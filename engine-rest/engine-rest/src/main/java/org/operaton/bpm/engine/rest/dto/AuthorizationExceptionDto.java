@@ -19,6 +19,7 @@ package org.operaton.bpm.engine.rest.dto;
 import java.util.List;
 
 import org.operaton.bpm.engine.AuthorizationException;
+import org.operaton.bpm.engine.authorization.MissingAuthorization;
 
 /**
  * <p>Dto for {@link AuthorizationException}</p>
@@ -47,10 +48,14 @@ public class AuthorizationExceptionDto extends ExceptionDto {
     dto.setType(AuthorizationException.class.getSimpleName());
 
     dto.setUserId(e.getUserId());
-    dto.setMissingAuthorizations(MissingAuthorizationDto.fromInfo(e.getMissingAuthorizations()));
-    dto.setPermissionName(e.getViolatedPermissionName());
-    dto.setResourceId(e.getResourceId());
-    dto.setResourceName(e.getResourceType());
+    List<MissingAuthorization> missingAuth = e.getMissingAuthorizations();
+    dto.setMissingAuthorizations(MissingAuthorizationDto.fromInfo(missingAuth));
+    if (missingAuth != null && missingAuth.size() == 1) {
+      MissingAuthorization info = missingAuth.get(0);
+      dto.setPermissionName(info.getViolatedPermissionName());
+      dto.setResourceId(info.getResourceId());
+      dto.setResourceName(info.getResourceType());
+    }
 
     return dto;
   }
