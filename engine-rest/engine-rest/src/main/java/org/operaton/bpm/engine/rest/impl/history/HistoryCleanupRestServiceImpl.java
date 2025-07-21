@@ -51,11 +51,11 @@ public class HistoryCleanupRestServiceImpl implements HistoryCleanupRestService 
 
   @Override
   public JobDto findCleanupJob() {
-    Job job = processEngine.getHistoryService().findHistoryCleanupJob();
-    if (job == null) {
+    List<Job> jobs = processEngine.getHistoryService().findHistoryCleanupJobs();
+    if (jobs == null || jobs.isEmpty()) {
       throw new RestException(Status.NOT_FOUND, "History cleanup job does not exist");
     }
-    return JobDto.fromJob(job);
+    return JobDto.fromJob(jobs.get(0));
   }
 
   @Override
