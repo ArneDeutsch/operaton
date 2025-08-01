@@ -17,9 +17,9 @@
 package org.operaton.bpm.cockpit.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.operaton.bpm.cockpit.CockpitRuntimeDelegate;
 import org.operaton.bpm.cockpit.db.CommandExecutor;
@@ -45,11 +45,11 @@ import org.operaton.bpm.webapp.impl.AbstractAppRuntimeDelegate;
  */
 public class DefaultCockpitRuntimeDelegate extends AbstractAppRuntimeDelegate<CockpitPlugin> implements CockpitRuntimeDelegate {
 
-  private final  Map<String, CommandExecutor> commandExecutors;
+  private final Map<String, CommandExecutor> commandExecutors;
 
   public DefaultCockpitRuntimeDelegate() {
     super(CockpitPlugin.class);
-    this.commandExecutors = new HashMap<>();
+    this.commandExecutors = new ConcurrentHashMap<>();
   }
 
   @Override
