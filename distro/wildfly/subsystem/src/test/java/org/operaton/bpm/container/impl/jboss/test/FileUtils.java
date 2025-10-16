@@ -24,7 +24,7 @@ import java.io.InputStreamReader;
  *
  * @author nico.rehwaldt
  */
-public class FileUtils {
+public final class FileUtils {
 
   private FileUtils() {
   }
@@ -49,9 +49,10 @@ public class FileUtils {
       }
     } finally {
       try {
-        if (is != null) is.close();
-      } finally {
-        ; // Cannot handle exception
+        if (is != null) {
+          is.close();
+        }
+      } finally { // Cannot handle exception
       }
     }
 

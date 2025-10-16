@@ -16,8 +16,6 @@
  */
 package org.operaton.bpm.integrationtest.util;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -26,11 +24,14 @@ import java.nio.channels.ReadableByteChannel;
 
 import org.jboss.shrinkwrap.api.asset.Asset;
 import org.jboss.shrinkwrap.api.asset.ByteArrayAsset;
+
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.RepositoryService;
 import org.operaton.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
 import org.operaton.bpm.engine.impl.util.IoUtil;
 import org.operaton.bpm.engine.repository.ProcessDefinition;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public abstract class TestHelper {
@@ -104,15 +105,18 @@ public abstract class TestHelper {
         int bytesReadFromStream1 = channel1.read(buffer1);
         int bytesReadFromStream2 = channel2.read(buffer2);
 
-        if (bytesReadFromStream1 == -1 || bytesReadFromStream2 == -1)
+        if (bytesReadFromStream1 == -1 || bytesReadFromStream2 == -1) {
           return bytesReadFromStream1 == bytesReadFromStream2;
+        }
 
         buffer1.flip();
         buffer2.flip();
 
-        for (int i = 0; i < Math.min(bytesReadFromStream1, bytesReadFromStream2); i++)
-          if (buffer1.get() != buffer2.get())
+        for (int i = 0;i < Math.min(bytesReadFromStream1, bytesReadFromStream2);i++) {
+          if (buffer1.get() != buffer2.get()) {
             return false;
+          }
+        }
 
         buffer1.compact();
         buffer2.compact();

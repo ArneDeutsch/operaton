@@ -80,8 +80,9 @@ public abstract class PrimitiveValueTypeImpl extends AbstractValueTypeImpl imple
   @Override
   public Map<String, Object> getValueInfo(TypedValue typedValue) {
     Map<String, Object> result = new HashMap<>();
-    if (typedValue.isTransient())
+    if (typedValue.isTransient()) {
       result.put(VALUE_INFO_TRANSIENT, typedValue.isTransient());
+    }
     return result;
   }
 
@@ -152,11 +153,7 @@ public abstract class PrimitiveValueTypeImpl extends AbstractValueTypeImpl imple
 
     @Override
     public boolean canConvertFromTypedValue(TypedValue typedValue) {
-      if (typedValue.getType() != ValueType.NUMBER) {
-        return false;
-      }
-
-      return true;
+      return typedValue.getType() == ValueType.NUMBER;
     }
 
     @Override

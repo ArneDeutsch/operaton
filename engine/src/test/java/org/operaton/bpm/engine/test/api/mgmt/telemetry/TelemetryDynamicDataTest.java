@@ -16,15 +16,13 @@
  */
 package org.operaton.bpm.engine.test.api.mgmt.telemetry;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.operaton.bpm.engine.test.util.ProcessEngineUtils.newRandomProcessEngineName;
-
 import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.ProcessEngines;
@@ -40,6 +38,9 @@ import org.operaton.bpm.engine.impl.metrics.Meter;
 import org.operaton.bpm.engine.task.Task;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
+
+import static org.operaton.bpm.engine.test.util.ProcessEngineUtils.newRandomProcessEngineName;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(ProcessEngineExtension.class)
 class TelemetryDynamicDataTest {
@@ -94,7 +95,7 @@ class TelemetryDynamicDataTest {
         "HistoryLevelSetupCommand",
         "BootstrapEngineCommand");
     for (String commandName : entries.keySet()) {
-      assertThat(entries.get(commandName).get()).isEqualTo(1);
+      assertThat(entries.get(commandName).get()).isOne();
     }
 
     ProcessEngines.unregister(processEngineInMem);
@@ -122,7 +123,7 @@ class TelemetryDynamicDataTest {
                                          "CompleteTaskCmd"};
     assertThat(entries).containsOnlyKeys(expectedExecutedCommands);
     for (String commandName : expectedExecutedCommands) {
-      assertThat(entries.get(commandName).get()).isEqualTo(1);
+      assertThat(entries.get(commandName).get()).isOne();
     }
   }
 

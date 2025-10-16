@@ -16,16 +16,16 @@
  */
 package org.operaton.bpm.spring.boot.starter.property;
 
-import static org.operaton.bpm.spring.boot.starter.property.OperatonBpmProperties.joinOn;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import static org.operaton.bpm.spring.boot.starter.property.OperatonBpmProperties.joinOn;
+
 public class SessionCookieProperties {
 
-  protected boolean enableSecureCookie = false;
+  protected boolean enableSecureCookie;
   protected boolean enableSameSiteCookie = true;
   protected String sameSiteCookieOption;
   protected String sameSiteCookieValue;

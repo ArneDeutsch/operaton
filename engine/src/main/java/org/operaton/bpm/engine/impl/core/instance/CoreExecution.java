@@ -18,7 +18,6 @@ package org.operaton.bpm.engine.impl.core.instance;
 
 import java.io.Serial;
 
-
 import org.operaton.bpm.engine.delegate.BaseDelegateExecution;
 import org.operaton.bpm.engine.delegate.DelegateListener;
 import org.operaton.bpm.engine.impl.ProcessEngineLogger;
@@ -55,7 +54,7 @@ public abstract class CoreExecution extends AbstractVariableScope implements Bas
 
   protected String eventName;
   protected CoreModelElement eventSource;
-  protected int listenerIndex = 0;
+  protected int listenerIndex;
   protected boolean skipCustomListeners;
   protected boolean skipIoMapping;
   protected boolean skipSubprocesses;

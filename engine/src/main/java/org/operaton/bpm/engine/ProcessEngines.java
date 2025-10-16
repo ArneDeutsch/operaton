@@ -39,7 +39,6 @@ import org.operaton.bpm.engine.impl.util.IoUtil;
 import org.operaton.bpm.engine.impl.util.ReflectUtil;
 
 
-
 /** Helper for initializing and closing process engines in server environments.
  * <br>
  * All created {@link ProcessEngine}s will be registered with this class.
@@ -62,13 +61,13 @@ import org.operaton.bpm.engine.impl.util.ReflectUtil;
  * @author Tom Baeyens
  * @author Joram Barrez
  */
-public class ProcessEngines {
+public final class ProcessEngines {
 
   private static final ProcessEngineLogger LOG = ProcessEngineLogger.INSTANCE;
 
   public static final String NAME_DEFAULT = "default";
 
-  private static volatile boolean isInitialized = false;
+  private static volatile boolean isInitialized;
   private static volatile Map<String, ProcessEngine> processEngines = new ConcurrentHashMap<>();
   private static final Map<String, ProcessEngineInfo> PROCESS_ENGINE_INFOS_BY_NAME = new ConcurrentHashMap<>();
   private static final Map<String, ProcessEngineInfo> PROCESS_ENGINE_INFOS_BY_RESOURCE_URL = new ConcurrentHashMap<>();
@@ -140,7 +139,7 @@ public class ProcessEngines {
   protected static void initProcessEngineFromSpringResource(URL resource) {
     try {
       Class< ? > springConfigurationHelperClass = ReflectUtil.loadClass("org.operaton.bpm.engine.spring.SpringConfigurationHelper");
-      Method method = springConfigurationHelperClass.getMethod("buildProcessEngine", new Class<?>[]{URL.class});
+      Method method = springConfigurationHelperClass.getMethod("buildProcessEngine", URL.class);
       ProcessEngine processEngine = (ProcessEngine) method.invoke(null, new Object[]{resource});
 
       String processEngineName = processEngine.getName();
@@ -199,7 +198,7 @@ public class ProcessEngines {
       processEngineInfo = new ProcessEngineInfoImpl(processEngineName, resourceUrlString, null);
       processEngines.put(processEngineName, processEngine);
       PROCESS_ENGINE_INFOS_BY_NAME.put(processEngineName, processEngineInfo);
-    } catch (Throwable e) {
+    } catch (RuntimeException e) {
       LOG.exceptionWhileInitializingProcessengine(e);
       processEngineInfo = new ProcessEngineInfoImpl(null, resourceUrlString, getExceptionString(e));
     }

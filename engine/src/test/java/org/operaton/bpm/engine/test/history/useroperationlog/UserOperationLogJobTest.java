@@ -16,13 +16,15 @@
  */
 package org.operaton.bpm.engine.test.history.useroperationlog;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.Test;
+
 import org.operaton.bpm.engine.EntityTypes;
 import org.operaton.bpm.engine.batch.Batch;
 import org.operaton.bpm.engine.history.UserOperationLogEntry;
@@ -32,6 +34,8 @@ import org.operaton.bpm.engine.runtime.Job;
 import org.operaton.bpm.engine.runtime.ProcessInstance;
 import org.operaton.bpm.engine.runtime.ProcessInstanceQuery;
 import org.operaton.bpm.engine.test.Deployment;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Thorben Lindhauer
@@ -320,7 +324,7 @@ class UserOperationLogJobTest extends AbstractUserOperationLogTest {
     UserOperationLogQuery query = historyService
             .createUserOperationLogQuery()
             .operationType(UserOperationLogEntry.OPERATION_TYPE_SET_DUEDATE);
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     // assert details
     UserOperationLogEntry entry = query.singleResult();
@@ -447,7 +451,7 @@ class UserOperationLogJobTest extends AbstractUserOperationLogTest {
   void testExecuteByJobExecutor() {
     // given a job
     runtimeService.startProcessInstanceByKey("asyncTaskProcess");
-    assertThat(managementService.createJobQuery().count()).isEqualTo(1L);
+    assertThat(managementService.createJobQuery().count()).isOne();
 
     // when a job is executed by the job executor
     testRule.waitForJobExecutorToProcessAllJobs(TimeUnit.MILLISECONDS.convert(5L, TimeUnit.SECONDS));

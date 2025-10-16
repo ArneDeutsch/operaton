@@ -16,8 +16,6 @@
  */
 package org.operaton.bpm.engine.impl.cmmn;
 
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-
 import java.util.Map;
 
 import org.operaton.bpm.engine.exception.NotAllowedException;
@@ -36,6 +34,8 @@ import org.operaton.bpm.engine.runtime.CaseInstanceBuilder;
 import org.operaton.bpm.engine.variable.VariableMap;
 import org.operaton.bpm.engine.variable.Variables;
 
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+
 /**
  * @author Roman Smirnov
  *
@@ -53,7 +53,7 @@ public class CaseInstanceBuilderImpl implements CaseInstanceBuilder {
   protected VariableMap variables;
 
   protected String caseDefinitionTenantId;
-  protected boolean isTenantIdSet = false;
+  protected boolean isTenantIdSet;
 
   public CaseInstanceBuilderImpl(CommandExecutor commandExecutor, String caseDefinitionKey, String caseDefinitionId) {
     this(caseDefinitionKey, caseDefinitionId);

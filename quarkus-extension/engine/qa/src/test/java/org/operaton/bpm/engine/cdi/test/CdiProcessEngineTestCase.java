@@ -16,9 +16,18 @@
  */
 package org.operaton.bpm.engine.cdi.test;
 
+import java.util.HashSet;
+import java.util.Set;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
+import jakarta.enterprise.inject.spi.BeanManager;
+
 import io.quarkus.arc.Arc;
 import io.quarkus.arc.InjectableInstance;
 import io.quarkus.arc.InstanceHandle;
+import org.junit.After;
+import org.junit.Before;
+
 import org.operaton.bpm.BpmPlatform;
 import org.operaton.bpm.engine.AuthorizationService;
 import org.operaton.bpm.engine.CaseService;
@@ -36,14 +45,6 @@ import org.operaton.bpm.engine.TaskService;
 import org.operaton.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.operaton.bpm.engine.impl.test.TestHelper;
 import org.operaton.bpm.quarkus.engine.extension.QuarkusProcessEngineConfiguration;
-import org.junit.After;
-import org.junit.Before;
-
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Produces;
-import jakarta.enterprise.inject.spi.BeanManager;
-import java.util.HashSet;
-import java.util.Set;
 
 public class CdiProcessEngineTestCase {
 
@@ -73,7 +74,9 @@ public class CdiProcessEngineTestCase {
   public void before() {
     Set<String> processEngineNames = BpmPlatform.getProcessEngineService()
         .getProcessEngineNames();
-    if (processEngineNames.size() > 1) throw new RuntimeException("More than one process engines registered");
+    if (processEngineNames.size() > 1) {
+      throw new RuntimeException("More than one process engines registered");
+    }
     processEngine =
         BpmPlatform.getProcessEngineService().getProcessEngine(processEngineNames.stream().findFirst().get());
     Arc.container().requestContext().activate();

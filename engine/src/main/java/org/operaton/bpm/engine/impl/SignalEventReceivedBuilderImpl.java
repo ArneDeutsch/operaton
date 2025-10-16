@@ -16,8 +16,6 @@
  */
 package org.operaton.bpm.engine.impl;
 
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-
 import java.util.Map;
 
 import org.operaton.bpm.engine.impl.cmd.CommandLogger;
@@ -27,6 +25,8 @@ import org.operaton.bpm.engine.runtime.SignalEventReceivedBuilder;
 import org.operaton.bpm.engine.variable.VariableMap;
 import org.operaton.bpm.engine.variable.impl.VariableMapImpl;
 
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+
 public class SignalEventReceivedBuilderImpl implements SignalEventReceivedBuilder {
 
   private static final CommandLogger LOG = ProcessEngineLogger.CMD_LOGGER;
@@ -34,12 +34,12 @@ public class SignalEventReceivedBuilderImpl implements SignalEventReceivedBuilde
   protected final CommandExecutor commandExecutor;
   protected final String signalName;
 
-  protected String executionId = null;
+  protected String executionId;
 
-  protected String tenantId = null;
-  protected boolean isTenantIdSet = false;
+  protected String tenantId;
+  protected boolean isTenantIdSet;
 
-  protected VariableMap variables = null;
+  protected VariableMap variables;
 
   public SignalEventReceivedBuilderImpl(CommandExecutor commandExecutor, String signalName) {
     this.commandExecutor = commandExecutor;

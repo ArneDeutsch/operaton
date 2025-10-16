@@ -19,7 +19,9 @@ package org.operaton.bpm.engine;
 /**
  * @author Sebastian Menski
  */
-public class EntityTypes {
+public final class EntityTypes {
+  private EntityTypes() {
+  }
 
   public static final String APPLICATION = "Application";
   public static final String ATTACHMENT = "Attachment";
@@ -53,11 +55,9 @@ public class EntityTypes {
   public static final String CASE_INSTANCE = "CaseInstance";
   public static final String PROPERTY = "Property";
   public static final String OPERATION_LOG_CATEGORY = "OperationLogCatgeory";
+  public static final String OPTIMIZE = "Optimize";
   public static final String OPERATION_LOG = "OperationLog";
   public static final String INCIDENT = "Incident";
   public static final String SYSTEM = "System";
   public static final String COMMENT = "Comment";
-
-  private EntityTypes() {
-  }
 }

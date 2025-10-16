@@ -17,7 +17,10 @@
 package org.operaton.bpm.engine.test.assertions.bpmn;
 
 
+import java.util.*;
+
 import org.assertj.core.api.Assertions;
+
 import org.operaton.bpm.engine.*;
 import org.operaton.bpm.engine.exception.NotFoundException;
 import org.operaton.bpm.engine.externaltask.ExternalTask;
@@ -32,8 +35,6 @@ import org.operaton.bpm.model.bpmn.BpmnModelInstance;
 import org.operaton.bpm.model.bpmn.instance.Activity;
 import org.operaton.bpm.model.bpmn.instance.Event;
 import org.operaton.bpm.model.bpmn.instance.Gateway;
-
-import java.util.*;
 
 import static java.util.Collections.emptyMap;
 
@@ -282,8 +283,9 @@ public class BpmnAwareTests extends AbstractAssertions {
    *          Object key value pairs.
    */
   public static Map<String, Object> withVariables(final String key, final Object value, final Object... furtherKeyValuePairs) {
-    if (key == null)
+    if (key == null) {
       throw new IllegalArgumentException("Illegal call of withVariables(key = '%s', value = '%s', ...) - key must not be null!".formatted(key, value));
+    }
     final Map<String, Object> map = new HashMap<>();
     map.put(key, value);
     if (furtherKeyValuePairs != null) {
@@ -291,8 +293,9 @@ public class BpmnAwareTests extends AbstractAssertions {
         throw new IllegalArgumentException("Illegal call of withVariables() - must have an even number of arguments, but found length = %s!".formatted(furtherKeyValuePairs.length + 2));
       }
       for (int i = 0; i < furtherKeyValuePairs.length; i += 2) {
-        if (!(furtherKeyValuePairs[i] instanceof String))
+        if (!(furtherKeyValuePairs[i] instanceof String)) {
           throw new IllegalArgumentException("Illegal call of withVariables() - keys must be strings, found object of type '%s'!".formatted(furtherKeyValuePairs[i] != null ? furtherKeyValuePairs[i].getClass().getName() : null));
+        }
         map.put((String) furtherKeyValuePairs[i], furtherKeyValuePairs[i + 1]);
       }
     }
@@ -388,8 +391,9 @@ public class BpmnAwareTests extends AbstractAssertions {
    */
   public static Task task(TaskQuery taskQuery) {
     ProcessInstanceAssert lastAssert = AbstractProcessAssert.getLastAssert(ProcessInstanceAssert.class);
-    if (lastAssert == null)
+    if (lastAssert == null) {
       throw new IllegalStateException("Call a process instance assertion first - e.g. assertThat(processInstance)... !");
+    }
     return task(taskQuery, lastAssert.getActual());
   }
 
@@ -501,11 +505,12 @@ public class BpmnAwareTests extends AbstractAssertions {
    */
   public static ExternalTask externalTask(ExternalTaskQuery externalTaskQuery) {
     ProcessInstanceAssert lastAssert = AbstractProcessAssert.getLastAssert(ProcessInstanceAssert.class);
-    if (lastAssert == null)
+    if (lastAssert == null) {
       throw new IllegalStateException(
         "Call a process instance assertion first - " +
           "e.g. assertThat(processInstance)... !"
       );
+    }
     return externalTask(externalTaskQuery, lastAssert.getActual());
   }
 
@@ -541,11 +546,12 @@ public class BpmnAwareTests extends AbstractAssertions {
    */
   public static ProcessDefinition processDefinition() {
     ProcessInstanceAssert lastAssert = AbstractProcessAssert.getLastAssert(ProcessInstanceAssert.class);
-    if (lastAssert == null)
+    if (lastAssert == null) {
       throw new IllegalStateException(
         "Call a process instance assertion first - " +
           "e.g. assertThat(processInstance)... !"
       );
+    }
     return processDefinition(lastAssert.getActual());
   }
 
@@ -680,11 +686,12 @@ public class BpmnAwareTests extends AbstractAssertions {
    */
   public static ProcessInstance calledProcessInstance(ProcessInstanceQuery processInstanceQuery) {
     ProcessInstanceAssert lastAssert = AbstractProcessAssert.getLastAssert(ProcessInstanceAssert.class);
-    if (lastAssert == null)
+    if (lastAssert == null) {
       throw new IllegalStateException(
         "Call a process instance assertion first - " +
           "e.g. assertThat(processInstance)... !"
       );
+    }
     return calledProcessInstance(processInstanceQuery, lastAssert.getActual());
   }
 
@@ -757,11 +764,12 @@ public class BpmnAwareTests extends AbstractAssertions {
    */
   public static Job job(String activityId) {
     ProcessInstanceAssert lastAssert = AbstractProcessAssert.getLastAssert(ProcessInstanceAssert.class);
-    if (lastAssert == null)
+    if (lastAssert == null) {
       throw new IllegalStateException(
         "Call a process instance assertion first - " +
           "e.g. assertThat(processInstance)... !"
       );
+    }
     return job(activityId, lastAssert.getActual());
   }
 
@@ -802,11 +810,12 @@ public class BpmnAwareTests extends AbstractAssertions {
    */
   public static Job job(JobQuery jobQuery) {
     ProcessInstanceAssert lastAssert = AbstractProcessAssert.getLastAssert(ProcessInstanceAssert.class);
-    if (lastAssert == null)
+    if (lastAssert == null) {
       throw new IllegalStateException(
         "Call a process instance assertion first - " +
           "e.g. assertThat(processInstance)... !"
       );
+    }
     return job(jobQuery, lastAssert.getActual());
   }
 
@@ -842,10 +851,11 @@ public class BpmnAwareTests extends AbstractAssertions {
    *          assigned state.
    */
   public static Task claim(Task task, String assigneeUserId) {
-    if (task == null || assigneeUserId == null)
+    if (task == null || assigneeUserId == null) {
       throw new IllegalArgumentException(("Illegal call " +
         "of claim(task = '%s', assigneeUserId = '%s') - both must " +
         "not be null!").formatted(task, assigneeUserId));
+    }
     taskService().claim(task.getId(), assigneeUserId);
     return taskQuery().taskId(task.getId()).singleResult();
   }
@@ -858,10 +868,11 @@ public class BpmnAwareTests extends AbstractAssertions {
    *          unassigned state.
    */
   public static Task unclaim(Task task) {
-    if (task == null)
+    if (task == null) {
       throw new IllegalArgumentException(("Illegal call " +
         "of unclaim(task = '%s') - task must " +
         "not be null!").formatted(task));
+    }
     taskService().claim(task.getId(), null);
     return taskQuery().taskId(task.getId()).singleResult();
   }
@@ -877,8 +888,9 @@ public class BpmnAwareTests extends AbstractAssertions {
    *          withVariables(String key, Object value, ...)
    */
   public static void complete(Task task, Map<String, Object> variables) {
-    if (task == null || variables == null)
+    if (task == null || variables == null) {
       throw new IllegalArgumentException("Illegal call of complete(task = '%s', variables = '%s') - both must not be null!".formatted(task, variables));
+    }
     taskService().complete(task.getId(), variables);
   }
 
@@ -888,8 +900,9 @@ public class BpmnAwareTests extends AbstractAssertions {
    * @param   task Task to be completed
    */
   public static void complete(Task task) {
-    if (task == null)
+    if (task == null) {
       throw new IllegalArgumentException("Illegal call of complete(task = 'null') - must not be null!");
+    }
     taskService().complete(task.getId());
   }
 
@@ -1050,11 +1063,13 @@ public class BpmnAwareTests extends AbstractAssertions {
    * @param   job Job to be executed.
    */
   public static void execute(Job job) {
-    if (job == null)
+    if (job == null) {
       throw new IllegalArgumentException("Illegal call of execute(job = '%s') - must not be null!".formatted(job));
+    }
     Job current = jobQuery().jobId(job.getId()).singleResult();
-    if (current == null)
+    if (current == null) {
       throw new IllegalStateException("Illegal state when calling execute(job = '%s') - job does not exist anymore!".formatted(job));
+    }
     managementService().executeJob(job.getId());
   }
 

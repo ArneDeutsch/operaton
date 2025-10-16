@@ -23,7 +23,7 @@ import org.operaton.bpm.engine.variable.Variables;
 import org.operaton.bpm.qa.upgrade.DescribesScenario;
 import org.operaton.bpm.qa.upgrade.ScenarioSetup;
 
-public class StartProcessIntanceWithInitialVariablesScenario {
+public final class StartProcessIntanceWithInitialVariablesScenario {
 
   private StartProcessIntanceWithInitialVariablesScenario() {
   }
@@ -35,26 +35,23 @@ public class StartProcessIntanceWithInitialVariablesScenario {
 
   @DescribesScenario("startProcessIntanceWithInitialVariablesScenario")
   public static ScenarioSetup createUserOperationLogEntries() {
-    return new ScenarioSetup() {
-      @Override
-      public void execute(ProcessEngine engine, String scenarioName) {
-        RuntimeService runtimeService = engine.getRuntimeService();
+    return (engine, scenarioName) -> {
+      RuntimeService runtimeService = engine.getRuntimeService();
 
-        String businessKey = "712_ProcessIntanceExecuted";
-        runtimeService.startProcessInstanceByKey("asyncBeforeStartProcess_712", businessKey,
-            Variables.createVariables()
-                .putValue("initial1", "value1"));
+      String businessKey = "712_ProcessIntanceExecuted";
+      runtimeService.startProcessInstanceByKey("asyncBeforeStartProcess_712", businessKey,
+        Variables.createVariables()
+          .putValue("initial1", "value1"));
 
-        businessKey = "7120_ProcessIntanceWithoutExecute";
-        runtimeService.startProcessInstanceByKey("asyncBeforeStartProcess_712", businessKey,
-            Variables.createVariables()
-            .putValue("initial2", "value1"));
+      businessKey = "7120_ProcessIntanceWithoutExecute";
+      runtimeService.startProcessInstanceByKey("asyncBeforeStartProcess_712", businessKey,
+        Variables.createVariables()
+          .putValue("initial2", "value1"));
 
-        businessKey = "7120_ProcessIntanceWithoutExecuteAndSetVariables";
-        runtimeService.startProcessInstanceByKey("asyncBeforeStartProcess_712", businessKey,
-            Variables.createVariables()
-            .putValue("initial3", "value1"));
-      }
+      businessKey = "7120_ProcessIntanceWithoutExecuteAndSetVariables";
+      runtimeService.startProcessInstanceByKey("asyncBeforeStartProcess_712", businessKey,
+        Variables.createVariables()
+          .putValue("initial3", "value1"));
     };
   }
 }

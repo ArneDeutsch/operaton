@@ -16,14 +16,15 @@
  */
 package org.operaton.bpm.engine.test.concurrency;
 
+import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+
 import org.operaton.bpm.engine.impl.interceptor.CommandContext;
 import org.operaton.bpm.engine.impl.persistence.entity.EventSubscriptionEntity;
 import org.operaton.bpm.engine.repository.ProcessDefinition;
 import org.operaton.bpm.engine.runtime.EventSubscription;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,14 +45,14 @@ class DeleteProcessDefinitionTest extends ConcurrencyTestCase {
     deleteProcessDefinitionsSimultaneously(processDefinitions.get(0).getId(), processDefinitions.get(1).getId());
 
     assertThat(repositoryService.createProcessDefinitionQuery().list()).isEmpty();
-    assertThat(runtimeService.createEventSubscriptionQuery().count()).isEqualTo(1);
+    assertThat(runtimeService.createEventSubscriptionQuery().count()).isOne();
 
     // when
     repositoryService.createDeployment().addClasspathResource(resource).deploy();
 
     // then
-    assertThat(repositoryService.createProcessDefinitionQuery().count()).isEqualTo(1);
-    assertThat(runtimeService.createEventSubscriptionQuery().count()).isEqualTo(1);
+    assertThat(repositoryService.createProcessDefinitionQuery().count()).isOne();
+    assertThat(runtimeService.createEventSubscriptionQuery().count()).isOne();
   }
 
   @Test
@@ -63,14 +64,14 @@ class DeleteProcessDefinitionTest extends ConcurrencyTestCase {
     deleteProcessDefinitionsSimultaneously(processDefinitions.get(0).getId(), processDefinitions.get(1).getId());
 
     assertThat(repositoryService.createProcessDefinitionQuery().list()).isEmpty();
-    assertThat(managementService.createJobQuery().count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().count()).isOne();
 
     // when
     repositoryService.createDeployment().addClasspathResource(resource).deploy();
 
     // then
-    assertThat(repositoryService.createProcessDefinitionQuery().count()).isEqualTo(1);
-    assertThat(managementService.createJobQuery().count()).isEqualTo(1);
+    assertThat(repositoryService.createProcessDefinitionQuery().count()).isOne();
+    assertThat(managementService.createJobQuery().count()).isOne();
   }
 
   @Test
@@ -82,14 +83,14 @@ class DeleteProcessDefinitionTest extends ConcurrencyTestCase {
     deleteProcessDefinitionsSimultaneously(processDefinitions.get(0).getId(), processDefinitions.get(1).getId());
 
     assertThat(repositoryService.createProcessDefinitionQuery().list()).isEmpty();
-    assertThat(runtimeService.createEventSubscriptionQuery().count()).isEqualTo(1);
+    assertThat(runtimeService.createEventSubscriptionQuery().count()).isOne();
 
     // when
     repositoryService.createDeployment().addClasspathResource(resource).deploy();
 
     // then
-    assertThat(repositoryService.createProcessDefinitionQuery().count()).isEqualTo(1);
-    assertThat(runtimeService.createEventSubscriptionQuery().count()).isEqualTo(1);
+    assertThat(repositoryService.createProcessDefinitionQuery().count()).isOne();
+    assertThat(runtimeService.createEventSubscriptionQuery().count()).isOne();
   }
 
   @Test
@@ -104,15 +105,15 @@ class DeleteProcessDefinitionTest extends ConcurrencyTestCase {
 
     deleteProcessDefinitionsSimultaneously(processDefinitions.get(1).getId(), processDefinitions.get(2).getId());
 
-    assertThat(repositoryService.createProcessDefinitionQuery().count()).isEqualTo(1);
-    assertThat(runtimeService.createEventSubscriptionQuery().count()).isEqualTo(1);
+    assertThat(repositoryService.createProcessDefinitionQuery().count()).isOne();
+    assertThat(runtimeService.createEventSubscriptionQuery().count()).isOne();
 
     // when
     repositoryService.createDeployment().addClasspathResource(resource).deploy();
 
     // then
     assertThat(repositoryService.createProcessDefinitionQuery().count()).isEqualTo(2);
-    assertThat(runtimeService.createEventSubscriptionQuery().count()).isEqualTo(1);
+    assertThat(runtimeService.createEventSubscriptionQuery().count()).isOne();
   }
 
   @Test

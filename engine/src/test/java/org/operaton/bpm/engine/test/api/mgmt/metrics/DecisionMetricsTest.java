@@ -16,11 +16,10 @@
  */
 package org.operaton.bpm.engine.test.api.mgmt.metrics;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.operaton.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
 import org.operaton.bpm.dmn.engine.spi.DmnEngineMetricCollector;
 import org.operaton.bpm.engine.DecisionService;
@@ -32,6 +31,8 @@ import org.operaton.bpm.engine.variable.Variables;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
 import org.operaton.bpm.model.bpmn.instance.BusinessRuleTask;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DecisionMetricsTest extends AbstractMetricsTest {
 
@@ -96,18 +97,18 @@ public class DecisionMetricsTest extends AbstractMetricsTest {
 
     runtimeService.startProcessInstanceByKey("testProcess", VARIABLES);
 
-    assertThat(getExecutedDecisionInstances()).isEqualTo(1L);
-    assertThat(getDecisionInstances()).isEqualTo(1L);
+    assertThat(getExecutedDecisionInstances()).isOne();
+    assertThat(getDecisionInstances()).isOne();
     assertThat(getExecutedDecisionElements()).isEqualTo(16L);
-    assertThat(getExecutedDecisionInstancesFromDmnEngine()).isEqualTo(1L);
+    assertThat(getExecutedDecisionInstancesFromDmnEngine()).isOne();
     assertThat(getExecutedDecisionElementsFromDmnEngine()).isEqualTo(16L);
 
     processEngineConfiguration.getDbMetricsReporter().reportNow();
 
-    assertThat(getExecutedDecisionInstances()).isEqualTo(1L);
-    assertThat(getDecisionInstances()).isEqualTo(1L);
+    assertThat(getExecutedDecisionInstances()).isOne();
+    assertThat(getDecisionInstances()).isOne();
     assertThat(getExecutedDecisionElements()).isEqualTo(16L);
-    assertThat(getExecutedDecisionInstancesFromDmnEngine()).isEqualTo(1L);
+    assertThat(getExecutedDecisionInstancesFromDmnEngine()).isOne();
     assertThat(getExecutedDecisionElementsFromDmnEngine()).isEqualTo(16L);
   }
 
@@ -123,13 +124,13 @@ public class DecisionMetricsTest extends AbstractMetricsTest {
         .evaluate();
 
     // then
-    assertThat(getExecutedDecisionInstances()).isEqualTo(1L);
-    assertThat(getDecisionInstances()).isEqualTo(1L);
+    assertThat(getExecutedDecisionInstances()).isOne();
+    assertThat(getDecisionInstances()).isOne();
 
     processEngineConfiguration.getDbMetricsReporter().reportNow();
 
-    assertThat(getExecutedDecisionInstances()).isEqualTo(1L);
-    assertThat(getDecisionInstances()).isEqualTo(1L);
+    assertThat(getExecutedDecisionInstances()).isOne();
+    assertThat(getDecisionInstances()).isOne();
   }
 
   @Test

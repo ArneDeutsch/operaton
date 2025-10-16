@@ -26,7 +26,7 @@ import org.operaton.bpm.qa.upgrade.Times;
  * @author Thorben Lindhauer
  *
  */
-public class EventBasedGatewayScenario {
+public final class EventBasedGatewayScenario {
 
   private EventBasedGatewayScenario() {
   }
@@ -39,12 +39,9 @@ public class EventBasedGatewayScenario {
   @DescribesScenario("init")
   @Times(3)
   public static ScenarioSetup instantiate() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        engine
-          .getRuntimeService()
-          .startProcessInstanceByKey("EventBasedGatewayScenario", scenarioName);
-      }
-    };
+    return (engine, scenarioName) ->
+      engine
+        .getRuntimeService()
+        .startProcessInstanceByKey("EventBasedGatewayScenario", scenarioName);
   }
 }

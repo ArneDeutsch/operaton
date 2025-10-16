@@ -16,9 +16,10 @@
  */
 package org.operaton.bpm.engine.rest.helper.variable;
 
+import org.hamcrest.Description;
+
 import org.operaton.bpm.engine.variable.type.ValueType;
 import org.operaton.bpm.engine.variable.value.ObjectValue;
-import org.hamcrest.Description;
 
 
 /**
@@ -31,7 +32,7 @@ public class EqualsObjectValue extends EqualsTypedValue<EqualsObjectValue> {
   protected String objectTypeName;
   protected String serializedValue;
   protected Object value;
-  protected boolean isDeserialized = false;
+  protected boolean isDeserialized;
 
   public EqualsObjectValue() {
     this.type = ValueType.OBJECT;

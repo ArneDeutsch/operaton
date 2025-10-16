@@ -16,10 +16,14 @@
  */
 package org.operaton.bpm.client.variable.pa;
 
+import java.util.Collections;
+import java.util.Properties;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.client.ExternalTaskClient;
 import org.operaton.bpm.client.dto.HistoricProcessInstanceDto;
 import org.operaton.bpm.client.dto.ProcessInstanceDto;
@@ -34,14 +38,11 @@ import org.operaton.bpm.engine.variable.Variables;
 import org.operaton.bpm.engine.variable.value.ObjectValue;
 import org.operaton.qa.Bean;
 
-import java.util.Collections;
-import java.util.Properties;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.operaton.bpm.client.util.PropertyUtil.CAMUNDA_ENGINE_NAME;
-import static org.operaton.bpm.client.util.PropertyUtil.CAMUNDA_ENGINE_REST;
 import static org.operaton.bpm.client.util.PropertyUtil.DEFAULT_PROPERTIES_PATH;
+import static org.operaton.bpm.client.util.PropertyUtil.OPERATON_ENGINE_NAME;
+import static org.operaton.bpm.client.util.PropertyUtil.OPERATON_ENGINE_REST;
 import static org.operaton.bpm.client.util.PropertyUtil.loadProperties;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Tassilo Weidner
@@ -64,7 +65,7 @@ public class PaSerializationIT {
   @RegisterExtension
   static ClientRule clientRule = new ClientRule(() -> {
     Properties properties = loadProperties(DEFAULT_PROPERTIES_PATH);
-    String baseUrl = properties.getProperty(CAMUNDA_ENGINE_REST) + ENGINE_NAME;
+    String baseUrl = properties.getProperty(OPERATON_ENGINE_REST) + ENGINE_NAME;
     return ExternalTaskClient.create()
       .baseUrl(baseUrl)
       .disableAutoFetching();
@@ -73,7 +74,7 @@ public class PaSerializationIT {
   @RegisterExtension
   static EngineRule engineRule = new EngineRule(() -> {
     Properties properties = loadProperties(DEFAULT_PROPERTIES_PATH);
-    properties.put(CAMUNDA_ENGINE_NAME, ENGINE_NAME);
+    properties.put(OPERATON_ENGINE_NAME, ENGINE_NAME);
     return properties;
   });
 

@@ -16,13 +16,11 @@
  */
 package org.operaton.bpm.engine.test.history;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.operaton.bpm.engine.CaseService;
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ProcessEngineConfiguration;
@@ -35,6 +33,9 @@ import org.operaton.bpm.engine.runtime.CaseExecution;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.RequiredHistoryLevel;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author Roman Smirnov
@@ -55,12 +56,7 @@ class HistoricCaseActivityStatisticsQueryTest {
     // given
 
     // when
-    try {
-      historicCaseActivityStatisticsQuery.list();
-      fail("It should not be possible to query for statistics by null.");
-    } catch (NullValueException exception) {
-      // expected
-    }
+    assertThatThrownBy(historicCaseActivityStatisticsQuery::list).isInstanceOf(NullValueException.class);
   }
 
   @Test
@@ -91,7 +87,7 @@ class HistoricCaseActivityStatisticsQueryTest {
     // then
     List<HistoricCaseActivityStatistics> statistics = query.list();
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(statistics).hasSize(1);
     assertStatisitcs(statistics.get(0), "PI_HumanTask_1", 5, 0, 0, 0, 0, 0);
   }

@@ -16,9 +16,6 @@
  */
 package org.operaton.bpm.engine.impl.dmn.entity.repository;
 
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensurePositive;
-
 import java.io.Serial;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +27,9 @@ import org.operaton.bpm.engine.impl.interceptor.CommandContext;
 import org.operaton.bpm.engine.impl.interceptor.CommandExecutor;
 import org.operaton.bpm.engine.repository.DecisionRequirementsDefinition;
 import org.operaton.bpm.engine.repository.DecisionRequirementsDefinitionQuery;
+
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensurePositive;
 
 public class DecisionRequirementsDefinitionQueryImpl extends AbstractQuery<DecisionRequirementsDefinitionQuery, DecisionRequirementsDefinition> implements DecisionRequirementsDefinitionQuery {
 
@@ -47,11 +47,11 @@ public class DecisionRequirementsDefinitionQueryImpl extends AbstractQuery<Decis
   protected String resourceName;
   protected String resourceNameLike;
   protected Integer version;
-  protected boolean latest = false;
+  protected boolean latest;
 
-  protected boolean isTenantIdSet = false;
+  protected boolean isTenantIdSet;
   protected String[] tenantIds;
-  protected boolean includeDefinitionsWithoutTenantId = false;
+  protected boolean includeDefinitionsWithoutTenantId;
 
   public DecisionRequirementsDefinitionQueryImpl() {
   }

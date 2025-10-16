@@ -16,8 +16,6 @@
  */
 package org.operaton.bpm.engine.test.api.runtime.migration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +24,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.RuntimeService;
 import org.operaton.bpm.engine.TaskService;
@@ -38,6 +37,8 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.migration.MigrationTestExtension;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class MigrationTimerBoundryEventTest {
 
@@ -86,8 +87,8 @@ class MigrationTimerBoundryEventTest {
     // then
     List<Job> list = managementService.createJobQuery().list();
     assertThat(list).isEmpty();
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("afterTimer").count()).isEqualTo(1);
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("afterTimer").count()).isOne();
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isOne();
   }
 
   @Test
@@ -113,7 +114,7 @@ class MigrationTimerBoundryEventTest {
     // then
     List<Job> list = managementService.createJobQuery().list();
     assertThat(list).isEmpty();
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("afterTimer").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("afterTimer").count()).isOne();
     assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isZero();
   }
 
@@ -138,7 +139,7 @@ class MigrationTimerBoundryEventTest {
     List<Job> list = managementService.createJobQuery().list();
     assertThat(list).hasSize(1);
     assertThat(taskService.createTaskQuery().taskDefinitionKey("afterTimer").count()).isZero();
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isOne();
   }
 
   @Test
@@ -177,10 +178,10 @@ class MigrationTimerBoundryEventTest {
     // then
     List<Job> list = managementService.createJobQuery().list();
     assertThat(list).hasSize(1);
-    assertThat(managementService.createJobQuery().duedateHigherThan(ClockUtil.getCurrentTime()).count()).isEqualTo(1);
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("past").count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().duedateHigherThan(ClockUtil.getCurrentTime()).count()).isOne();
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("past").count()).isOne();
     assertThat(taskService.createTaskQuery().taskDefinitionKey("future").count()).isZero();
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isOne();
   }
 
   @Test
@@ -206,9 +207,9 @@ class MigrationTimerBoundryEventTest {
     testHelper.migrateProcessInstance(migrationPlan, processInstance);
 
     // then
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isOne();
     assertThat(taskService.createTaskQuery().taskDefinitionKey("afterTimer").count()).isZero();
-    assertThat(managementService.createJobQuery().count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().count()).isOne();
   }
 
   @Test
@@ -240,8 +241,8 @@ class MigrationTimerBoundryEventTest {
     // then
     List<Job> list = managementService.createJobQuery().list();
     assertThat(list).isEmpty();
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isEqualTo(1);
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("afterTimer").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isOne();
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("afterTimer").count()).isOne();
   }
 
   @Test
@@ -290,8 +291,8 @@ class MigrationTimerBoundryEventTest {
     // then
     List<Job> list = managementService.createJobQuery().duedateHigherThan(ClockUtil.getCurrentTime()).list();
     assertThat(list).hasSize(1);
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isEqualTo(1);
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("future").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isOne();
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("future").count()).isOne();
   }
 
   @Test
@@ -371,8 +372,8 @@ class MigrationTimerBoundryEventTest {
     // then
     List<Job> list = managementService.createJobQuery().list();
     assertThat(list).isEmpty();
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("afterTimer").count()).isEqualTo(1);
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("afterTimer").count()).isOne();
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("userTask").count()).isOne();
   }
 
   protected BpmnModelInstance createModel(boolean isCancelActivity, String date) {

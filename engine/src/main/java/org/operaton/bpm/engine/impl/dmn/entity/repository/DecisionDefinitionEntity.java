@@ -16,6 +16,11 @@
  */
 package org.operaton.bpm.engine.impl.dmn.entity.repository;
 
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.operaton.bpm.dmn.engine.impl.DmnDecisionImpl;
 import org.operaton.bpm.engine.impl.ProcessEngineLogger;
 import org.operaton.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
@@ -27,11 +32,6 @@ import org.operaton.bpm.engine.impl.interceptor.CommandContext;
 import org.operaton.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
 import org.operaton.bpm.engine.impl.repository.ResourceDefinitionEntity;
 import org.operaton.bpm.engine.repository.DecisionDefinition;
-
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 public class DecisionDefinitionEntity extends DmnDecisionImpl implements DecisionDefinition, ResourceDefinitionEntity<DecisionDefinitionEntity>, DbEntity, HasDbRevision, Serializable {
 
@@ -52,7 +52,7 @@ public class DecisionDefinitionEntity extends DmnDecisionImpl implements Decisio
 
   // firstVersion is true, when version == 1 or when
   // this definition does not have any previous definitions
-  protected boolean firstVersion = false;
+  protected boolean firstVersion;
   protected String previousDecisionDefinitionId;
 
   protected Integer historyTimeToLive;
@@ -121,7 +121,7 @@ public class DecisionDefinitionEntity extends DmnDecisionImpl implements Decisio
   @Override
   public void setVersion(int version) {
     this.version = version;
-    this.firstVersion = (this.version == 1);
+    this.firstVersion = this.version == 1;
   }
 
   @Override

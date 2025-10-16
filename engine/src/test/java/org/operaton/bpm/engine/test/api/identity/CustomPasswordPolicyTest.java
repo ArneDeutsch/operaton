@@ -16,13 +16,11 @@
  */
 package org.operaton.bpm.engine.test.api.identity;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.operaton.bpm.engine.IdentityService;
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.identity.PasswordPolicy;
@@ -30,6 +28,9 @@ import org.operaton.bpm.engine.identity.User;
 import org.operaton.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.operaton.bpm.engine.impl.identity.DefaultPasswordPolicyImpl;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author Miklas Boskamp
@@ -67,7 +68,7 @@ class CustomPasswordPolicyTest {
     User user = identityService.newUser("user");
     user.setPassword("this-is-1-STRONG-password");
     identityService.saveUser(user);
-    assertThat(identityService.createUserQuery().userId(user.getId()).count()).isEqualTo(1L);
+    assertThat(identityService.createUserQuery().userId(user.getId()).count()).isOne();
   }
 
   @Test

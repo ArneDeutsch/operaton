@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * <p>
  * It also provides useful cleanup and assertion methods for test cases.
  */
-public class TestMdcFacade {
+public final class TestMdcFacade {
 
   private final Map<String, String> keyValuePairs;
 
@@ -132,8 +132,7 @@ public class TestMdcFacade {
    * Asserts all test inserted properties in the MDC are still there.
    */
   public void assertAllInsertedPropertiesAreInMdc() {
-    this.keyValuePairs.forEach((k, v) -> {
-      assertThat(MdcAccess.get(k)).isNotNull();
-    });
+    this.keyValuePairs.forEach((k, v) ->
+      assertThat(MdcAccess.get(k)).isNotNull());
   }
 }

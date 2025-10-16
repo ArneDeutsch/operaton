@@ -16,21 +16,21 @@
  */
 package org.operaton.bpm.engine.impl.bpmn.helper;
 
-import static org.operaton.bpm.engine.impl.bpmn.parser.BpmnParse.PROPERTYNAME_HAS_CONDITIONAL_EVENTS;
-
 import java.util.Map;
 
 import org.operaton.bpm.engine.impl.bpmn.parser.ConditionalEventDefinition;
 import org.operaton.bpm.engine.impl.bpmn.parser.ErrorEventDefinition;
-import org.operaton.bpm.engine.impl.bpmn.parser.OperatonErrorEventDefinition;
 import org.operaton.bpm.engine.impl.bpmn.parser.EscalationEventDefinition;
 import org.operaton.bpm.engine.impl.bpmn.parser.EventSubscriptionDeclaration;
+import org.operaton.bpm.engine.impl.bpmn.parser.OperatonErrorEventDefinition;
 import org.operaton.bpm.engine.impl.core.model.Properties;
 import org.operaton.bpm.engine.impl.core.model.PropertyKey;
 import org.operaton.bpm.engine.impl.core.model.PropertyListKey;
 import org.operaton.bpm.engine.impl.core.model.PropertyMapKey;
 import org.operaton.bpm.engine.impl.jobexecutor.TimerDeclarationImpl;
 import org.operaton.bpm.engine.impl.pvm.process.ActivityImpl;
+
+import static org.operaton.bpm.engine.impl.bpmn.parser.BpmnParse.PROPERTYNAME_HAS_CONDITIONAL_EVENTS;
 
 /**
  * Properties of bpmn elements.
@@ -40,7 +40,9 @@ import org.operaton.bpm.engine.impl.pvm.process.ActivityImpl;
  * @see Properties
  *
  */
-public class BpmnProperties {
+public final class BpmnProperties {
+  private BpmnProperties() {
+  }
 
   public static final PropertyKey<String> TYPE = new PropertyKey<>("type");
 
@@ -78,8 +80,6 @@ public class BpmnProperties {
 
   public static final PropertyKey<Map<String, String>> EXTENSION_PROPERTIES = new PropertyKey<>("extensionProperties");
 
-  public static final PropertyListKey<OperatonErrorEventDefinition> CAMUNDA_ERROR_EVENT_DEFINITION = new PropertyListKey<>("operatonErrorEventDefinition");
+  public static final PropertyListKey<OperatonErrorEventDefinition> OPERATON_ERROR_EVENT_DEFINITION = new PropertyListKey<>("operatonErrorEventDefinition");
 
-  private BpmnProperties() {
-  }
 }

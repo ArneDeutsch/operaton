@@ -16,12 +16,12 @@
  */
 package org.operaton.bpm.client.topic.impl;
 
-import org.operaton.bpm.client.task.ExternalTaskHandler;
-import org.operaton.bpm.client.topic.TopicSubscription;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.operaton.bpm.client.task.ExternalTaskHandler;
+import org.operaton.bpm.client.topic.TopicSubscription;
 
 /**
  * @author Tassilo Weidner
@@ -190,8 +190,7 @@ public class TopicSubscriptionImpl implements TopicSubscription {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((topicName == null) ? 0 : topicName.hashCode());
-    return result;
+    return prime * result + (topicName == null ? 0 : topicName.hashCode());
   }
 
   @Override
@@ -207,8 +206,9 @@ public class TopicSubscriptionImpl implements TopicSubscription {
     }
     TopicSubscriptionImpl other = (TopicSubscriptionImpl) obj;
     if (topicName == null) {
-      if (other.topicName != null)
+      if (other.topicName != null) {
         return false;
+      }
     } else if (!topicName.equals(other.topicName)) {
       return false;
     }

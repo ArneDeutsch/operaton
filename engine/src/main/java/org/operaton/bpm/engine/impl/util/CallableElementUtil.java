@@ -27,13 +27,14 @@ import org.operaton.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.operaton.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
 import org.operaton.bpm.engine.repository.DecisionDefinition;
 import org.operaton.bpm.engine.repository.ProcessDefinition;
+
 import static org.operaton.bpm.engine.impl.ProcessEngineLogger.UTIL_LOGGER;
 
 /**
  * @author Roman Smirnov
  *
  */
-public class CallableElementUtil {
+public final class CallableElementUtil {
 
   private CallableElementUtil() {
   }

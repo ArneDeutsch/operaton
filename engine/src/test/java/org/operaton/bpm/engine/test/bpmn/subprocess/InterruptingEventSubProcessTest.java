@@ -16,13 +16,11 @@
  */
 package org.operaton.bpm.engine.test.bpmn.subprocess;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.RuntimeService;
@@ -37,6 +35,9 @@ import org.operaton.bpm.engine.task.TaskQuery;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author Roman Smirnov
@@ -76,12 +77,7 @@ class InterruptingEventSubProcessTest {
     assertThat(eventSubscriptionQuery.count()).isZero();
     var processInstanceId = pi.getId();
 
-    try {
-      runtimeService.signalEventReceived("newSignal", processInstanceId);
-      fail("A ProcessEngineException was expected.");
-    } catch (ProcessEngineException e) {
-      // expected exception;
-    }
+    assertThatThrownBy(() -> runtimeService.signalEventReceived("newSignal", processInstanceId)).isInstanceOf(ProcessEngineException.class);
 
     taskService.complete(task.getId());
 
@@ -112,12 +108,7 @@ class InterruptingEventSubProcessTest {
     assertThat(eventSubscriptionQuery.count()).isZero();
     var processInstanceId = pi.getId();
 
-    try {
-      runtimeService.messageEventReceived("newMessage", processInstanceId);
-      fail("A ProcessEngineException was expected.");
-    } catch (ProcessEngineException e) {
-      // expected exception;
-    }
+    assertThatThrownBy(() -> runtimeService.messageEventReceived("newMessage", processInstanceId)).isInstanceOf(ProcessEngineException.class);
 
     taskService.complete(task.getId());
 
@@ -173,7 +164,7 @@ class InterruptingEventSubProcessTest {
     assertThat(task).isNotNull();
     assertThat(task.getTaskDefinitionKey()).isEqualTo("taskAfterMessageStartEvent");
 
-    assertThat(eventSubscriptionQuery.count()).isEqualTo(1);
+    assertThat(eventSubscriptionQuery.count()).isOne();
 
     taskService.complete(task.getId());
 
@@ -189,19 +180,19 @@ class InterruptingEventSubProcessTest {
     assertThat(eventSubscriptionQuery.count()).isZero();
 
     TaskQuery taskQuery = taskService.createTaskQuery();
-    assertThat(taskQuery.count()).isEqualTo(1);
+    assertThat(taskQuery.count()).isOne();
     Task task = taskQuery.singleResult();
     assertThat(task.getTaskDefinitionKey()).isEqualTo("task");
 
     JobQuery jobQuery = managementService.createJobQuery().timers();
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
 
     String jobId = jobQuery.singleResult().getId();
     managementService.executeJob(jobId);
 
     assertThat(jobQuery.count()).isZero();
 
-    assertThat(taskQuery.count()).isEqualTo(1);
+    assertThat(taskQuery.count()).isOne();
     task = taskQuery.singleResult();
     assertThat(task.getTaskDefinitionKey()).isEqualTo("eventSubProcessTask");
 

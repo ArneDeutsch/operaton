@@ -16,8 +16,6 @@
  */
 package org.operaton.bpm.engine.test.history.dmn;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +25,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.operaton.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
 import org.operaton.bpm.engine.CaseService;
 import org.operaton.bpm.engine.DecisionService;
@@ -56,6 +55,8 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.util.ResetDmnConfigUtil;
 import org.operaton.bpm.engine.variable.VariableMap;
 import org.operaton.bpm.engine.variable.Variables;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Philipp Ossler
@@ -370,7 +371,7 @@ public class HistoricDecisionInstanceTest {
       .evaluate();
 
     HistoricDecisionInstanceQuery query = historyService.createHistoricDecisionInstanceQuery().includeInputs().includeOutputs();
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     HistoricDecisionInstance historicDecisionInstance = query.singleResult();
 
@@ -432,7 +433,7 @@ public class HistoricDecisionInstanceTest {
 
     startProcessInstanceAndEvaluateDecision();
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     DecisionDefinition decisionDefinition = repositoryService.createDecisionDefinitionQuery().singleResult();
     historyService.deleteHistoricDecisionInstanceByDefinitionId(decisionDefinition.getId());
@@ -449,7 +450,7 @@ public class HistoricDecisionInstanceTest {
     HistoricDecisionInstanceQuery query =
         historyService.createHistoricDecisionInstanceQuery().decisionDefinitionKey(DECISION_DEFINITION_KEY);
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
     HistoricDecisionInstance historicDecisionInstance = query.includeInputs().includeOutputs().singleResult();
 
     // when
@@ -474,10 +475,10 @@ public class HistoricDecisionInstanceTest {
         .deploy().getId();
 
     HistoricDecisionInstanceQuery query = historyService.createHistoricDecisionInstanceQuery();
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     repositoryService.deleteDeployment(secondDeploymentId, true);
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     repositoryService.deleteDeployment(firstDeploymentId, true);
     assertThat(query.count()).isZero();

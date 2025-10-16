@@ -16,12 +16,11 @@
  */
 package org.operaton.bpm.engine.test.api.mgmt.metrics;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.Collections;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+
 import org.operaton.bpm.engine.management.Metrics;
 import org.operaton.bpm.engine.management.MetricsQuery;
 import org.operaton.bpm.engine.variable.VariableMap;
@@ -29,6 +28,8 @@ import org.operaton.bpm.engine.variable.Variables;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
 import org.operaton.bpm.model.bpmn.instance.CallActivity;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class RootProcessInstanceMetricsTest extends AbstractMetricsTest {
 
@@ -74,21 +75,21 @@ public class RootProcessInstanceMetricsTest extends AbstractMetricsTest {
 
     // then
     MetricsQuery query = managementService.createMetricsQuery();
-    assertThat(query.name(Metrics.ROOT_PROCESS_INSTANCE_START).sum()).isEqualTo(1l);
-    assertThat(query.name(Metrics.PROCESS_INSTANCES).sum()).isEqualTo(1l);
+    assertThat(query.name(Metrics.ROOT_PROCESS_INSTANCE_START).sum()).isOne();
+    assertThat(query.name(Metrics.PROCESS_INSTANCES).sum()).isOne();
 
     // and force the db metrics reporter to report
     processEngineConfiguration.getDbMetricsReporter().reportNow();
 
     // still 1
-    assertThat(query.name(Metrics.ROOT_PROCESS_INSTANCE_START).sum()).isEqualTo(1l);
-    assertThat(query.name(Metrics.PROCESS_INSTANCES).sum()).isEqualTo(1l);
+    assertThat(query.name(Metrics.ROOT_PROCESS_INSTANCE_START).sum()).isOne();
+    assertThat(query.name(Metrics.PROCESS_INSTANCES).sum()).isOne();
   }
 
   @Test
   void shouldCountRootProcessInstanceWithCallActivities() {
     // given
-    BpmnModelInstance callingInstance = getCallingInstance(BASE_INSTANCE_KEY, Collections.EMPTY_MAP);
+    BpmnModelInstance callingInstance = getCallingInstance(BASE_INSTANCE_KEY, Collections.emptyMap());
     testRule.deploy(BASE_INSTANCE, callingInstance);
 
     // when
@@ -96,15 +97,15 @@ public class RootProcessInstanceMetricsTest extends AbstractMetricsTest {
 
     // then
     MetricsQuery query = managementService.createMetricsQuery();
-    assertThat(query.name(Metrics.ROOT_PROCESS_INSTANCE_START).sum()).isEqualTo(1l);
-    assertThat(query.name(Metrics.PROCESS_INSTANCES).sum()).isEqualTo(1l);
+    assertThat(query.name(Metrics.ROOT_PROCESS_INSTANCE_START).sum()).isOne();
+    assertThat(query.name(Metrics.PROCESS_INSTANCES).sum()).isOne();
 
     // and force the db metrics reporter to report
     processEngineConfiguration.getDbMetricsReporter().reportNow();
 
     // still 1
-    assertThat(query.name(Metrics.ROOT_PROCESS_INSTANCE_START).sum()).isEqualTo(1l);
-    assertThat(query.name(Metrics.PROCESS_INSTANCES).sum()).isEqualTo(1l);
+    assertThat(query.name(Metrics.ROOT_PROCESS_INSTANCE_START).sum()).isOne();
+    assertThat(query.name(Metrics.PROCESS_INSTANCES).sum()).isOne();
   }
 
   @Test
@@ -121,17 +122,17 @@ public class RootProcessInstanceMetricsTest extends AbstractMetricsTest {
 
     // then
     MetricsQuery query = managementService.createMetricsQuery();
-    assertThat(query.name(Metrics.ROOT_PROCESS_INSTANCE_START).sum()).isEqualTo(1l);
-    assertThat(query.name(Metrics.PROCESS_INSTANCES).sum()).isEqualTo(1l);
-    assertThat(query.name(Metrics.EXECUTED_DECISION_INSTANCES).sum()).isEqualTo(1l);
+    assertThat(query.name(Metrics.ROOT_PROCESS_INSTANCE_START).sum()).isOne();
+    assertThat(query.name(Metrics.PROCESS_INSTANCES).sum()).isOne();
+    assertThat(query.name(Metrics.EXECUTED_DECISION_INSTANCES).sum()).isOne();
 
     // and force the db metrics reporter to report
     processEngineConfiguration.getDbMetricsReporter().reportNow();
 
     // still 1
-    assertThat(query.name(Metrics.ROOT_PROCESS_INSTANCE_START).sum()).isEqualTo(1l);
-    assertThat(query.name(Metrics.PROCESS_INSTANCES).sum()).isEqualTo(1l);
-    assertThat(query.name(Metrics.EXECUTED_DECISION_INSTANCES).sum()).isEqualTo(1l);
+    assertThat(query.name(Metrics.ROOT_PROCESS_INSTANCE_START).sum()).isOne();
+    assertThat(query.name(Metrics.PROCESS_INSTANCES).sum()).isOne();
+    assertThat(query.name(Metrics.EXECUTED_DECISION_INSTANCES).sum()).isOne();
   }
 
   protected BpmnModelInstance getCallingInstance(String calledInstanceKey, Map variables) {

@@ -16,16 +16,17 @@
  */
 package org.operaton.bpm.engine.test.concurrency;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.Map;
+
+import org.junit.jupiter.api.Test;
 
 import org.operaton.bpm.engine.impl.cmd.CompleteTaskCmd;
 import org.operaton.bpm.engine.impl.cmd.SetTaskVariablesCmd;
 import org.operaton.bpm.engine.impl.interceptor.CommandContext;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.variable.Variables;
-import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Svetlana Dorokhova
@@ -113,11 +114,11 @@ class CompetingCompleteTaskSetVariableTest extends ConcurrencyTestCase {
     thread2.waitUntilDone();
 
     //variable was persisted
-    assertThat(runtimeService.createVariableInstanceQuery().taskIdIn(taskId).count()).isEqualTo(1);
+    assertThat(runtimeService.createVariableInstanceQuery().taskIdIn(taskId).count()).isOne();
 
     //task was not removed
     assertThat(thread2.exception).isNotNull();
-    assertThat(taskService.createTaskQuery().taskId(taskId).count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskId(taskId).count()).isOne();
 
   }
 }

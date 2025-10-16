@@ -39,7 +39,7 @@ import org.operaton.bpm.engine.impl.persistence.entity.ExecutionEntity;
  * @author Daniel Meyer
  * @author Thorben Lindhauer
  */
-public class Context {
+public final class Context {
   protected static ThreadLocal<Deque<CommandContext>> commandContextThreadLocal = new ThreadLocal<>();
 
   protected static ThreadLocal<Deque<CommandInvocationContext>> commandInvocationContextThreadLocal = new ThreadLocal<>();
@@ -130,8 +130,8 @@ public class Context {
   }
 
   public static CoreExecutionContext<? extends CoreExecution> getCoreExecutionContext() {
-    Deque<CoreExecutionContext<? extends CoreExecution>> stack = getStack(executionContextStackThreadLocal);
-    if(stack == null || stack.isEmpty()) {
+    var stack = getStack(executionContextStackThreadLocal);
+    if(stack.isEmpty()) {
       return null;
     } else {
       return stack.peek();
@@ -214,7 +214,7 @@ public class Context {
       } catch (Exception e) {
 
         // unwrap exception
-        if(e.getCause() != null && e.getCause() instanceof RuntimeException runtimeException) {
+        if(e.getCause() instanceof RuntimeException runtimeException) {
           throw runtimeException;
         }else {
           throw new ProcessEngineException("Unexpected exeption while executing within process application ", e);

@@ -16,9 +16,6 @@
  */
 package org.operaton.bpm.engine.test.bpmn.event.timer;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,6 +28,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.RepositoryService;
 import org.operaton.bpm.engine.RuntimeService;
@@ -52,6 +50,10 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.engine.test.util.ClockTestUtil;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.operaton.bpm.engine.impl.test.TestHelper.executeJobExpectingException;
+import static org.operaton.bpm.engine.impl.test.TestHelper.executeJobIgnoringException;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Joram Barrez
@@ -107,7 +109,7 @@ class BoundaryTimerNonInterruptingEventTest {
     testHelper.waitForJobExecutorToProcessAllJobs(5000L);
 
     // we still have one timer more to fire
-    assertThat(jobQuery.count()).isEqualTo(1L);
+    assertThat(jobQuery.count()).isOne();
 
     // and we are still in the first state, but in the second state as well!
     assertThat(taskService.createTaskQuery().count()).isEqualTo(2L);
@@ -119,7 +121,7 @@ class BoundaryTimerNonInterruptingEventTest {
     taskService.complete(taskList.get(1).getId());
 
     // but we still have the original executions
-    assertThat(taskService.createTaskQuery().count()).isEqualTo(1L);
+    assertThat(taskService.createTaskQuery().count()).isOne();
     assertThat(taskService.createTaskQuery().singleResult().getName()).isEqualTo("First Task");
 
     // After setting the clock to time '2 hour and 5 seconds', the second timer should fire
@@ -139,7 +141,7 @@ class BoundaryTimerNonInterruptingEventTest {
     taskService.complete(taskList.get(0).getId());
 
     // but we still have the escalation task
-    assertThat(taskService.createTaskQuery().count()).isEqualTo(1L);
+    assertThat(taskService.createTaskQuery().count()).isOne();
     Task escalationTask = taskService.createTaskQuery().singleResult();
     assertThat(escalationTask.getName()).isEqualTo("Escalation Task 2");
 
@@ -212,7 +214,7 @@ class BoundaryTimerNonInterruptingEventTest {
     taskService.complete(task1.getId());
 
     // we now have one task left
-    assertThat(taskService.createTaskQuery().count()).isEqualTo(1L);
+    assertThat(taskService.createTaskQuery().count()).isOne();
     Task task2 = taskService.createTaskQuery().singleResult();
     assertThat(task2.getName()).isEqualTo("Escalation Task");
 
@@ -308,7 +310,7 @@ class BoundaryTimerNonInterruptingEventTest {
     taskService.complete(task.getId());
     task = taskService.createTaskQuery().taskDefinitionKey("secondTask").singleResult();
     taskService.complete(task.getId());
-    assertThat(taskService.createTaskQuery().count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().count()).isOne();
 
     // Finally, complete the task that was created due to the timer
     task = taskService.createTaskQuery().taskDefinitionKey("timerFiredTask").singleResult();
@@ -324,7 +326,7 @@ class BoundaryTimerNonInterruptingEventTest {
     TaskQuery tq = taskService.createTaskQuery().taskDefinitionKey("timerFiredTask");
     assertThat(tq.count()).isZero();
     moveByHours(1);
-    assertThat(tq.count()).isEqualTo(1);
+    assertThat(tq.count()).isOne();
     moveByHours(1);
     assertThat(tq.count()).isEqualTo(2);
 
@@ -345,7 +347,7 @@ class BoundaryTimerNonInterruptingEventTest {
 
     TaskQuery tq = taskService.createTaskQuery().taskAssignee("kermit");
 
-    assertThat(tq.count()).isEqualTo(1);
+    assertThat(tq.count()).isOne();
 
     // Simulate timer
     Job timer = managementService.createJobQuery().singleResult();
@@ -418,7 +420,7 @@ class BoundaryTimerNonInterruptingEventTest {
     taskService.complete(task.getId());
     task = taskService.createTaskQuery().taskDefinitionKey("sub2task2").singleResult();
     taskService.complete(task.getId());
-    assertThat(taskService.createTaskQuery().count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().count()).isOne();
 
     // Finally, complete the task that was created due to the timer
     task = taskService.createTaskQuery().taskDefinitionKey("timerFiredTask").singleResult();
@@ -562,14 +564,14 @@ class BoundaryTimerNonInterruptingEventTest {
     runtimeService.startProcessInstanceByKey("nonInterruptingCycle");
 
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
     String jobId = jobQuery.singleResult().getId();
 
     // when
     managementService.executeJob(jobId);
 
     // then
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
 
     String anotherJobId = jobQuery.singleResult().getId();
     assertThat(anotherJobId).isNotEqualTo(jobId);
@@ -584,18 +586,13 @@ class BoundaryTimerNonInterruptingEventTest {
     JobQuery failedJobQuery = managementService.createJobQuery();
     JobQuery jobQuery = managementService.createJobQuery();
 
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
 
     String jobId = jobQuery.singleResult().getId();
     failedJobQuery.jobId(jobId);
 
     // when (1)
-    try {
-      managementService.executeJob(jobId);
-      fail("");
-    } catch (Exception e) {
-      // expected
-    }
+    executeJobExpectingException(managementService, jobId);
 
     // then (1)
     Job failedJob = failedJobQuery.singleResult();
@@ -604,16 +601,12 @@ class BoundaryTimerNonInterruptingEventTest {
     // a new timer job has been created
     assertThat(jobQuery.count()).isEqualTo(2);
 
-    assertThat(managementService.createJobQuery().withException().count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().withException().count()).isOne();
     assertThat(managementService.createJobQuery().noRetriesLeft().count()).isZero();
     assertThat(managementService.createJobQuery().withRetriesLeft().count()).isEqualTo(2);
 
     // when (2)
-    try {
-      managementService.executeJob(jobId);
-    } catch (Exception e) {
-      // expected
-    }
+    executeJobIgnoringException(managementService, jobId);
 
     // then (2)
     failedJob = failedJobQuery.singleResult();
@@ -622,7 +615,7 @@ class BoundaryTimerNonInterruptingEventTest {
     // there are still two jobs
     assertThat(jobQuery.count()).isEqualTo(2);
 
-    assertThat(managementService.createJobQuery().withException().count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().withException().count()).isOne();
     assertThat(managementService.createJobQuery().noRetriesLeft().count()).isZero();
     assertThat(managementService.createJobQuery().withRetriesLeft().count()).isEqualTo(2);
   }
@@ -771,16 +764,16 @@ class BoundaryTimerNonInterruptingEventTest {
     runtimeService.startProcessInstanceByKey("nonInterruptingCycle").getId();
 
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
     moveByHours(1); // execute first job
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
 
     // when bean changed and job is due
     myCycleTimerBean.setCycle("R2/PT2H");
     moveByHours(1); // execute second job
 
     // then a job is due in 2 hours
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
     assertThat(jobQuery.singleResult().getDuedate())
       .isCloseTo(new Date(ClockUtil.getCurrentTime().getTime() + TWO_HOURS), 5000);
 
@@ -789,7 +782,7 @@ class BoundaryTimerNonInterruptingEventTest {
     // then a job is due in 2 hours
     assertThat(jobQuery.singleResult().getDuedate())
       .isCloseTo(new Date(ClockUtil.getCurrentTime().getTime() + TWO_HOURS), 5000);
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
 
     moveByHours(2);  // execute second job of the new cycle => no more jobs
     assertThat(jobQuery.count()).isZero();
@@ -808,16 +801,16 @@ class BoundaryTimerNonInterruptingEventTest {
     runtimeService.startProcessInstanceByKey("nonInterruptingCycle").getId();
 
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
     moveByHours(2); // execute first job
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
 
     // when bean changed and job is due
     myCycleTimerBean.setCycle("R2/PT1H");
     moveByHours(2); // execute second job
 
     // then one more job is left due in 1 hours
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
     assertThat(jobQuery.singleResult().getDuedate())
       .isCloseTo(new Date(ClockUtil.getCurrentTime().getTime() + ONE_HOUR), 5000);
 
@@ -826,7 +819,7 @@ class BoundaryTimerNonInterruptingEventTest {
      // then a job is due in 1 hours
     assertThat(jobQuery.singleResult().getDuedate())
       .isCloseTo(new Date(ClockUtil.getCurrentTime().getTime() + ONE_HOUR), 5000);
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
 
     moveByHours(1); // execute second job of the new cycle => no more jobs
     assertThat(jobQuery.count()).isZero();
@@ -843,9 +836,9 @@ class BoundaryTimerNonInterruptingEventTest {
     runtimeService.startProcessInstanceByKey("nonInterruptingCycle").getId();
 
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
     moveByHours(1); // execute first job
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
 
     // when job is due
     moveByHours(1); // execute second job
@@ -865,9 +858,9 @@ class BoundaryTimerNonInterruptingEventTest {
     runtimeService.startProcessInstanceByKey("nonInterruptingCycle").getId();
 
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
     moveByHours(1); // execute first job
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
 
     // when job is due
     myCycleTimerBean.setCycle("R2\\PT2H"); // set incorrect cycle

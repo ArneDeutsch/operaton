@@ -16,12 +16,11 @@
  */
 package org.operaton.bpm.engine.test.api.mgmt.metrics;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.operaton.bpm.engine.EntityTypes;
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.IdentityService;
@@ -31,6 +30,8 @@ import org.operaton.bpm.engine.history.UserOperationLogEntry;
 import org.operaton.bpm.engine.impl.util.ClockUtil;
 import org.operaton.bpm.engine.test.RequiredHistoryLevel;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  *
@@ -55,7 +56,7 @@ class MetricsUserOperationLogTest {
     identityService.clearAuthentication();
 
     // then
-    assertThat(historyService.createUserOperationLogQuery().count()).isEqualTo(1L);
+    assertThat(historyService.createUserOperationLogQuery().count()).isOne();
     UserOperationLogEntry logEntry = historyService.createUserOperationLogQuery().singleResult();
     assertThat(logEntry.getEntityType()).isEqualTo(EntityTypes.METRICS);
     assertThat(logEntry.getOperationType()).isEqualTo(UserOperationLogEntry.OPERATION_TYPE_DELETE);
@@ -75,7 +76,7 @@ class MetricsUserOperationLogTest {
     identityService.clearAuthentication();
 
     // then
-    assertThat(historyService.createUserOperationLogQuery().count()).isEqualTo(1L);
+    assertThat(historyService.createUserOperationLogQuery().count()).isOne();
     UserOperationLogEntry logEntry = historyService.createUserOperationLogQuery().singleResult();
     assertThat(logEntry.getEntityType()).isEqualTo(EntityTypes.METRICS);
     assertThat(logEntry.getOperationType()).isEqualTo(UserOperationLogEntry.OPERATION_TYPE_DELETE);
@@ -94,7 +95,7 @@ class MetricsUserOperationLogTest {
     identityService.clearAuthentication();
 
     // then
-    assertThat(historyService.createUserOperationLogQuery().count()).isEqualTo(1L);
+    assertThat(historyService.createUserOperationLogQuery().count()).isOne();
     UserOperationLogEntry logEntry = historyService.createUserOperationLogQuery().singleResult();
     assertThat(logEntry.getEntityType()).isEqualTo(EntityTypes.METRICS);
     assertThat(logEntry.getOperationType()).isEqualTo(UserOperationLogEntry.OPERATION_TYPE_DELETE);
@@ -141,7 +142,7 @@ class MetricsUserOperationLogTest {
     identityService.clearAuthentication();
 
     // then
-    assertThat(historyService.createUserOperationLogQuery().count()).isEqualTo(1L);
+    assertThat(historyService.createUserOperationLogQuery().count()).isOne();
     UserOperationLogEntry logEntry = historyService.createUserOperationLogQuery().property("timestamp").singleResult();
     assertThat(logEntry.getEntityType()).isEqualTo(EntityTypes.TASK_METRICS);
     assertThat(logEntry.getOperationType()).isEqualTo(UserOperationLogEntry.OPERATION_TYPE_DELETE);
@@ -160,7 +161,7 @@ class MetricsUserOperationLogTest {
     identityService.clearAuthentication();
 
     // then
-    assertThat(historyService.createUserOperationLogQuery().count()).isEqualTo(1L);
+    assertThat(historyService.createUserOperationLogQuery().count()).isOne();
     UserOperationLogEntry logEntry = historyService.createUserOperationLogQuery().singleResult();
     assertThat(logEntry.getEntityType()).isEqualTo(EntityTypes.TASK_METRICS);
     assertThat(logEntry.getOperationType()).isEqualTo(UserOperationLogEntry.OPERATION_TYPE_DELETE);

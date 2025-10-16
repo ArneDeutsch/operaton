@@ -16,15 +16,9 @@
  */
 package org.operaton.bpm.engine.test.api.runtime.migration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.operaton.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
-import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
-import static org.operaton.bpm.engine.test.util.ExecutionAssert.describeExecutionTree;
-import static org.operaton.bpm.engine.test.util.MigrationPlanValidationReportAssert.assertThat;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.migration.MigrationPlan;
 import org.operaton.bpm.engine.migration.MigrationPlanValidationException;
 import org.operaton.bpm.engine.repository.ProcessDefinition;
@@ -32,6 +26,13 @@ import org.operaton.bpm.engine.runtime.ProcessInstance;
 import org.operaton.bpm.engine.test.api.runtime.migration.models.GatewayModels;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.migration.MigrationTestExtension;
+
+import static org.operaton.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
+import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
+import static org.operaton.bpm.engine.test.util.ExecutionAssert.describeExecutionTree;
+import static org.operaton.bpm.engine.test.util.MigrationPlanValidationReportAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 /**
  * @author Thorben Lindhauer
@@ -66,7 +67,7 @@ class MigrationGatewayTest {
     testHelper.migrateProcessInstance(migrationPlan, processInstance);
 
     // then
-    assertThat(rule.getTaskService().createTaskQuery().count()).isEqualTo(1);
+    assertThat(rule.getTaskService().createTaskQuery().count()).isOne();
     assertThat(rule.getTaskService().createTaskQuery().taskDefinitionKey("afterJoin").count()).isZero();
 
     testHelper.completeTask("parallel1");
@@ -133,7 +134,7 @@ class MigrationGatewayTest {
     testHelper.migrateProcessInstance(migrationPlan, processInstance);
 
     // then
-    assertThat(rule.getTaskService().createTaskQuery().count()).isEqualTo(1);
+    assertThat(rule.getTaskService().createTaskQuery().count()).isOne();
     assertThat(rule.getTaskService().createTaskQuery().taskDefinitionKey("afterJoin").count()).isZero();
 
     testHelper.completeTask("parallel1");
@@ -163,7 +164,7 @@ class MigrationGatewayTest {
     testHelper.migrateProcessInstance(migrationPlan, processInstance);
 
     // then
-    assertThat(rule.getTaskService().createTaskQuery().count()).isEqualTo(1);
+    assertThat(rule.getTaskService().createTaskQuery().count()).isOne();
     assertThat(rule.getTaskService().createTaskQuery().taskDefinitionKey("afterJoin").count()).isZero();
 
     testHelper.completeTask("parallel1");
@@ -230,7 +231,7 @@ class MigrationGatewayTest {
     testHelper.migrateProcessInstance(migrationPlan, processInstance);
 
     // then
-    assertThat(rule.getTaskService().createTaskQuery().count()).isEqualTo(1);
+    assertThat(rule.getTaskService().createTaskQuery().count()).isOne();
     assertThat(rule.getTaskService().createTaskQuery().taskDefinitionKey("afterJoin").count()).isZero();
 
     testHelper.completeTask("parallel1");
@@ -338,7 +339,7 @@ class MigrationGatewayTest {
     testHelper.migrateProcessInstance(migrationPlan, processInstance);
 
     // then
-    assertThat(rule.getTaskService().createTaskQuery().count()).isEqualTo(1);
+    assertThat(rule.getTaskService().createTaskQuery().count()).isOne();
     assertThat(rule.getTaskService().createTaskQuery().taskDefinitionKey("afterJoin").count()).isZero();
 
     rule.getRuntimeService().createProcessInstanceModification(processInstance.getId())

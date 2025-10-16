@@ -16,14 +16,12 @@
  */
 package org.operaton.bpm.engine.test.bpmn.tasklistener;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.RuntimeService;
 import org.operaton.bpm.engine.TaskService;
@@ -38,6 +36,9 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.engine.test.junit5.authorization.AuthorizationTestExtension;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author Askar Akhmerov
@@ -142,7 +143,7 @@ class TaskListenerDelegateCompletionTest {
     runtimeService.startProcessInstanceByKey("process");
 
     // assume
-    assertThat(taskQuery.count()).isEqualTo(1L);
+    assertThat(taskQuery.count()).isOne();
 
     // when
     ClockUtil.offset(TimeUnit.MINUTES.toMillis(70L));

@@ -27,6 +27,7 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.ws.rs.container.AsyncResponse;
 import jakarta.ws.rs.core.Response.Status;
+
 import org.operaton.bpm.engine.IdentityService;
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.externaltask.ExternalTaskQueryTopicBuilder;
@@ -66,9 +67,9 @@ public class FetchAndLockHandlerImpl implements Runnable, FetchAndLockHandler {
 
   protected Thread handlerThread = new Thread(this, this.getClass().getSimpleName());
 
-  protected volatile boolean isRunning = false;
+  protected volatile boolean isRunning;
 
-  protected boolean isUniqueWorkerRequest = false;
+  protected boolean isUniqueWorkerRequest;
 
   public FetchAndLockHandlerImpl() {
     this.condition = new SingleConsumerCondition(handlerThread);

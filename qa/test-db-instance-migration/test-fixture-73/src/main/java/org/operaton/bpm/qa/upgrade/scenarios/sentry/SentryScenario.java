@@ -28,7 +28,7 @@ import org.operaton.bpm.qa.upgrade.ScenarioSetup;
  * @author Roman Smirnov
  *
  */
-public class SentryScenario {
+public final class SentryScenario {
 
   private SentryScenario() {
   }
@@ -40,62 +40,54 @@ public class SentryScenario {
 
   @DescribesScenario("triggerTaskEntryCriterion")
   public static ScenarioSetup triggerEntryCriterion() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        CaseService caseService = engine.getCaseService();
-        caseService.createCaseInstanceByKey("case", scenarioName);
-      }
+    return (engine, scenarioName) -> {
+      CaseService caseService = engine.getCaseService();
+      caseService.createCaseInstanceByKey("case", scenarioName);
     };
   }
 
   @DescribesScenario("triggerStageEntryCriterion")
   public static ScenarioSetup completeStage() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        CaseService caseService = engine.getCaseService();
-        CaseInstance caseInstance = caseService.createCaseInstanceByKey("case", scenarioName);
-        String caseInstanceId = caseInstance.getId();
+    return (engine, scenarioName) -> {
+      CaseService caseService = engine.getCaseService();
+      CaseInstance caseInstance = caseService.createCaseInstanceByKey("case", scenarioName);
+      String caseInstanceId = caseInstance.getId();
 
-        CaseExecutionQuery query = caseService.createCaseExecutionQuery().caseInstanceId(caseInstanceId);
+      CaseExecutionQuery query = caseService.createCaseExecutionQuery().caseInstanceId(caseInstanceId);
 
-        String firstHumanTaskId = query.activityId("PI_HumanTask_1").singleResult().getId();
-        caseService.manuallyStartCaseExecution(firstHumanTaskId);
-        caseService.completeCaseExecution(firstHumanTaskId);
+      String firstHumanTaskId = query.activityId("PI_HumanTask_1").singleResult().getId();
+      caseService.manuallyStartCaseExecution(firstHumanTaskId);
+      caseService.completeCaseExecution(firstHumanTaskId);
 
-        String secondHumanTaskId = query.activityId("PI_HumanTask_2").singleResult().getId();
-        caseService.manuallyStartCaseExecution(secondHumanTaskId);
-      }
+      String secondHumanTaskId = query.activityId("PI_HumanTask_2").singleResult().getId();
+      caseService.manuallyStartCaseExecution(secondHumanTaskId);
     };
   }
 
   @DescribesScenario("newSentryInstance")
   public static ScenarioSetup newSentryInstance() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        CaseService caseService = engine.getCaseService();
-        CaseInstance caseInstance = caseService.createCaseInstanceByKey("case", scenarioName);
-        String caseInstanceId = caseInstance.getId();
+    return (engine, scenarioName) -> {
+      CaseService caseService = engine.getCaseService();
+      CaseInstance caseInstance = caseService.createCaseInstanceByKey("case", scenarioName);
+      String caseInstanceId = caseInstance.getId();
 
-        CaseExecutionQuery query = caseService.createCaseExecutionQuery().caseInstanceId(caseInstanceId);
+      CaseExecutionQuery query = caseService.createCaseExecutionQuery().caseInstanceId(caseInstanceId);
 
-        String firstHumanTaskId = query.activityId("PI_HumanTask_1").singleResult().getId();
-        caseService.manuallyStartCaseExecution(firstHumanTaskId);
-        caseService.completeCaseExecution(firstHumanTaskId);
+      String firstHumanTaskId = query.activityId("PI_HumanTask_1").singleResult().getId();
+      caseService.manuallyStartCaseExecution(firstHumanTaskId);
+      caseService.completeCaseExecution(firstHumanTaskId);
 
-        String secondHumanTaskId = query.activityId("PI_HumanTask_2").singleResult().getId();
-        caseService.manuallyStartCaseExecution(secondHumanTaskId);
-        caseService.completeCaseExecution(secondHumanTaskId);
-      }
+      String secondHumanTaskId = query.activityId("PI_HumanTask_2").singleResult().getId();
+      caseService.manuallyStartCaseExecution(secondHumanTaskId);
+      caseService.completeCaseExecution(secondHumanTaskId);
     };
   }
 
   @DescribesScenario("completeInstance")
   public static ScenarioSetup completeInstance() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        CaseService caseService = engine.getCaseService();
-        caseService.createCaseInstanceByKey("case", scenarioName);
-      }
+    return (engine, scenarioName) -> {
+      CaseService caseService = engine.getCaseService();
+      caseService.createCaseInstanceByKey("case", scenarioName);
     };
   }
 }

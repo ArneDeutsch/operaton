@@ -26,7 +26,7 @@ import org.operaton.bpm.qa.upgrade.Times;
  * @author Thorben Lindhauer
  *
  */
-public class ParallelMultiInstanceSubprocessScenario {
+public final class ParallelMultiInstanceSubprocessScenario {
 
   private ParallelMultiInstanceSubprocessScenario() {
   }
@@ -39,14 +39,12 @@ public class ParallelMultiInstanceSubprocessScenario {
   @DescribesScenario("initNonInterruptingBoundaryEvent")
   @Times(7)
   public static ScenarioSetup instantiateNonInterruptingBoundaryEvent() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        engine
-          .getRuntimeService()
-          .startProcessInstanceByKey("ParallelMultiInstanceSubprocessNonInterruptingBoundaryEvent", scenarioName);
+    return (engine, scenarioName) -> {
+      engine
+        .getRuntimeService()
+        .startProcessInstanceByKey("ParallelMultiInstanceSubprocessNonInterruptingBoundaryEvent", scenarioName);
 
-        engine.getRuntimeService().correlateMessage("BoundaryEventMessage", scenarioName);
-      }
+      engine.getRuntimeService().correlateMessage("BoundaryEventMessage", scenarioName);
     };
   }
 }

@@ -36,8 +36,9 @@ import org.operaton.bpm.identity.impl.ldap.util.LdapPluginLogger;
  */
 public class LdapIdentityProviderPlugin extends LdapConfiguration implements ProcessEnginePlugin {
 
-  protected boolean acceptUntrustedCertificates = false;
+  protected boolean acceptUntrustedCertificates;
 
+  @Override
   public void preInit(ProcessEngineConfigurationImpl processEngineConfiguration) {
 
     LdapPluginLogger.INSTANCE.pluginActivated(getClass().getSimpleName(), processEngineConfiguration.getProcessEngineName());
@@ -53,10 +54,12 @@ public class LdapIdentityProviderPlugin extends LdapConfiguration implements Pro
 
   }
 
+  @Override
   public void postInit(ProcessEngineConfigurationImpl processEngineConfiguration) {
     // nothing to do
   }
 
+  @Override
   public void postProcessEngineBuild(ProcessEngine processEngine) {
     // nothing to do
   }

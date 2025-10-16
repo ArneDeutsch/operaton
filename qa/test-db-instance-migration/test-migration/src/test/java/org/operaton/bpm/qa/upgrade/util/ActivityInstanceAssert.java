@@ -21,16 +21,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
+import org.junit.Assert;
+
 import org.operaton.bpm.engine.impl.bpmn.parser.BpmnParse;
 import org.operaton.bpm.engine.runtime.ActivityInstance;
 import org.operaton.bpm.engine.runtime.TransitionInstance;
-import org.junit.Assert;
 
 /**
  * @author Daniel Meyer
  *
  */
-public class ActivityInstanceAssert {
+public final class ActivityInstanceAssert {
   private ActivityInstanceAssert() {
   }
 
@@ -105,9 +106,10 @@ public class ActivityInstanceAssert {
     }
 
   }
+
   public static class ActivityInstanceTreeBuilder {
 
-    protected ExpectedActivityInstance rootInstance = null;
+    protected ExpectedActivityInstance rootInstance;
 
     protected Stack<ExpectedActivityInstance> activityInstanceStack = new Stack<>();
 

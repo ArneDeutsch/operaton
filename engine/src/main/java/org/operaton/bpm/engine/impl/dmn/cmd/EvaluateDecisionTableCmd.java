@@ -16,9 +16,6 @@
  */
 package org.operaton.bpm.engine.impl.dmn.cmd;
 
-import static org.operaton.bpm.engine.impl.util.DecisionEvaluationUtil.evaluateDecisionTable;
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureOnlyOneNotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +32,9 @@ import org.operaton.bpm.engine.repository.DecisionDefinition;
 import org.operaton.bpm.engine.variable.VariableMap;
 import org.operaton.bpm.engine.variable.Variables;
 
+import static org.operaton.bpm.engine.impl.util.DecisionEvaluationUtil.evaluateDecisionTable;
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureOnlyOneNotNull;
+
 /**
  * Evaluates the decision table with the given key or id.
  *
@@ -50,7 +50,7 @@ public class EvaluateDecisionTableCmd implements Command<DmnDecisionTableResult>
   protected Integer version;
   protected VariableMap variables;
   protected String decisionDefinitionTenantId;
-  protected boolean isTenandIdSet;
+  protected boolean isTenantIdSet;
 
   public EvaluateDecisionTableCmd(DecisionTableEvaluationBuilderImpl builder) {
     this.decisionDefinitionKey = builder.getDecisionDefinitionKey();
@@ -58,7 +58,7 @@ public class EvaluateDecisionTableCmd implements Command<DmnDecisionTableResult>
     this.version = builder.getVersion();
     this.variables = Variables.fromMap(builder.getVariables());
     this.decisionDefinitionTenantId = builder.getDecisionDefinitionTenantId();
-    this.isTenandIdSet = builder.isTenantIdSet();
+    this.isTenantIdSet = builder.isTenantIdSet();
   }
 
   @Override
@@ -110,16 +110,16 @@ public class EvaluateDecisionTableCmd implements Command<DmnDecisionTableResult>
   protected DecisionDefinition findByKey(DeploymentCache deploymentCache) {
     DecisionDefinition decisionDefinition = null;
 
-    if (version == null && !isTenandIdSet) {
+    if (version == null && !isTenantIdSet) {
       decisionDefinition = deploymentCache.findDeployedLatestDecisionDefinitionByKey(decisionDefinitionKey);
     }
-    else if (version == null && isTenandIdSet) {
+    else if (version == null && isTenantIdSet) {
       decisionDefinition = deploymentCache.findDeployedLatestDecisionDefinitionByKeyAndTenantId(decisionDefinitionKey, decisionDefinitionTenantId);
     }
-    else if (version != null && !isTenandIdSet) {
+    else if (version != null && !isTenantIdSet) {
       decisionDefinition = deploymentCache.findDeployedDecisionDefinitionByKeyAndVersion(decisionDefinitionKey, version);
     }
-    else if (version != null && isTenandIdSet) {
+    else if (version != null && isTenantIdSet) {
       decisionDefinition = deploymentCache.findDeployedDecisionDefinitionByKeyVersionAndTenantId(decisionDefinitionKey, version, decisionDefinitionTenantId);
     }
 

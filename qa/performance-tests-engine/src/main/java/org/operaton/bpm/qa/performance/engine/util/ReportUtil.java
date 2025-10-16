@@ -16,17 +16,17 @@
  */
 package org.operaton.bpm.qa.performance.engine.util;
 
+import java.io.File;
+
 import org.operaton.bpm.qa.performance.engine.framework.aggregate.TabularResultAggregator;
 import org.operaton.bpm.qa.performance.engine.framework.aggregate.TabularResultSet;
 import org.operaton.bpm.qa.performance.engine.framework.report.HtmlReportBuilder;
-
-import java.io.File;
 
 /**
  * @author Daniel Meyer
  *
  */
-public class ReportUtil {
+public final class ReportUtil {
 
   private ReportUtil() {
   }

@@ -16,12 +16,6 @@
  */
 package org.operaton.bpm.engine.test.api.mgmt;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.operaton.bpm.engine.management.Metrics.DECISION_INSTANCES;
-import static org.operaton.bpm.engine.management.Metrics.EXECUTED_DECISION_ELEMENTS;
-import static org.operaton.bpm.engine.management.Metrics.FLOW_NODE_INSTANCES;
-import static org.operaton.bpm.engine.management.Metrics.PROCESS_INSTANCES;
-
 import java.util.Date;
 import java.util.Map;
 
@@ -29,6 +23,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.impl.ManagementServiceImpl;
 import org.operaton.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.operaton.bpm.engine.impl.metrics.MetricsRegistry;
@@ -40,6 +35,12 @@ import org.operaton.bpm.engine.telemetry.Metric;
 import org.operaton.bpm.engine.telemetry.TelemetryData;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
+
+import static org.operaton.bpm.engine.management.Metrics.DECISION_INSTANCES;
+import static org.operaton.bpm.engine.management.Metrics.EXECUTED_DECISION_ELEMENTS;
+import static org.operaton.bpm.engine.management.Metrics.FLOW_NODE_INSTANCES;
+import static org.operaton.bpm.engine.management.Metrics.PROCESS_INSTANCES;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ManagementServiceGetTelemetryDataTest {
 
@@ -183,8 +184,7 @@ class ManagementServiceGetTelemetryDataTest {
     TelemetryData telemetryData = managementService.getTelemetryData();
 
     // then count should not reset
-    assertThat(telemetryData.getProduct().getInternals().getCommands().get(IS_TELEMETRY_ENABLED_CMD_NAME).getCount())
-        .isEqualTo(1);
+    assertThat(telemetryData.getProduct().getInternals().getCommands().get(IS_TELEMETRY_ENABLED_CMD_NAME).getCount()).isOne();
   }
 
   @Test
@@ -217,7 +217,7 @@ class ManagementServiceGetTelemetryDataTest {
 
     // then count should not reset
     assertThat(telemetryData.getProduct().getInternals().getMetrics().get(FLOW_NODE_INSTANCES).getCount()).isEqualTo(2);
-    assertThat(telemetryData.getProduct().getInternals().getMetrics().get(PROCESS_INSTANCES).getCount()).isEqualTo(1);
+    assertThat(telemetryData.getProduct().getInternals().getMetrics().get(PROCESS_INSTANCES).getCount()).isOne();
   }
 
   @Test
@@ -231,8 +231,7 @@ class ManagementServiceGetTelemetryDataTest {
     TelemetryData telemetryDataAfterPiStart = managementService.getTelemetryData();
 
     // then
-    assertThat(telemetryDataAfterPiStart.getProduct().getInternals().getMetrics().get(PROCESS_INSTANCES).getCount())
-        .isEqualTo(1);
+    assertThat(telemetryDataAfterPiStart.getProduct().getInternals().getMetrics().get(PROCESS_INSTANCES).getCount()).isOne();
   }
 
   @Test
@@ -249,7 +248,7 @@ class ManagementServiceGetTelemetryDataTest {
 
     // then
     assertThat(telemetryDataAfterPiStart.getProduct().getInternals().getCommands().get(IS_TELEMETRY_ENABLED_CMD_NAME)
-        .getCount()).isEqualTo(1);
+      .getCount()).isOne();
   }
 
   @Test

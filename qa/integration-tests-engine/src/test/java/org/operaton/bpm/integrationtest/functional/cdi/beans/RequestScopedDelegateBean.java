@@ -16,11 +16,11 @@
  */
 package org.operaton.bpm.integrationtest.functional.cdi.beans;
 
-import org.operaton.bpm.engine.delegate.DelegateExecution;
-import org.operaton.bpm.engine.delegate.JavaDelegate;
-
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
+
+import org.operaton.bpm.engine.delegate.DelegateExecution;
+import org.operaton.bpm.engine.delegate.JavaDelegate;
 
 /**
  * A {@link RequestScoped} bean
@@ -32,7 +32,7 @@ import jakarta.inject.Named;
 @RequestScoped
 public class RequestScopedDelegateBean implements JavaDelegate {
 
-  private int invocationCounter = 0;
+  private int invocationCounter;
 
   @Override
   public void execute(DelegateExecution execution) throws Exception {

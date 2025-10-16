@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<assembly xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xmlns="urn:maven:assembly:1.1.2">
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.2.0 https://maven.apache.org/xsd/assembly-2.2.0.xsd">
   
   <id>distro</id>
   
@@ -70,6 +71,19 @@
       <source>src/EMPTY_FILE</source>
       <outputDirectory>server/wildfly-${version.wildfly}/standalone/deployments/</outputDirectory>
       <destName>operaton-welcome.war.dodeploy</destName>
+    </file>
+
+    <file>
+      <source>src/security.txt.example</source>
+      <filtered>true</filtered>
+      <lineEnding>crlf</lineEnding>
+      <outputDirectory />
+    </file>
+    <file>
+      <source>src/SECURITY-BEST-PRACTICES.md</source>
+      <filtered>true</filtered>
+      <lineEnding>crlf</lineEnding>
+      <outputDirectory />
     </file>  
   </files>
   

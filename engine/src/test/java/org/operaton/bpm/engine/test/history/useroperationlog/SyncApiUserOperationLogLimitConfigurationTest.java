@@ -16,15 +16,16 @@
  */
 package org.operaton.bpm.engine.test.history.useroperationlog;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.ProcessEngineConfiguration;
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class SyncApiUserOperationLogLimitConfigurationTest {
 
@@ -48,7 +49,7 @@ class SyncApiUserOperationLogLimitConfigurationTest {
     startEngineManaged(processEngineConfiguration);
 
     // then
-    assertThat(processEngineConfiguration.getLogEntriesPerSyncOperationLimit()).isEqualTo(1L);
+    assertThat(processEngineConfiguration.getLogEntriesPerSyncOperationLimit()).isOne();
   }
 
   @Test

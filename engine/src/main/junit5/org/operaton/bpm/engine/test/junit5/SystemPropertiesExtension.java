@@ -25,7 +25,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 /**
  * Extension as replacement for SystemPropertiesRule to restore system properties after a test.
  */
-public class SystemPropertiesExtension implements BeforeEachCallback, AfterEachCallback {
+public final class SystemPropertiesExtension implements BeforeEachCallback, AfterEachCallback {
 
   protected Properties properties;
 
@@ -37,13 +37,13 @@ public class SystemPropertiesExtension implements BeforeEachCallback, AfterEachC
   }
 
   @Override
-  public void beforeEach(ExtensionContext context) throws Exception {
+  public void beforeEach(ExtensionContext context) {
     properties = System.getProperties();
     System.setProperties(new Properties(properties));
   }
 
   @Override
-  public void afterEach(ExtensionContext context) throws Exception {
+  public void afterEach(ExtensionContext context) {
     System.setProperties(properties);
   }
 

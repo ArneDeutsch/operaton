@@ -16,18 +16,6 @@
  */
 package org.operaton.bpm.engine.impl.util;
 
-import org.operaton.bpm.engine.ProcessEngineException;
-import org.operaton.bpm.engine.ProcessEnginePersistenceException;
-import org.operaton.bpm.engine.impl.context.Context;
-import org.operaton.bpm.engine.impl.persistence.entity.ByteArrayEntity;
-import org.operaton.bpm.engine.repository.ResourceType;
-import static org.operaton.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.DB2;
-import static org.operaton.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.H2;
-import static org.operaton.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MARIADB_MYSQL;
-import static org.operaton.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MSSQL;
-import static org.operaton.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.ORACLE;
-import static org.operaton.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.POSTGRES;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
@@ -36,11 +24,24 @@ import java.util.function.Supplier;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.executor.BatchExecutorException;
 
+import org.operaton.bpm.engine.ProcessEngineException;
+import org.operaton.bpm.engine.ProcessEnginePersistenceException;
+import org.operaton.bpm.engine.impl.context.Context;
+import org.operaton.bpm.engine.impl.persistence.entity.ByteArrayEntity;
+import org.operaton.bpm.engine.repository.ResourceType;
+
+import static org.operaton.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.DB2;
+import static org.operaton.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.H2;
+import static org.operaton.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MARIADB_MYSQL;
+import static org.operaton.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MSSQL;
+import static org.operaton.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.ORACLE;
+import static org.operaton.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.POSTGRES;
+
 /**
  * @author Roman Smirnov
  * @author Askar Akhmerov
  */
-public class ExceptionUtil {
+public final class ExceptionUtil {
 
   public static final String PERSISTENCE_EXCEPTION_MESSAGE = "An exception occurred in the " +
       "persistence layer. Please check the server logs for a detailed message and the entire " +

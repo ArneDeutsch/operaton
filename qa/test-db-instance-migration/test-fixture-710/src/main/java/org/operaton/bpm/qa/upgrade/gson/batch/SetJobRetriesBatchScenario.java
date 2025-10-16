@@ -29,7 +29,7 @@ import org.operaton.bpm.qa.upgrade.ScenarioSetup;
 /**
  * @author Tassilo Weidner
  */
-public class SetJobRetriesBatchScenario {
+public final class SetJobRetriesBatchScenario {
 
   private SetJobRetriesBatchScenario() {
   }
@@ -41,25 +41,23 @@ public class SetJobRetriesBatchScenario {
 
   @DescribesScenario("initSetJobRetriesBatch")
   public static ScenarioSetup initSetJobRetriesBatch() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        for (int i = 0; i < 10; i++) {
-          engine.getRuntimeService().startProcessInstanceByKey("oneTaskProcessAsync_710");
-        }
-
-        List<String> jobIds = new ArrayList<>();
-
-        List<Job> jobs = engine.getManagementService().createJobQuery()
-          .processDefinitionKey("oneTaskProcessAsync_710")
-          .list();
-
-        for (Job job : jobs) {
-          jobIds.add(job.getId());
-        }
-
-        Batch batch = engine.getManagementService().setJobRetriesAsync(jobIds, 22);
-        engine.getManagementService().setProperty("SetJobRetriesBatchScenario.retries.batchId", batch.getId());
+    return (engine, scenarioName) -> {
+      for (int i = 0;i < 10;i++) {
+        engine.getRuntimeService().startProcessInstanceByKey("oneTaskProcessAsync_710");
       }
+
+      List<String> jobIds = new ArrayList<>();
+
+      List<Job> jobs = engine.getManagementService().createJobQuery()
+        .processDefinitionKey("oneTaskProcessAsync_710")
+        .list();
+
+      for (Job job : jobs) {
+        jobIds.add(job.getId());
+      }
+
+      Batch batch = engine.getManagementService().setJobRetriesAsync(jobIds, 22);
+      engine.getManagementService().setProperty("SetJobRetriesBatchScenario.retries.batchId", batch.getId());
     };
   }
 }

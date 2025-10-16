@@ -16,18 +16,18 @@
  */
 package org.operaton.bpm.qa.performance.engine.util;
 
-import org.operaton.bpm.qa.performance.engine.framework.PerfTestException;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 
+import org.operaton.bpm.qa.performance.engine.framework.PerfTestException;
+
 /**
  * @author Daniel Meyer, Ingo Richtsmeier
  *
  */
-public class FileUtil {
+public final class FileUtil {
 
   private FileUtil() {
   }

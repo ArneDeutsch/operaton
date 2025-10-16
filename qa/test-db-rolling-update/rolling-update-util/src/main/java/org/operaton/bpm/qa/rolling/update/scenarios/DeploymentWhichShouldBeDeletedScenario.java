@@ -26,7 +26,7 @@ import org.operaton.bpm.qa.upgrade.Times;
  *
  * @author Christopher Zell <christopher.zell@camunda.com>
  */
-public class DeploymentWhichShouldBeDeletedScenario {
+public final class DeploymentWhichShouldBeDeletedScenario {
 
   public static final String PROCESS_DEF_KEY = "processWithAsyncServiceTask";
 
@@ -41,10 +41,7 @@ public class DeploymentWhichShouldBeDeletedScenario {
   @DescribesScenario("init")
   @Times(1)
   public static ScenarioSetup startProcess() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        engine.getRuntimeService().startProcessInstanceByKey(PROCESS_DEF_KEY, scenarioName);
-      }
-    };
+    return (engine, scenarioName) ->
+      engine.getRuntimeService().startProcessInstanceByKey(PROCESS_DEF_KEY, scenarioName);
   }
 }

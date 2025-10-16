@@ -16,10 +16,9 @@
  */
 package org.operaton.bpm.qa.performance.engine.framework;
 
-import static org.operaton.bpm.qa.performance.engine.framework.activitylog.ActivityPerfTestWatcher.WATCH_ALL_ACTIVITIES;
-
 import java.util.*;
 
+import static org.operaton.bpm.qa.performance.engine.framework.activitylog.ActivityPerfTestWatcher.WATCH_ALL_ACTIVITIES;
 import static java.util.Collections.emptyList;
 
 /**
@@ -34,10 +33,10 @@ public class PerfTestConfiguration {
   protected int numberOfRuns = 1000;
   protected String databaseName = "";
 
-  protected String testWatchers = null;
+  protected String testWatchers;
   protected String historyLevel;
 
-  protected List<String> watchActivities = null;
+  protected List<String> watchActivities;
 
   protected Date startTime;
 

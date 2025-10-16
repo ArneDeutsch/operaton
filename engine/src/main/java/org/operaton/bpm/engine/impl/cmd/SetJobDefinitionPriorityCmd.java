@@ -16,8 +16,6 @@
  */
 package org.operaton.bpm.engine.impl.cmd;
 
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-
 import org.operaton.bpm.engine.EntityTypes;
 import org.operaton.bpm.engine.exception.NotFoundException;
 import org.operaton.bpm.engine.exception.NotValidException;
@@ -31,6 +29,8 @@ import org.operaton.bpm.engine.impl.oplog.UserOperationLogContextEntryBuilder;
 import org.operaton.bpm.engine.impl.persistence.entity.JobDefinitionEntity;
 import org.operaton.bpm.engine.impl.persistence.entity.PropertyChange;
 
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+
 /**
  * @author Thorben Lindhauer
  *
@@ -41,7 +41,7 @@ public class SetJobDefinitionPriorityCmd implements Command<Void> {
 
   protected String jobDefinitionId;
   protected Long priority;
-  protected boolean cascade = false;
+  protected boolean cascade;
 
   public SetJobDefinitionPriorityCmd(String jobDefinitionId, Long priority, boolean cascade) {
     this.jobDefinitionId = jobDefinitionId;

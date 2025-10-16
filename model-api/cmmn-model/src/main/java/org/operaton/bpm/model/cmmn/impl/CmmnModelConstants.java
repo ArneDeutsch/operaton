@@ -20,7 +20,9 @@ package org.operaton.bpm.model.cmmn.impl;
  * @author Roman Smirnov
  *
  */
-public class CmmnModelConstants {
+public final class CmmnModelConstants {
+  private CmmnModelConstants() {
+  }
 
   /** The CMMN 1.0 namespace */
   public static final String CMMN10_NS = "http://www.omg.org/spec/CMMN/20131201/MODEL";
@@ -40,8 +42,11 @@ public class CmmnModelConstants {
   /** The XPath namespace */
   public static final String XPATH_NS = "http://www.w3.org/1999/XPath";
 
+  /** Backwards compatibility with Camunda CMMN files */
+  public static final String CAMUNDA_NS = "http://camunda.org/schema/1.0/cmmn";
+
   /** Operaton namespace */
-  public static final String CAMUNDA_NS = "http://operaton.org/schema/1.0/cmmn";
+  public static final String OPERATON_NS = "http://operaton.org/schema/1.0/cmmn";
 
   // elements ///////////////////////////////////////////////////////////////////////////
 
@@ -263,8 +268,4 @@ public class CmmnModelConstants {
   public static final String OPERATON_ATTRIBUTE_MAP_DECISION_RESULT = "mapDecisionResult";
   public static final String OPERATON_ATTRIBUTE_VARIABLE_NAME = "variableName";
   public static final String OPERATON_ATTRIBUTE_HISTORY_TIME_TO_LIVE = "historyTimeToLive";
-
-  private CmmnModelConstants() {
-  }
-
 }

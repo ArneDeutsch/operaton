@@ -16,12 +16,9 @@
  */
 package org.operaton.bpm.engine.test.bpmn.event.error;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.operaton.bpm.engine.test.bpmn.event.error.ThrowErrorDelegate.throwError;
-import static org.operaton.bpm.engine.test.bpmn.event.error.ThrowErrorDelegate.throwException;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.RuntimeService;
 import org.operaton.bpm.engine.TaskService;
@@ -35,11 +32,15 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.engine.variable.VariableMap;
 import org.operaton.bpm.engine.variable.Variables;
 
+import static org.operaton.bpm.engine.test.bpmn.event.error.ThrowErrorDelegate.throwError;
+import static org.operaton.bpm.engine.test.bpmn.event.error.ThrowErrorDelegate.throwException;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 /**
  * @author Falko Menge
  */
-class ErrorEventSubProcessTest  {
+class ErrorEventSubProcessTest {
 
   @RegisterExtension
   static ProcessEngineExtension engineRule = ProcessEngineExtension.builder().build();
@@ -67,8 +68,8 @@ class ErrorEventSubProcessTest  {
     // The process will throw an error event,
     // which is caught and escalated by a User Task
     assertThat(taskService.createTaskQuery()
-        .taskDefinitionKey("taskAfterErrorCatch2") // <!>
-        .count()).as("No tasks found in task list.").isEqualTo(1);
+      .taskDefinitionKey("taskAfterErrorCatch2") // <!>
+      .count()).as("No tasks found in task list.").isOne();
     Task task = taskService.createTaskQuery().singleResult();
     assertThat(task.getName()).isEqualTo("Escalated Task");
 
@@ -303,7 +304,7 @@ class ErrorEventSubProcessTest  {
   private void assertThatErrorHasBeenCaught(String procId) {
     // The process will throw an error event,
     // which is caught and escalated by a User Task
-    assertThat(taskService.createTaskQuery().count()).as("No tasks found in task list.").isEqualTo(1);
+    assertThat(taskService.createTaskQuery().count()).as("No tasks found in task list.").isOne();
     Task task = taskService.createTaskQuery().singleResult();
     assertThat(task.getName()).isEqualTo("Escalated Task");
 

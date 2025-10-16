@@ -17,7 +17,6 @@
 package org.operaton.bpm.webapp.impl.security.filter;
 
 import java.util.Arrays;
-
 import jakarta.servlet.FilterConfig;
 
 import org.operaton.bpm.engine.ProcessEngineException;
@@ -85,7 +84,7 @@ public class CookieConfigurator {
   }
 
   public String getCookieName(String defaultName) {
-    return !hasText(cookieName) ? defaultName : cookieName;
+    return hasText(cookieName) ? cookieName : defaultName;
   }
 
   static String getSameSiteCookieValueInitValue(String sameSiteCookieValueInitParam, String sameSiteCookieOptionInitParam) {

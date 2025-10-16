@@ -24,35 +24,33 @@ import org.operaton.bpm.qa.upgrade.ScenarioSetup;
 /**
  * @author Tassilo Weidner
  */
-public class CreateRootProcessInstanceWithoutRootIdScenario {
+public final class CreateRootProcessInstanceWithoutRootIdScenario {
 
   private CreateRootProcessInstanceWithoutRootIdScenario() {
   }
 
   @DescribesScenario("initRootProcessInstanceWithoutRootId")
   public static ScenarioSetup initRootProcessInstance() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
+    return (engine, scenarioName) -> {
 
-        engine.getRepositoryService().createDeployment()
-          .addModelInstance("process.bpmn", Bpmn.createExecutableProcess("process")
-              .operatonHistoryTimeToLive(180)
-            .startEvent()
-            .userTask()
-            .endEvent().done())
-          .deploy();
+      engine.getRepositoryService().createDeployment()
+        .addModelInstance("process.bpmn", Bpmn.createExecutableProcess("process")
+            .operatonHistoryTimeToLive(180)
+          .startEvent()
+          .userTask()
+          .endEvent().done())
+        .deploy();
 
-        engine.getRepositoryService().createDeployment()
-          .addModelInstance("rootProcess.bpmn", Bpmn.createExecutableProcess("rootProcess")
-              .operatonHistoryTimeToLive(180)
-            .startEvent()
-            .callActivity()
-              .calledElement("process")
-            .endEvent().done())
-          .deploy();
+      engine.getRepositoryService().createDeployment()
+        .addModelInstance("rootProcess.bpmn", Bpmn.createExecutableProcess("rootProcess")
+            .operatonHistoryTimeToLive(180)
+          .startEvent()
+          .callActivity()
+            .calledElement("process")
+          .endEvent().done())
+        .deploy();
 
-        engine.getRuntimeService().startProcessInstanceByKey("rootProcess", "rootProcessInstance");
-      }
+      engine.getRuntimeService().startProcessInstanceByKey("rootProcess", "rootProcessInstance");
     };
   }
 }

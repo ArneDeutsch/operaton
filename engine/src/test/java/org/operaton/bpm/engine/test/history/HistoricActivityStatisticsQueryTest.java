@@ -16,15 +16,12 @@
  */
 package org.operaton.bpm.engine.test.history;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.ProcessEngineConfiguration;
@@ -45,6 +42,9 @@ import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.RequiredHistoryLevel;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 /**
  *
@@ -89,7 +89,7 @@ class HistoricActivityStatisticsQueryTest {
     HistoricActivityStatisticsQuery query = historyService.createHistoricActivityStatisticsQuery(processDefinitionId);
     List<HistoricActivityStatistics> statistics = query.list();
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(statistics).hasSize(1);
 
     HistoricActivityStatistics statistic = statistics.get(0);
@@ -178,7 +178,7 @@ class HistoricActivityStatisticsQueryTest {
 
     List<HistoricActivityStatistics> statistics = query.list();
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(statistics).hasSize(1);
 
     // callActivity
@@ -396,7 +396,7 @@ class HistoricActivityStatisticsQueryTest {
         .includeCompleteScope();
     List<HistoricActivityStatistics> statistics = query.list();
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(statistics).hasSize(1);
 
     // end
@@ -518,7 +518,7 @@ class HistoricActivityStatisticsQueryTest {
 
     List<HistoricActivityStatistics> statistics = query.list();
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(statistics).hasSize(1);
 
     // task
@@ -550,7 +550,7 @@ class HistoricActivityStatisticsQueryTest {
 
     List<HistoricActivityStatistics> statistics = query.list();
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(statistics).hasSize(1);
 
     // task
@@ -624,7 +624,7 @@ class HistoricActivityStatisticsQueryTest {
 
   @Deployment(resources = "org/operaton/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
-  void testQueryByCanceledAndFinishedByPeriods() throws ParseException {
+  void testQueryByCanceledAndFinishedByPeriods() throws Exception {
     try {
 
       //start two process instances
@@ -971,8 +971,8 @@ class HistoricActivityStatisticsQueryTest {
     assertThat(endStats.getId()).isEqualTo("end");
     assertThat(endStats.getInstances()).isZero();
     assertThat(endStats.getCanceled()).isZero();
-    assertThat(endStats.getFinished()).isEqualTo(1);
-    assertThat(endStats.getCompleteScope()).isEqualTo(1);
+    assertThat(endStats.getFinished()).isOne();
+    assertThat(endStats.getCompleteScope()).isOne();
 
     // start
     HistoricActivityStatistics startStats = statistics.get(1);
@@ -988,7 +988,7 @@ class HistoricActivityStatisticsQueryTest {
 
     assertThat(taskStats.getId()).isEqualTo("task");
     assertThat(taskStats.getInstances()).isZero();
-    assertThat(taskStats.getCanceled()).isEqualTo(1);
+    assertThat(taskStats.getCanceled()).isOne();
     assertThat(taskStats.getFinished()).isEqualTo(2);
     assertThat(taskStats.getCompleteScope()).isZero();
   }
@@ -1031,8 +1031,8 @@ class HistoricActivityStatisticsQueryTest {
     assertThat(query.orderByActivityId().asc().list()).hasSize(1);
     assertThat(query.orderByActivityId().desc().list()).hasSize(1);
 
-    assertThat(query.orderByActivityId().asc().count()).isEqualTo(1);
-    assertThat(query.orderByActivityId().desc().count()).isEqualTo(1);
+    assertThat(query.orderByActivityId().asc().count()).isOne();
+    assertThat(query.orderByActivityId().desc().count()).isOne();
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml",
@@ -1052,7 +1052,7 @@ class HistoricActivityStatisticsQueryTest {
 
     List<HistoricActivityStatistics> statistics = query.list();
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(statistics).hasSize(1);
 
     HistoricActivityStatistics task = statistics.get(0);
@@ -1064,7 +1064,7 @@ class HistoricActivityStatisticsQueryTest {
 
     statistics = query.list();
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(statistics).hasSize(1);
 
     task = statistics.get(0);
@@ -1272,7 +1272,7 @@ class HistoricActivityStatisticsQueryTest {
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Deployment(resources = "org/operaton/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
-  void testQueryCancelledIncludeIncidentsDeletedOnly() throws ParseException {
+  void testQueryCancelledIncludeIncidentsDeletedOnly() throws Exception {
     try {
       // given
       String processDefinitionId = getProcessDefinitionId();
@@ -1320,7 +1320,7 @@ class HistoricActivityStatisticsQueryTest {
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Deployment(resources = "org/operaton/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
-  void testQueryCompletedIncludeIncidentsDeletedOnly() throws ParseException {
+  void testQueryCompletedIncludeIncidentsDeletedOnly() throws Exception {
     try {
       // given
       String processDefinitionId = getProcessDefinitionId();

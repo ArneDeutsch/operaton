@@ -16,9 +16,6 @@
  */
 package org.operaton.bpm.engine.impl.management;
 
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +24,9 @@ import org.operaton.bpm.engine.impl.cmd.CommandLogger;
 import org.operaton.bpm.engine.impl.cmd.SetJobRetriesCmd;
 import org.operaton.bpm.engine.impl.interceptor.CommandExecutor;
 import org.operaton.bpm.engine.management.SetJobRetriesBuilder;
+
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 public class SetJobRetriesBuilderImpl implements SetJobRetriesBuilder {
 
@@ -40,10 +40,10 @@ public class SetJobRetriesBuilderImpl implements SetJobRetriesBuilder {
   protected Integer retries;
   protected Date dueDate;
 
-  protected boolean isDueDateSet = false;
-  boolean byJobId = false;
-  boolean byJobIds = false;
-  boolean byJobDefinitionId = false;
+  protected boolean isDueDateSet;
+  boolean byJobId;
+  boolean byJobIds;
+  boolean byJobDefinitionId;
 
   public SetJobRetriesBuilderImpl(CommandExecutor commandExecutor, int retries) {
     this.commandExecutor = commandExecutor;

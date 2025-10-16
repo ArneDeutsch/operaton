@@ -16,14 +16,14 @@
  */
 package org.operaton.bpm.container.impl.spi;
 
-import org.operaton.bpm.container.impl.ContainerIntegrationLogger;
-import org.operaton.bpm.engine.impl.ProcessEngineLogger;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.operaton.bpm.container.impl.ContainerIntegrationLogger;
+import org.operaton.bpm.engine.impl.ProcessEngineLogger;
 
 /**
  * <p>A DeploymentOperation allows bundling multiple deployment steps into a
@@ -178,7 +178,7 @@ public class DeploymentOperation {
 
     protected PlatformServiceContainer container;
     protected String name;
-    protected boolean isUndeploymentOperation = false;
+    protected boolean isUndeploymentOperation;
     protected List<DeploymentOperationStep> steps = new ArrayList<>();
     protected Map<String, Object> initialAttachments = new HashMap<>();
 

@@ -27,7 +27,7 @@ import org.operaton.bpm.qa.upgrade.Times;
  * @author Thorben Lindhauer
  *
  */
-public class InterruptingEventSubProcessCompensationScenario {
+public final class InterruptingEventSubProcessCompensationScenario {
 
   private InterruptingEventSubProcessCompensationScenario() {
   }
@@ -40,20 +40,18 @@ public class InterruptingEventSubProcessCompensationScenario {
   @DescribesScenario("init.throwCompensate")
   @Times(4)
   public static ScenarioSetup instantiateThrowCompensate() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        engine
-          .getRuntimeService()
-          .startProcessInstanceByKey("InterruptingEventSubProcessCompensationScenario", scenarioName);
+    return (engine, scenarioName) -> {
+      engine
+        .getRuntimeService()
+        .startProcessInstanceByKey("InterruptingEventSubProcessCompensationScenario", scenarioName);
 
-        // trigger the event subprocess
-        engine.getRuntimeService().correlateMessage("EventSubProcessMessage");
+      // trigger the event subprocess
+      engine.getRuntimeService().correlateMessage("EventSubProcessMessage");
 
-        // complete the task to compensate and then throw compensation
-        Task eventSubProcessTask = engine.getTaskService().createTaskQuery()
-            .processInstanceBusinessKey(scenarioName).singleResult();
-        engine.getTaskService().complete(eventSubProcessTask.getId());
-      }
+      // complete the task to compensate and then throw compensation
+      Task eventSubProcessTask = engine.getTaskService().createTaskQuery()
+        .processInstanceBusinessKey(scenarioName).singleResult();
+      engine.getTaskService().complete(eventSubProcessTask.getId());
     };
   }
 }

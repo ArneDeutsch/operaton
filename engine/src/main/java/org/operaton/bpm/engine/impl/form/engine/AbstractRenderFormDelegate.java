@@ -16,6 +16,9 @@
  */
 package org.operaton.bpm.engine.impl.form.engine;
 
+import java.util.List;
+import java.util.Map;
+
 import org.operaton.bpm.engine.form.FormData;
 import org.operaton.bpm.engine.form.FormField;
 import org.operaton.bpm.engine.form.FormFieldValidationConstraint;
@@ -24,9 +27,6 @@ import org.operaton.bpm.engine.impl.form.type.BooleanFormType;
 import org.operaton.bpm.engine.impl.form.type.DateFormType;
 import org.operaton.bpm.engine.impl.form.type.EnumFormType;
 import org.operaton.bpm.engine.impl.form.type.StringFormType;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Askar Akhmerov
@@ -287,7 +287,7 @@ public abstract class AbstractRenderFormDelegate {
     HtmlElementWriter inputField = new HtmlElementWriter(INPUT_ELEMENT, true);
     addCommonFormFieldAttributes(formField, inputField);
 
-    String inputType = !isBoolean(formField) ? TEXT_INPUT_TYPE : CHECKBOX_INPUT_TYPE;
+    String inputType = isBoolean(formField) ? CHECKBOX_INPUT_TYPE : TEXT_INPUT_TYPE;
 
     inputField.attribute(TYPE_ATTRIBUTE, inputType);
 

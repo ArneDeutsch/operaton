@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.SAXParser;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import org.operaton.bpm.engine.BpmnParseException;
 import org.operaton.bpm.engine.Problem;
@@ -34,8 +36,6 @@ import org.operaton.bpm.engine.impl.util.io.StreamSource;
 import org.operaton.bpm.engine.impl.util.io.StringStreamSource;
 import org.operaton.bpm.engine.impl.util.io.UrlStreamSource;
 import org.operaton.bpm.engine.impl.xml.ProblemImpl;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.DefaultHandler;
 
 
 /**
@@ -57,7 +57,7 @@ public abstract class Parse extends DefaultHandler {
   protected Parser parser;
   protected String name;
   protected StreamSource streamSource;
-  protected Element rootElement = null;
+  protected Element rootElement;
   protected List<Problem> errors = new ArrayList<>();
   protected List<Problem> warnings = new ArrayList<>();
   protected String schemaResource;

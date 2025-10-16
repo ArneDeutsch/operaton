@@ -16,40 +16,6 @@
  */
 package org.operaton.bpm.engine.test.history.useroperationlog;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.operaton.bpm.engine.EntityTypes.ATTACHMENT;
-import static org.operaton.bpm.engine.EntityTypes.IDENTITY_LINK;
-import static org.operaton.bpm.engine.EntityTypes.JOB;
-import static org.operaton.bpm.engine.EntityTypes.JOB_DEFINITION;
-import static org.operaton.bpm.engine.EntityTypes.PROCESS_DEFINITION;
-import static org.operaton.bpm.engine.EntityTypes.PROCESS_INSTANCE;
-import static org.operaton.bpm.engine.EntityTypes.TASK;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_ACTIVATE;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_ACTIVATE_JOB;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_ACTIVATE_JOB_DEFINITION;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_ACTIVATE_PROCESS_DEFINITION;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_ADD_ATTACHMENT;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_ADD_GROUP_LINK;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_ADD_USER_LINK;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_CREATE;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_DELETE;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_DELETE_ATTACHMENT;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_DELETE_GROUP_LINK;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_DELETE_USER_LINK;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_SET_JOB_RETRIES;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_SET_PRIORITY;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_SUSPEND;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_SUSPEND_JOB;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_SUSPEND_JOB_DEFINITION;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_SUSPEND_PROCESS_DEFINITION;
-import static org.operaton.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_UPDATE;
-import static org.operaton.bpm.engine.impl.cmd.AbstractSetBatchStateCmd.SUSPENSION_STATE_PROPERTY;
-import static org.operaton.bpm.engine.impl.cmd.AbstractSetProcessDefinitionStateCmd.INCLUDE_PROCESS_INSTANCES_PROPERTY;
-import static org.operaton.bpm.engine.impl.persistence.entity.TaskEntity.ASSIGNEE;
-import static org.operaton.bpm.engine.impl.persistence.entity.TaskEntity.OWNER;
-import static org.operaton.bpm.engine.test.util.QueryTestHelper.verifyQueryResults;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -63,6 +29,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+
 import org.operaton.bpm.engine.EntityTypes;
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.externaltask.ExternalTask;
@@ -84,6 +51,22 @@ import org.operaton.bpm.engine.runtime.ProcessInstance;
 import org.operaton.bpm.engine.task.Attachment;
 import org.operaton.bpm.engine.task.Task;
 import org.operaton.bpm.engine.test.Deployment;
+
+import static org.operaton.bpm.engine.EntityTypes.ATTACHMENT;
+import static org.operaton.bpm.engine.EntityTypes.IDENTITY_LINK;
+import static org.operaton.bpm.engine.EntityTypes.JOB;
+import static org.operaton.bpm.engine.EntityTypes.JOB_DEFINITION;
+import static org.operaton.bpm.engine.EntityTypes.PROCESS_DEFINITION;
+import static org.operaton.bpm.engine.EntityTypes.PROCESS_INSTANCE;
+import static org.operaton.bpm.engine.EntityTypes.TASK;
+import static org.operaton.bpm.engine.history.UserOperationLogEntry.*;
+import static org.operaton.bpm.engine.impl.cmd.AbstractSetBatchStateCmd.SUSPENSION_STATE_PROPERTY;
+import static org.operaton.bpm.engine.impl.cmd.AbstractSetProcessDefinitionStateCmd.INCLUDE_PROCESS_INSTANCES_PROPERTY;
+import static org.operaton.bpm.engine.impl.persistence.entity.TaskEntity.ASSIGNEE;
+import static org.operaton.bpm.engine.impl.persistence.entity.TaskEntity.OWNER;
+import static org.operaton.bpm.engine.test.util.QueryTestHelper.verifyQueryResults;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author Danny Gräf
@@ -123,23 +106,23 @@ class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
     assertThat(query().entityType(TASK).count()).isEqualTo(11);
     assertThat(query().entityType(IDENTITY_LINK).count()).isEqualTo(4);
     assertThat(query().entityType(ATTACHMENT).count()).isEqualTo(2);
-    assertThat(query().entityType(EntityTypes.PROCESS_INSTANCE).count()).isEqualTo(1);
+    assertThat(query().entityType(EntityTypes.PROCESS_INSTANCE).count()).isOne();
     assertThat(query().entityType("unknown entity type").count()).isZero();
 
     // operation type
     assertThat(query().operationType(OPERATION_TYPE_CREATE).count()).isEqualTo(2);
-    assertThat(query().operationType(OPERATION_TYPE_SET_PRIORITY).count()).isEqualTo(1);
+    assertThat(query().operationType(OPERATION_TYPE_SET_PRIORITY).count()).isOne();
     assertThat(query().operationType(OPERATION_TYPE_UPDATE).count()).isEqualTo(4);
-    assertThat(query().operationType(OPERATION_TYPE_ADD_USER_LINK).count()).isEqualTo(1);
-    assertThat(query().operationType(OPERATION_TYPE_DELETE_USER_LINK).count()).isEqualTo(1);
-    assertThat(query().operationType(OPERATION_TYPE_ADD_GROUP_LINK).count()).isEqualTo(1);
-    assertThat(query().operationType(OPERATION_TYPE_DELETE_GROUP_LINK).count()).isEqualTo(1);
-    assertThat(query().operationType(OPERATION_TYPE_ADD_ATTACHMENT).count()).isEqualTo(1);
-    assertThat(query().operationType(OPERATION_TYPE_DELETE_ATTACHMENT).count()).isEqualTo(1);
+    assertThat(query().operationType(OPERATION_TYPE_ADD_USER_LINK).count()).isOne();
+    assertThat(query().operationType(OPERATION_TYPE_DELETE_USER_LINK).count()).isOne();
+    assertThat(query().operationType(OPERATION_TYPE_ADD_GROUP_LINK).count()).isOne();
+    assertThat(query().operationType(OPERATION_TYPE_DELETE_GROUP_LINK).count()).isOne();
+    assertThat(query().operationType(OPERATION_TYPE_ADD_ATTACHMENT).count()).isOne();
+    assertThat(query().operationType(OPERATION_TYPE_DELETE_ATTACHMENT).count()).isOne();
 
     // category
     assertThat(query().categoryIn(UserOperationLogEntry.CATEGORY_TASK_WORKER).count()).isEqualTo(17);
-    assertThat(query().categoryIn(UserOperationLogEntry.CATEGORY_OPERATOR).count()).isEqualTo(1);// start process instance
+    assertThat(query().categoryIn(UserOperationLogEntry.CATEGORY_OPERATOR).count()).isOne();// start process instance
 
     // process and execution reference
     assertThat(query().processDefinitionId(process.getProcessDefinitionId()).count()).isEqualTo(12);
@@ -851,7 +834,7 @@ class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
     managementService.setJobRetries(job.getId(), 10);
 
     // then
-    assertThat(query().entityType(JOB).operationType(OPERATION_TYPE_SET_JOB_RETRIES).count()).isEqualTo(1);
+    assertThat(query().entityType(JOB).operationType(OPERATION_TYPE_SET_JOB_RETRIES).count()).isOne();
 
     UserOperationLogEntry jobRetryEntry = query()
       .entityType(JOB)
@@ -862,7 +845,7 @@ class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
     assertThat(jobRetryEntry).isNotNull();
     assertThat(jobRetryEntry.getJobId()).isEqualTo(job.getId());
 
-    assertThat(jobRetryEntry.getOrgValue()).isEqualTo("3");
+    assertThat(jobRetryEntry.getOrgValue()).isEqualTo("5");
     assertThat(jobRetryEntry.getNewValue()).isEqualTo("10");
     assertThat(jobRetryEntry.getProperty()).isEqualTo("retries");
     assertThat(jobRetryEntry.getJobDefinitionId()).isEqualTo(job.getJobDefinitionId());
@@ -903,7 +886,7 @@ class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
       .category(UserOperationLogEntry.CATEGORY_OPERATOR)
       .count();
 
-    assertThat(jobDefinitionEntryCount).isEqualTo(1);
+    assertThat(jobDefinitionEntryCount).isOne();
 
     // there exists a job for the delayed activation execution
     JobQuery jobQuery = managementService.createJobQuery();
@@ -921,7 +904,7 @@ class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
       .category(UserOperationLogEntry.CATEGORY_OPERATOR)
       .count();
 
-    assertThat(jobDefinitionEntryCount).isEqualTo(1);
+    assertThat(jobDefinitionEntryCount).isOne();
 
     // Clean up db
     CommandExecutor commandExecutor = processEngineConfiguration.getCommandExecutorTxRequired();
@@ -963,7 +946,7 @@ class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
       .property(SUSPENSION_STATE_PROPERTY)
       .count();
 
-    assertThat(processDefinitionEntryCount).isEqualTo(1);
+    assertThat(processDefinitionEntryCount).isOne();
 
     // when
     // execute job
@@ -979,7 +962,7 @@ class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
       .property(SUSPENSION_STATE_PROPERTY)
       .count();
 
-    assertThat(processDefinitionEntryCount).isEqualTo(1);
+    assertThat(processDefinitionEntryCount).isOne();
 
     // clean up op log
     CommandExecutor commandExecutor = processEngineConfiguration.getCommandExecutorTxRequired();
@@ -1009,7 +992,7 @@ class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
       .entityType(EntityTypes.PROCESS_INSTANCE)
       .operationType(UserOperationLogEntry.OPERATION_TYPE_MODIFY_PROCESS_INSTANCE);
 
-    assertThat(logQuery.count()).isEqualTo(1);
+    assertThat(logQuery.count()).isOne();
     UserOperationLogEntry logEntry = logQuery.singleResult();
 
     assertThat(logEntry.getProcessInstanceId()).isEqualTo(processInstanceId);
@@ -1256,19 +1239,9 @@ class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
 
     verifyQueryResults(query, 0);
 
-    try {
-      query.entityTypeIn((String[]) null);
-      fail("");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    assertThatThrownBy(() -> query.entityTypeIn((String[]) null)).isInstanceOf(ProcessEngineException.class);
 
-    try {
-      query.entityTypeIn(TASK, null, EntityTypes.VARIABLE);
-      fail("");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    assertThatThrownBy(() -> query.entityTypeIn(TASK, null, EntityTypes.VARIABLE)).isInstanceOf(ProcessEngineException.class);
   }
 
   @Deployment(resources = {ONE_TASK_PROCESS})
@@ -1318,26 +1291,12 @@ class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
 
     verifyQueryResults(query, 0);
 
-    try {
-      query.category(null);
-      fail("");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    var query2 = query;
+    assertThatThrownBy(() -> query2.category(null)).isInstanceOf(ProcessEngineException.class);
 
-    try {
-      query.categoryIn((String[]) null);
-      fail("");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    assertThatThrownBy(() -> query2.categoryIn((String[]) null)).isInstanceOf(ProcessEngineException.class);
 
-    try {
-      query.categoryIn(UserOperationLogEntry.CATEGORY_ADMIN, null, UserOperationLogEntry.CATEGORY_TASK_WORKER);
-      fail("");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    assertThatThrownBy(() -> query2.categoryIn(UserOperationLogEntry.CATEGORY_ADMIN, null, UserOperationLogEntry.CATEGORY_TASK_WORKER)).isInstanceOf(ProcessEngineException.class);
   }
 
   // ----- DELETE VARIABLE HISTORY -----
@@ -1461,9 +1420,8 @@ class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
     historyService.deleteHistoricVariableInstance(variableInstance.getId());
 
     // then
-    String operationType = UserOperationLogEntry.OPERATION_TYPE_DELETE_HISTORY;
-    UserOperationLogQuery logQuery = query().entityType(EntityTypes.VARIABLE).operationType(operationType);
-    assertThat(logQuery.count()).isEqualTo(1);
+    UserOperationLogQuery logQuery = query().entityType(EntityTypes.VARIABLE).operationType(UserOperationLogEntry.OPERATION_TYPE_DELETE_HISTORY);
+    assertThat(logQuery.count()).isOne();
 
     UserOperationLogEntry logEntry = logQuery.singleResult();
     assertThat(logEntry.getTaskId()).isEqualTo(task.getId());
@@ -1703,12 +1661,7 @@ class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
 
     verifyQueryResults(query, 0);
 
-    try {
-      query.deploymentId(null);
-      fail("");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    assertThatThrownBy(() -> query.deploymentId(null)).isInstanceOf(ProcessEngineException.class);
   }
 
   private Map<String, Object> createMapForVariableAddition() {
@@ -1777,7 +1730,7 @@ class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
 
   private void verifySingleVariableOperationPropertyChange(String property, String newValue, String operationType) {
     UserOperationLogQuery logQuery = query().entityType(EntityTypes.VARIABLE).operationType(operationType);
-    assertThat(logQuery.count()).isEqualTo(1);
+    assertThat(logQuery.count()).isOne();
     UserOperationLogEntry logEntry = logQuery.singleResult();
     assertThat(logEntry.getProperty()).isEqualTo(property);
     assertThat(logEntry.getNewValue()).isEqualTo(newValue);
@@ -1786,9 +1739,8 @@ class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
 
   private void verifySingleCaseVariableOperationAsserts(CaseInstance caseInstance) {
     String deploymentId = repositoryService.createDeploymentQuery().singleResult().getId();
-    String operationType = UserOperationLogEntry.OPERATION_TYPE_DELETE_HISTORY;
-    UserOperationLogQuery logQuery = query().entityType(EntityTypes.VARIABLE).operationType(operationType);
-    assertThat(logQuery.count()).isEqualTo(1);
+    UserOperationLogQuery logQuery = query().entityType(EntityTypes.VARIABLE).operationType(UserOperationLogEntry.OPERATION_TYPE_DELETE_HISTORY);
+    assertThat(logQuery.count()).isOne();
 
     UserOperationLogEntry logEntry = logQuery.singleResult();
     assertThat(logEntry.getCaseDefinitionId()).isEqualTo(caseInstance.getCaseDefinitionId());

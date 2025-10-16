@@ -24,10 +24,13 @@ import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.ServiceLoader;
-
 import jakarta.ws.rs.core.MediaType;
 
+import io.restassured.RestAssured;
+import io.restassured.http.Header;
 import org.apache.http.entity.ContentType;
+import org.junit.jupiter.api.BeforeEach;
+
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.impl.persistence.entity.ActivityInstanceImpl;
@@ -43,10 +46,6 @@ import org.operaton.bpm.engine.variable.VariableMap;
 import org.operaton.bpm.engine.variable.Variables;
 import org.operaton.bpm.engine.variable.value.BytesValue;
 import org.operaton.bpm.engine.variable.value.TypedValue;
-import org.junit.jupiter.api.BeforeEach;
-
-import io.restassured.RestAssured;
-import io.restassured.http.Header;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -151,8 +150,8 @@ public abstract class AbstractRestServiceTest {
   }
 
 
-  private static Properties connectionProperties = null;
-  private static MockedProcessEngineProvider processEngineProvider = null;
+  private static Properties connectionProperties;
+  private static MockedProcessEngineProvider processEngineProvider;
 
   @BeforeEach
   public void setUp() throws IOException {

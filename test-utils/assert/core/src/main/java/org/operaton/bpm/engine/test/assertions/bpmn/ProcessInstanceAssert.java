@@ -27,6 +27,7 @@ import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ListAssert;
 import org.assertj.core.api.MapAssert;
 import org.assertj.core.util.Lists;
+
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.externaltask.ExternalTaskQuery;
 import org.operaton.bpm.engine.history.HistoricActivityInstance;
@@ -129,11 +130,11 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
     ActivityInstance activityInstanceTree = runtimeService().getActivityInstance(actual.getId());
 
     // Collect all children recursively
-    Stream <ActivityInstance> flattenedActivityInstances = collectAllDecendentActivities(activityInstanceTree);
+    Stream <ActivityInstance> flattenedActivityInstances = collectAllDescendantActivities(activityInstanceTree);
 
-    Stream<String> decendentActivityIdStream = flattenedActivityInstances
+    Stream<String> descendantActivityIdStream = flattenedActivityInstances
         .flatMap(this::getActivityIdAndCollectTransitions);
-    List<String> decendentActivityIds = decendentActivityIdStream.filter(
+    List<String> descendantActivityIds = descendantActivityIdStream.filter(
         // remove the root id from the list
         activityId -> !activityId.equals(activityInstanceTree.getActivityId())
     ).toList();
@@ -141,11 +142,11 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
     final String message = "Expecting %s " +
       (isWaitingAt ? "to be waiting at " + (exactly ? "exactly " : "") + "%s, ": "NOT to be waiting at %s, ") +
       "but it is actually waiting at %s.";
-    ListAssert<String> assertion = Assertions.assertThat(decendentActivityIds)
+    ListAssert<String> assertion = Assertions.assertThat(descendantActivityIds)
       .overridingErrorMessage(message,
         toString(current),
         Lists.newArrayList(activityIds),
-        decendentActivityIds);
+        descendantActivityIds);
     if (exactly) {
       if (isWaitingAt) {
         assertion.containsOnly(activityIds);
@@ -163,11 +164,11 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
     return this;
   }
 
-  private Stream<ActivityInstance> collectAllDecendentActivities(ActivityInstance root) {
+  private Stream<ActivityInstance> collectAllDescendantActivities(ActivityInstance root) {
     ActivityInstance[] childActivityInstances = root.getChildActivityInstances();
     return Stream.concat(
         Stream.of(root),
-        Arrays.stream(childActivityInstances).flatMap(this::collectAllDecendentActivities)
+        Arrays.stream(childActivityInstances).flatMap(this::collectAllDescendantActivities)
     );
   }
 
@@ -306,9 +307,9 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
           remainingFinished = remainingFinished.subList(remainingFinished.indexOf(activityId) + 1, remainingFinished.size());
         }
       }
-    }
-    else
+    } else {
       assertion.doesNotContain(activityIds);
+    }
     return this;
   }
 
@@ -344,16 +345,17 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
     message.append("Expecting %s to hold ");
     if (shouldHaveVariables) {
       message.append("process variables");
-      message.append((shouldHaveSpecificVariables ? " %s, " : ", "));
+      message.append(shouldHaveSpecificVariables ? " %s, " : ", ");
     } else {
       message.append("no variables at all, ");
     }
     message.append("instead we found it to hold ");
     message.append(vars.isEmpty() ? "no variables at all." : "the variables %s.");
-    if (vars.isEmpty() && getCurrent() == null)
+    if (vars.isEmpty() && getCurrent() == null) {
       message.append(" (Please make sure you have set the history " +
         "service of the engine to at least 'audit' or a higher level " +
         "before making use of this assertion for historic instances!)");
+    }
 
     MapAssert<String, Object> assertion = variables()
       .overridingErrorMessage(message.toString(), toString(actual),
@@ -481,8 +483,9 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    */
   public ProcessInstanceAssert isStarted() {
     Object pi = getCurrent();
-    if (pi == null)
+    if (pi == null) {
       pi = historicProcessInstanceQuery().singleResult();
+    }
     Assertions.assertThat(pi)
       .overridingErrorMessage("Expecting %s to be started, but it is not!",
         toString(actual))
@@ -543,8 +546,9 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    *          actual ProcessInstance)
    */
   public TaskAssert task(final TaskQuery query) {
-    if (query == null)
+    if (query == null) {
       throw new IllegalArgumentException("Illegal call of task(query = 'null') - but must not be null!");
+    }
     isNotNull();
     TaskQuery narrowed = query.processInstanceId(actual.getId());
     return TaskAssert.assertThat(engine, narrowed.singleResult());
@@ -660,8 +664,9 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    *          actual ProcessInstance)
    */
   public ProcessInstanceAssert calledProcessInstance(ProcessInstanceQuery query) {
-    if (query == null)
+    if (query == null) {
       throw new IllegalArgumentException("Illegal call of calledProcessInstance(query = 'null') - but must not be null!");
+    }
     isNotNull();
     ProcessInstanceQuery narrowed = query.superProcessInstanceId(actual.getId());
     return CalledProcessInstanceAssert.assertThat(engine, narrowed.singleResult());
@@ -718,8 +723,9 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    *          to actual ProcessInstance)
    */
   public JobAssert job(JobQuery query) {
-    if (query == null)
+    if (query == null) {
       throw new IllegalArgumentException("Illegal call of job(query = 'null') - but must not be null!");
+    }
     isNotNull();
     JobQuery narrowed = query.processInstanceId(actual.getId());
     return JobAssert.assertThat(engine, narrowed.singleResult());

@@ -23,7 +23,7 @@ import org.operaton.bpm.qa.upgrade.DescribesScenario;
 import org.operaton.bpm.qa.upgrade.ScenarioSetup;
 import org.operaton.bpm.qa.upgrade.Times;
 
-public class EmptyStringVariableScenario {
+public final class EmptyStringVariableScenario {
 
   public static final String PROCESS_DEF_KEY = "oneTaskProcess";
 
@@ -38,11 +38,8 @@ public class EmptyStringVariableScenario {
   @DescribesScenario("init")
   @Times(1)
   public static ScenarioSetup startProcess() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        engine.getRuntimeService().startProcessInstanceByKey(PROCESS_DEF_KEY, scenarioName,
-            Variables.createVariables().putValue("myStringVar", ""));
-      }
-    };
+    return (engine, scenarioName) ->
+      engine.getRuntimeService().startProcessInstanceByKey(PROCESS_DEF_KEY, scenarioName,
+        Variables.createVariables().putValue("myStringVar", ""));
   }
 }

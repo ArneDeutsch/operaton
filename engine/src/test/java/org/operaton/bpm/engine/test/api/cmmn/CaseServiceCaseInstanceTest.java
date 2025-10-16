@@ -16,16 +16,13 @@
  */
 package org.operaton.bpm.engine.test.api.cmmn;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.operaton.bpm.engine.CaseService;
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.RepositoryService;
@@ -42,6 +39,10 @@ import org.operaton.bpm.engine.runtime.VariableInstanceQuery;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.fail;
 
 /**
  * @author Roman Smirnov
@@ -1057,9 +1058,9 @@ class CaseServiceCaseInstanceTest {
 
     assertThat(caseInstance.getBusinessKey()).isEqualTo("aBusinessKey");
     assertThat(runtimeService.createVariableInstanceQuery()
-        .caseInstanceIdIn(caseInstance.getId())
-        .variableValueEquals("aVariable", "aValue")
-        .count()).isEqualTo(1);
+      .caseInstanceIdIn(caseInstance.getId())
+      .variableValueEquals("aVariable", "aValue")
+      .count()).isOne();
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
@@ -1081,9 +1082,9 @@ class CaseServiceCaseInstanceTest {
 
     assertThat(caseInstance.getBusinessKey()).isEqualTo("aBusinessKey");
     assertThat(runtimeService.createVariableInstanceQuery()
-        .caseInstanceIdIn(caseInstance.getId())
-        .variableValueEquals("aVariable", "aValue")
-        .count()).isEqualTo(1);
+      .caseInstanceIdIn(caseInstance.getId())
+      .variableValueEquals("aVariable", "aValue")
+      .count()).isOne();
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})

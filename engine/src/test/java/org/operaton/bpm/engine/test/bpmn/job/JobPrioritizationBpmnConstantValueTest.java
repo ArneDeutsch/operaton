@@ -16,13 +16,11 @@
  */
 package org.operaton.bpm.engine.test.bpmn.job;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.ParseException;
 import org.operaton.bpm.engine.RepositoryService;
@@ -32,6 +30,9 @@ import org.operaton.bpm.engine.runtime.Job;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 /**
  * @author Thorben Lindhauer
@@ -329,7 +330,7 @@ class JobPrioritizationBpmnConstantValueTest {
     runtimeService.startProcessInstanceByKey("intermediateSignalJobPrioProcess");
 
     // then there is an async job for the signal start event with the priority defined in the BPMN XML
-    assertThat(managementService.createJobQuery().count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().count()).isOne();
     Job signalStartJob = managementService.createJobQuery().singleResult();
     assertThat(signalStartJob).isNotNull();
     assertThat(signalStartJob.getPriority()).isEqualTo(4);
@@ -341,7 +342,7 @@ class JobPrioritizationBpmnConstantValueTest {
     runtimeService.startProcessInstanceByKey("miBodyAsyncPriorityProcess");
 
     // then there is a job that has the priority as defined on the activity
-    assertThat(managementService.createJobQuery().count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().count()).isOne();
     Job miBodyJob = managementService.createJobQuery().singleResult();
     assertThat(miBodyJob).isNotNull();
     assertThat(miBodyJob.getPriority()).isEqualTo(5);

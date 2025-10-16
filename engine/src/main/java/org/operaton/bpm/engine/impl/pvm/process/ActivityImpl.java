@@ -16,6 +16,12 @@
  */
 package org.operaton.bpm.engine.impl.pvm.process;
 
+import java.io.Serial;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.operaton.bpm.engine.impl.bpmn.helper.BpmnProperties;
 import org.operaton.bpm.engine.impl.bpmn.parser.BpmnParse;
 import org.operaton.bpm.engine.impl.pvm.PvmActivity;
@@ -23,12 +29,6 @@ import org.operaton.bpm.engine.impl.pvm.PvmException;
 import org.operaton.bpm.engine.impl.pvm.PvmScope;
 import org.operaton.bpm.engine.impl.pvm.PvmTransition;
 import org.operaton.bpm.engine.impl.pvm.delegate.ActivityBehavior;
-
-import java.io.Serial;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -54,7 +54,7 @@ public class ActivityImpl extends ScopeImpl implements PvmActivity, HasDIBounds 
   protected ScopeImpl eventScope;
   protected ScopeImpl flowScope;
 
-  protected boolean isScope = false;
+  protected boolean isScope;
 
   protected boolean isAsyncBefore;
   protected boolean isAsyncAfter;
@@ -153,8 +153,9 @@ public class ActivityImpl extends ScopeImpl implements PvmActivity, HasDIBounds 
   }
 
   public void setAsyncBefore(boolean isAsyncBefore, boolean exclusive) {
-    if (delegateAsyncBeforeUpdate != null)
+    if (delegateAsyncBeforeUpdate != null) {
       delegateAsyncBeforeUpdate.updateAsyncBefore(isAsyncBefore, exclusive);
+    }
     this.isAsyncBefore = isAsyncBefore;
   }
 
@@ -168,8 +169,9 @@ public class ActivityImpl extends ScopeImpl implements PvmActivity, HasDIBounds 
   }
 
   public void setAsyncAfter(boolean isAsyncAfter, boolean exclusive) {
-    if (delegateAsyncAfterUpdate != null)
+    if (delegateAsyncAfterUpdate != null) {
       delegateAsyncAfterUpdate.updateAsyncAfter(isAsyncAfter, exclusive);
+    }
     this.isAsyncAfter = isAsyncAfter;
   }
 

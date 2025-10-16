@@ -22,7 +22,7 @@ import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.qa.upgrade.DescribesScenario;
 import org.operaton.bpm.qa.upgrade.ScenarioSetup;
 
-public class AuthorizationCheckProcessDefinitionScenario {
+public final class AuthorizationCheckProcessDefinitionScenario {
   private AuthorizationCheckProcessDefinitionScenario() {
   }
 
@@ -33,26 +33,24 @@ public class AuthorizationCheckProcessDefinitionScenario {
 
   @DescribesScenario("prepareAuthorizationCheckProcessDefinition")
   public static ScenarioSetup prepareAuthorizationCheckProcessDefinition() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        String processInstanceId = engine.getRuntimeService()
-            .startProcessInstanceByKey("oneTaskProcess_userOpLog_annotation")
-            .getId();
+    return (engine, scenarioName) -> {
+      String processInstanceId = engine.getRuntimeService()
+        .startProcessInstanceByKey("oneTaskProcess_userOpLog_annotation")
+        .getId();
 
-        engine.getIdentityService()
-            .setAuthentication("demo", null);
+      engine.getIdentityService()
+        .setAuthentication("demo", null);
 
-        Task task = engine.getTaskService()
-            .createTaskQuery()
-            .processInstanceId(processInstanceId)
-            .singleResult();
+      Task task = engine.getTaskService()
+        .createTaskQuery()
+        .processInstanceId(processInstanceId)
+        .singleResult();
 
-        engine.getTaskService()
-            .setAssignee(task.getId(), "john");
+      engine.getTaskService()
+        .setAssignee(task.getId(), "john");
 
-        engine.getIdentityService()
-            .clearAuthentication();
-      }
+      engine.getIdentityService()
+        .clearAuthentication();
     };
   }
 }

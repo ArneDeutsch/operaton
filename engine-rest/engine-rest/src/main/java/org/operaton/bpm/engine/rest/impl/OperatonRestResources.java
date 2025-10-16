@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.jakarta.rs.json.JacksonJsonProvider;
+
 import org.operaton.bpm.engine.rest.exception.ExceptionHandler;
 import org.operaton.bpm.engine.rest.exception.JsonMappingExceptionHandler;
 import org.operaton.bpm.engine.rest.exception.JsonParseExceptionHandler;
@@ -35,7 +36,7 @@ import org.operaton.bpm.engine.rest.mapper.MultipartPayloadProvider;
  * @author Daniel Meyer
  *
  */
-public class OperatonRestResources {
+public final class OperatonRestResources {
 
   private static final Set<Class<?>> RESOURCE_CLASSES = new HashSet<>();
 

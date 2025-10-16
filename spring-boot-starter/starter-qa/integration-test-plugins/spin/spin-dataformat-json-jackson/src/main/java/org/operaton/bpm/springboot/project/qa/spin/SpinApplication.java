@@ -16,15 +16,18 @@
  */
 package org.operaton.bpm.springboot.project.qa.spin;
 
-import static org.operaton.spin.Spin.S;
+import java.util.Objects;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 import org.operaton.bpm.engine.delegate.JavaDelegate;
 import org.operaton.bpm.engine.variable.Variables;
 import org.operaton.spin.DataFormats;
 import org.operaton.spin.json.SpinJsonNode;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+
+import static org.operaton.spin.Spin.S;
 
 @SpringBootApplication
 public class SpinApplication {
@@ -37,7 +40,8 @@ public class SpinApplication {
   public JavaDelegate spinJava8DeserializerDelegate() {
     return delegateExecution -> {
       SpinJsonNode jsonNode = S("{\"dateTime\": \"2019-12-12T22:22:22\"}");
-      Object         key      = jsonNode.mapTo(SpinJava8Dto.class);
+      Object key = jsonNode.mapTo(SpinJava8Dto.class);
+      Objects.requireNonNull(key);
     };
   }
 

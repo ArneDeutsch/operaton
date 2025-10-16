@@ -18,7 +18,6 @@ package org.operaton.bpm.integrationtest.functional.spin.dataformat;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.io.Writer;
 import java.util.regex.Pattern;
 
 import org.operaton.spin.DeserializationTypeValidator;
@@ -71,15 +70,11 @@ public class FooDataFormat implements DataFormat<FooSpin> {
 
   @Override
   public DataFormatWriter getWriter() {
-    return new DataFormatWriter() {
-
-      @Override
-      public void writeToWriter(Writer writer, Object input) {
-        try {
-          writer.write("foo");
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
+    return (writer, input) -> {
+      try {
+        writer.write("foo");
+      } catch (IOException e) {
+        throw new RuntimeException(e);
       }
     };
   }

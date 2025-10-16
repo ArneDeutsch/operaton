@@ -23,7 +23,9 @@ import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.qa.upgrade.DescribesScenario;
 import org.operaton.bpm.qa.upgrade.ScenarioSetup;
 
-public class JobFailureLogScenario {
+import static org.operaton.bpm.engine.impl.test.TestHelper.executeJobIgnoringException;
+
+public final class JobFailureLogScenario {
 
   private JobFailureLogScenario() {
   }
@@ -43,11 +45,7 @@ public class JobFailureLogScenario {
       ManagementService managementService = engine.getManagementService();
       Job job = managementService.createJobQuery().processInstanceId(processInstanceId).singleResult();
 
-      try {
-        managementService.executeJob(job.getId());
-      } catch (Exception e) {
-        // expected
-      }
+      executeJobIgnoringException(managementService, job.getId());
 
       // result: Job has failed once (job log; exception message populated)
       // and has still > 0 retries left

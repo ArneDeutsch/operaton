@@ -16,12 +16,10 @@
  */
 package org.operaton.bpm.engine.test.api.history;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.DecisionService;
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ProcessEngineConfiguration;
@@ -34,6 +32,9 @@ import org.operaton.bpm.engine.test.RequiredHistoryLevel;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.engine.variable.Variables;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 /**
@@ -155,10 +156,10 @@ class HistoricDecisionInstanceStatisticsQueryTest {
     DecisionRequirementsDefinition decisionRequirementsDefinition = repositoryService.createDecisionRequirementsDefinitionQuery().singleResult();
 
     // when
-    assertThatThrownBy(() -> historyService
-                      .createHistoricDecisionInstanceStatisticsQuery(
-                              decisionRequirementsDefinition.getId())
-                      .decisionInstanceId(null))
+    var historicDecisionInstanceStatisticsQuery = historyService.createHistoricDecisionInstanceStatisticsQuery(
+      decisionRequirementsDefinition.getId());
+
+    assertThatThrownBy(() -> historicDecisionInstanceStatisticsQuery.decisionInstanceId(null))
             .isInstanceOf(NotValidException.class);
   }
 
@@ -177,7 +178,7 @@ class HistoricDecisionInstanceStatisticsQueryTest {
             decisionRequirementsDefinition.getId());
 
     //then
-    assertThat(statisticsQuery.count()).isEqualTo(1L);
+    assertThat(statisticsQuery.count()).isOne();
     assertThat(statisticsQuery.list()).hasSize(1);
     assertThat(statisticsQuery.list().get(0).getEvaluations()).isEqualTo(1);
     assertThat(statisticsQuery.list().get(0).getDecisionDefinitionKey()).isNotNull();
@@ -207,7 +208,7 @@ class HistoricDecisionInstanceStatisticsQueryTest {
             decisionRequirementsDefinition.getId());
 
     //then
-    assertThat(statisticsQuery.count()).isEqualTo(1L);
+    assertThat(statisticsQuery.count()).isOne();
     assertThat(statisticsQuery.list()).hasSize(1);
     assertThat(statisticsQuery.list().get(0).getEvaluations()).isEqualTo(1);
     assertThat(statisticsQuery.list().get(0).getDecisionDefinitionKey()).isNotNull();

@@ -19,6 +19,7 @@ package org.operaton.bpm.qa.upgrade.json;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.runtime.Execution;
 import org.operaton.bpm.engine.runtime.ProcessInstance;
@@ -30,9 +31,10 @@ import org.operaton.bpm.qa.upgrade.json.beans.ObjectList;
 import org.operaton.bpm.qa.upgrade.json.beans.Order;
 import org.operaton.bpm.qa.upgrade.json.beans.OrderDetails;
 import org.operaton.bpm.qa.upgrade.json.beans.RegularCustomer;
+
 import static org.operaton.bpm.engine.variable.Variables.serializedObjectValue;
 
-public class CreateProcessInstanceWithJsonVariablesScenario {
+public final class CreateProcessInstanceWithJsonVariablesScenario {
 
   private CreateProcessInstanceWithJsonVariablesScenario() {
   }
@@ -44,17 +46,15 @@ public class CreateProcessInstanceWithJsonVariablesScenario {
 
   @DescribesScenario("initProcessInstanceWithDifferentVariables")
   public static ScenarioSetup initProcessInstance() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        // given
-        ProcessInstance processInstance = engine.getRuntimeService().startProcessInstanceByKey("Process", "processWithJsonVariables");
-        // when
-        Execution execution = engine.getRuntimeService().createExecutionQuery().processInstanceId(processInstance.getId()).singleResult();
-        engine.getRuntimeService().setVariable(execution.getId(), "objectVariable", createObjectVariable());
-        engine.getRuntimeService().setVariable(execution.getId(), "plainTypeArrayVariable", createPlainTypeArray());
-        engine.getRuntimeService().setVariable(execution.getId(), "notGenericObjectListVariable", createNotGenericObjectList());
-        engine.getRuntimeService().setVariable(execution.getId(), "serializedMapVariable", createSerializedMap());
-      }
+    return (engine, scenarioName) -> {
+      // given
+      ProcessInstance processInstance = engine.getRuntimeService().startProcessInstanceByKey("Process", "processWithJsonVariables");
+      // when
+      Execution execution = engine.getRuntimeService().createExecutionQuery().processInstanceId(processInstance.getId()).singleResult();
+      engine.getRuntimeService().setVariable(execution.getId(), "objectVariable", createObjectVariable());
+      engine.getRuntimeService().setVariable(execution.getId(), "plainTypeArrayVariable", createPlainTypeArray());
+      engine.getRuntimeService().setVariable(execution.getId(), "notGenericObjectListVariable", createNotGenericObjectList());
+      engine.getRuntimeService().setVariable(execution.getId(), "serializedMapVariable", createSerializedMap());
     };
   }
 

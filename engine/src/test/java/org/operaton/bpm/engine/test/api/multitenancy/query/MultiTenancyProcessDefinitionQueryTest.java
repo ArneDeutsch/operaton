@@ -16,9 +16,6 @@
  */
 package org.operaton.bpm.engine.test.api.multitenancy.query;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +24,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.IdentityService;
 import org.operaton.bpm.engine.RepositoryService;
 import org.operaton.bpm.engine.exception.NullValueException;
@@ -37,6 +35,9 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MultiTenancyProcessDefinitionQueryTest {
 
@@ -76,13 +77,13 @@ class MultiTenancyProcessDefinitionQueryTest {
         .createProcessDefinitionQuery()
         .tenantIdIn(TENANT_ONE);
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     query = repositoryService.
         createProcessDefinitionQuery()
         .tenantIdIn(TENANT_TWO);
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -100,7 +101,7 @@ class MultiTenancyProcessDefinitionQueryTest {
         .createProcessDefinitionQuery()
         .withoutTenantId();
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -140,14 +141,14 @@ class MultiTenancyProcessDefinitionQueryTest {
         .processDefinitionKey(PROCESS_DEFINITION_KEY)
         .withoutTenantId();
     // one definition without tenant id
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     query = repositoryService
         .createProcessDefinitionQuery()
         .processDefinitionKey(PROCESS_DEFINITION_KEY)
         .tenantIdIn(TENANT_ONE);
     // one definition for tenant one
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -179,7 +180,7 @@ class MultiTenancyProcessDefinitionQueryTest {
         .latestVersion()
         .tenantIdIn(TENANT_ONE);
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     ProcessDefinition processDefinition = query.singleResult();
     assertThat(processDefinition.getTenantId()).isEqualTo(TENANT_ONE);
@@ -191,7 +192,7 @@ class MultiTenancyProcessDefinitionQueryTest {
         .latestVersion()
         .tenantIdIn(TENANT_TWO);
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     processDefinition = query.singleResult();
     assertThat(processDefinition.getTenantId()).isEqualTo(TENANT_TWO);
@@ -227,7 +228,7 @@ class MultiTenancyProcessDefinitionQueryTest {
         .latestVersion()
         .withoutTenantId();
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     ProcessDefinition processDefinition = query.singleResult();
     assertThat(processDefinition.getTenantId()).isNull();
@@ -319,7 +320,7 @@ class MultiTenancyProcessDefinitionQueryTest {
     identityService.setAuthentication("user", null, null);
 
     ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery();
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -329,7 +330,7 @@ class MultiTenancyProcessDefinitionQueryTest {
     ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery();
 
     assertThat(query.count()).isEqualTo(2L);
-    assertThat(query.tenantIdIn(TENANT_ONE).count()).isEqualTo(1L);
+    assertThat(query.tenantIdIn(TENANT_ONE).count()).isOne();
     assertThat(query.tenantIdIn(TENANT_TWO).count()).isZero();
     assertThat(query.tenantIdIn(TENANT_ONE, TENANT_TWO).includeProcessDefinitionsWithoutTenantId().count()).isEqualTo(2L);
   }
@@ -341,9 +342,9 @@ class MultiTenancyProcessDefinitionQueryTest {
     ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery();
 
     assertThat(query.count()).isEqualTo(3L);
-    assertThat(query.tenantIdIn(TENANT_ONE).count()).isEqualTo(1L);
-    assertThat(query.tenantIdIn(TENANT_TWO).count()).isEqualTo(1L);
-    assertThat(query.withoutTenantId().count()).isEqualTo(1L);
+    assertThat(query.tenantIdIn(TENANT_ONE).count()).isOne();
+    assertThat(query.tenantIdIn(TENANT_TWO).count()).isOne();
+    assertThat(query.withoutTenantId().count()).isOne();
   }
 
   @Test

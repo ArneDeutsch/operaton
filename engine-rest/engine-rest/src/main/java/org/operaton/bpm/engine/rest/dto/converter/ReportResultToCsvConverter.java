@@ -17,7 +17,6 @@
 package org.operaton.bpm.engine.rest.dto.converter;
 
 import java.util.List;
-
 import jakarta.ws.rs.core.Response.Status;
 
 import org.operaton.bpm.engine.history.DurationReportResult;
@@ -29,7 +28,7 @@ import org.operaton.bpm.engine.rest.exception.InvalidRequestException;
  * @author Roman Smirnov
  *
  */
-public class ReportResultToCsvConverter {
+public final class ReportResultToCsvConverter {
   protected static final String DELIMITER = ",";
 
   protected static final String NEW_LINE_SEPARATOR = "\n";

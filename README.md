@@ -12,7 +12,7 @@
 
 
 [![Forum](https://img.shields.io/badge/forum-Operaton-green)](https://forum.operaton.org/)
-[![Slack](https://img.shields.io/badge/chat-Slack-purple)](https://join.slack.com/t/operaton/shared_invite/zt-39cabj835-eLMK1VKAJx~kXf_qO8gaUQ)
+[![Slack](https://img.shields.io/badge/chat-Slack-purple)](https://join.slack.com/t/operaton/shared_invite/zt-3fiodp5cz-vM2h5uDZi9JbCZZqG~6WEA)
 
 Operaton is a native BPMN 2.0 process engine that runs inside the Java Virtual Machine. It can be embedded inside any Java application and any Runtime Container. It integrates with Spring, Spring Boot, Quarkus and is a perfect match for Jakarta EE. On top of the process engine, you can choose from a stack of tools for human workflow management, operations and monitoring.
 
@@ -35,6 +35,8 @@ Visit our [Forum](https://forum.operaton.org)
 Prerequisites:
 
 JDK 17 or newer - check `java -version`
+
+Operaton is tested and supported on Java 17, 21, and 25.
 
 You can use the Maven Wrapper script to execute the build. The script downloads and installs (if necessary) the required Maven version to `~/.m2/wrapper` and runs it from there.
 
@@ -114,13 +116,23 @@ To run the tests in this repository, please see our [testing tips and tricks](TE
 
 ## Prerequisites
 
-Java 17 or higher is required.
+Java 17 or higher is required. Operaton is tested and supported on Java 17, 21, and 25.
 
 ## License
 
 The source files in this repository are made available under the [Apache License Version 2.0](./LICENSE).
 
 Operaton uses and includes third-party dependencies published under various licenses. By downloading and using Operaton artifacts, you agree to their terms and conditions. Refer to our [license-book.txt](./distro/license-book/src/main/resources/license-book.txt) for an overview of third-party libraries and particularly important third-party licenses we want to make you aware of.
+
+## Security
+
+Please see our [security policy](SECURITY.md) for how to report security vulnerabilities.
+
+## Project reports
+
+- [Dependency Update Candidates](https://operaton.github.io/operaton/reports/dependency-updates-aggregate-report.html)
+- [Maven Plugin Update Candidates](https://operaton.github.io/operaton/reports/plugin-updates-aggregate-report.html)
+- [Javadoc API](https://operaton.github.io/operaton/javadoc/operaton/1.0/index.html)
 
 ## Contributors
 

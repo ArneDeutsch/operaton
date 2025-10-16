@@ -16,13 +16,12 @@
  */
 package org.operaton.bpm.engine.test.api.multitenancy.query.history;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ProcessEngineConfiguration;
 import org.operaton.bpm.engine.RepositoryService;
@@ -38,6 +37,8 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
 *
@@ -112,7 +113,7 @@ class MultiTenancyHistoricIdentityLinkLogQueryTest {
         .withoutTenantId();
 
     // then
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -127,8 +128,8 @@ class MultiTenancyHistoricIdentityLinkLogQueryTest {
 
     // then
     assertThat(query.list()).hasSize(2);
-    assertThat(query.tenantIdIn(TENANT_1).count()).isEqualTo(1L);
-    assertThat(query.tenantIdIn(TENANT_2).count()).isEqualTo(1L);
+    assertThat(query.tenantIdIn(TENANT_1).count()).isOne();
+    assertThat(query.tenantIdIn(TENANT_2).count()).isOne();
   }
 
   @Test
@@ -214,7 +215,7 @@ class MultiTenancyHistoricIdentityLinkLogQueryTest {
 
     // then
     HistoricIdentityLinkLogQuery query = historyService.createHistoricIdentityLinkLogQuery();
-    assertThat(query.withoutTenantId().count()).isEqualTo(1);
+    assertThat(query.withoutTenantId().count()).isOne();
     assertThat(query.tenantIdIn(TENANT_1, TENANT_2).count()).isEqualTo(2);
     assertThat(query.tenantIdIn(TENANT_2, TENANT_3).count()).isEqualTo(2);
     assertThat(query.tenantIdIn(TENANT_1, TENANT_2, TENANT_3).count()).isEqualTo(3);

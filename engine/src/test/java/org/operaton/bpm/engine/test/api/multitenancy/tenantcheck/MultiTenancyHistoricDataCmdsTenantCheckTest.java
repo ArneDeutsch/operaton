@@ -16,14 +16,12 @@
  */
 package org.operaton.bpm.engine.test.api.multitenancy.tenantcheck;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.CaseService;
 import org.operaton.bpm.engine.DecisionService;
 import org.operaton.bpm.engine.HistoryService;
@@ -50,6 +48,9 @@ import org.operaton.bpm.engine.variable.VariableMap;
 import org.operaton.bpm.engine.variable.Variables;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author kristin.polenz
@@ -253,7 +254,7 @@ class MultiTenancyHistoricDataCmdsTenantCheckTest {
 
     HistoricDecisionInstanceQuery query = historyService.createHistoricDecisionInstanceQuery();
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -436,7 +437,7 @@ class MultiTenancyHistoricDataCmdsTenantCheckTest {
     runtimeService.setVariable(processInstanceId, "myVariable", "testValue");
     HistoricVariableInstanceQuery variableQuery = historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceId);
 
-    assertThat(variableQuery.count()).isEqualTo(1L);
+    assertThat(variableQuery.count()).isOne();
     String variableInstanceId = variableQuery.singleResult().getId();
 
     identityService.setAuthentication("user", null, List.of(TENANT_ONE));
@@ -459,8 +460,8 @@ class MultiTenancyHistoricDataCmdsTenantCheckTest {
     HistoricVariableInstanceQuery variableQueryOne = historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceIdOne);
     HistoricVariableInstanceQuery variableQueryTwo = historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceIdTwo);
 
-    assertThat(variableQueryOne.count()).isEqualTo(1L);
-    assertThat(variableQueryTwo.count()).isEqualTo(1L);
+    assertThat(variableQueryOne.count()).isOne();
+    assertThat(variableQueryTwo.count()).isOne();
     String variableInstanceIdOne = variableQueryOne.singleResult().getId();
     String variableInstanceIdTwo = variableQueryTwo.singleResult().getId();
 
@@ -500,7 +501,7 @@ class MultiTenancyHistoricDataCmdsTenantCheckTest {
     runtimeService.setVariable(processInstanceId, "myVariable", "testValue2");
 
     HistoricVariableInstanceQuery variableQuery = historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceId);
-    assertThat(variableQuery.count()).isEqualTo(1L);
+    assertThat(variableQuery.count()).isOne();
 
     identityService.setAuthentication("user", null, List.of(TENANT_ONE));
 

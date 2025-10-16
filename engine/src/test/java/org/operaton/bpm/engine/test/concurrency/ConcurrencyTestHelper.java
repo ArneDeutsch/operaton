@@ -16,15 +16,17 @@
  */
 package org.operaton.bpm.engine.test.concurrency;
 
-import static org.assertj.core.api.Assertions.fail;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 import org.operaton.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.operaton.bpm.engine.impl.interceptor.Command;
 import org.operaton.bpm.engine.impl.util.ExceptionUtil;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+
+import static org.assertj.core.api.Assertions.fail;
 
 public abstract class ConcurrencyTestHelper {
 
@@ -92,14 +94,14 @@ public abstract class ConcurrencyTestHelper {
 
   public static class ThreadControl {
 
-    protected volatile boolean syncAvailable = false;
+    protected volatile boolean syncAvailable;
 
     protected Thread executingThread;
 
     protected volatile boolean reportFailure;
     protected volatile Exception exception;
 
-    protected boolean ignoreSync = false;
+    protected boolean ignoreSync;
 
     public ThreadControl() {
     }

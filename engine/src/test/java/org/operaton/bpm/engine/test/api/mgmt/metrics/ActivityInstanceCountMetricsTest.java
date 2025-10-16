@@ -16,17 +16,18 @@
  */
 package org.operaton.bpm.engine.test.api.mgmt.metrics;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+
 import org.operaton.bpm.engine.history.HistoricTaskInstance;
 import org.operaton.bpm.engine.management.Metrics;
 import org.operaton.bpm.engine.runtime.CaseExecution;
 import org.operaton.bpm.engine.task.Task;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.model.bpmn.Bpmn;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Daniel Meyer
@@ -90,16 +91,16 @@ class ActivityInstanceCountMetricsTest extends AbstractMetricsTest {
     // then
     // the increased count is immediately visible
     assertThat(managementService.createMetricsQuery()
-        .name(Metrics.ACTIVTY_INSTANCE_START)
-        .sum()).isEqualTo(1L);
+      .name(Metrics.ACTIVTY_INSTANCE_START)
+      .sum()).isOne();
 
     // and force the db metrics reporter to report
     processEngineConfiguration.getDbMetricsReporter().reportNow();
 
     // still 1
     assertThat(managementService.createMetricsQuery()
-        .name(Metrics.ACTIVTY_INSTANCE_START)
-        .sum()).isEqualTo(1L);
+      .name(Metrics.ACTIVTY_INSTANCE_START)
+      .sum()).isOne();
 
     taskService.deleteTask(task.getId());
 
@@ -122,8 +123,8 @@ class ActivityInstanceCountMetricsTest extends AbstractMetricsTest {
     caseService.createCaseInstanceByKey("case");
 
     assertThat(managementService.createMetricsQuery()
-        .name(Metrics.ACTIVTY_INSTANCE_START)
-        .sum()).isEqualTo(1L);
+      .name(Metrics.ACTIVTY_INSTANCE_START)
+      .sum()).isOne();
 
     // start PI_HumanTask_1 and PI_Milestone_1
     List<CaseExecution> list = caseService.createCaseExecutionQuery().enabled().list();

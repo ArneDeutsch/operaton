@@ -16,10 +16,9 @@
  */
 package org.operaton.bpm.engine.test.bpmn.tasklistener;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.delegate.BpmnError;
 import org.operaton.bpm.engine.delegate.DelegateTask;
@@ -32,6 +31,8 @@ import org.operaton.bpm.engine.test.bpmn.tasklistener.util.RecorderTaskListener;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
 import org.operaton.bpm.model.bpmn.builder.ProcessBuilder;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TaskListenerErrorThrowTest extends AbstractTaskListenerTest {
   /*
@@ -363,7 +364,7 @@ public class TaskListenerErrorThrowTest extends AbstractTaskListenerTest {
   }
 
   public static class ThrowBPMNErrorListener implements TaskListener {
-    public static int invocations = 0;
+    public static int invocations;
 
     @Override
     public void notify(DelegateTask delegateTask) {

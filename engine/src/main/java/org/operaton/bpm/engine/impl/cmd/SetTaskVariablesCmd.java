@@ -16,8 +16,6 @@
  */
 package org.operaton.bpm.engine.impl.cmd;
 
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-
 import java.io.Serial;
 import java.util.Map;
 
@@ -29,6 +27,8 @@ import org.operaton.bpm.engine.impl.persistence.entity.PropertyChange;
 import org.operaton.bpm.engine.impl.persistence.entity.TaskEntity;
 import org.operaton.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
 
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+
 
 /**
  * @author Tom Baeyens
@@ -38,7 +38,7 @@ public class SetTaskVariablesCmd extends AbstractSetVariableCmd implements Varia
 
   @Serial private static final long serialVersionUID = 1L;
 
-  protected boolean taskLocalVariablesUpdated = false;
+  protected boolean taskLocalVariablesUpdated;
 
 
   public SetTaskVariablesCmd(String taskId, Map<String, ? extends Object> variables, boolean isLocal) {

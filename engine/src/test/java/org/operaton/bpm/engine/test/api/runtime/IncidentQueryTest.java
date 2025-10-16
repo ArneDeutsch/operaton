@@ -16,10 +16,6 @@
  */
 package org.operaton.bpm.engine.test.api.runtime;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -29,6 +25,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.RuntimeService;
@@ -42,6 +39,10 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.fail;
 
 /**
  * @author roman.smirnov
@@ -142,7 +143,7 @@ public class IncidentQueryTest {
   @Test
   void testQueryByIncidentMessage() {
     IncidentQuery query = runtimeService.createIncidentQuery().incidentMessage("exception0");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     List<Incident> incidents = query.list();
     assertThat(incidents)
@@ -248,7 +249,7 @@ public class IncidentQueryTest {
   void testQueryByProcessInstanceId() {
     IncidentQuery query = runtimeService.createIncidentQuery().processInstanceId(processInstanceIds.get(0));
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     List<Incident> incidents = query.list();
     assertThat(incidents)
@@ -279,7 +280,7 @@ public class IncidentQueryTest {
 
     IncidentQuery query = runtimeService.createIncidentQuery().incidentId(incident.getId());
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     List<Incident> incidents = query.list();
     assertThat(incidents)
@@ -307,7 +308,7 @@ public class IncidentQueryTest {
 
     IncidentQuery query = runtimeService.createIncidentQuery().executionId(execution.getId());
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     List<Incident> incidents = query.list();
     assertThat(incidents)
@@ -381,7 +382,7 @@ public class IncidentQueryTest {
     String jobId = managementService.createJobQuery().processInstanceId(processInstanceIds.get(0)).singleResult().getId();
 
     IncidentQuery query = runtimeService.createIncidentQuery().configuration(jobId);
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     List<Incident> incidents = query.list();
     assertThat(incidents)
@@ -489,12 +490,7 @@ public class IncidentQueryTest {
             .isNotEmpty()
             .hasSize(3);
 
-    try {
-      query.singleResult();
-      fail("Exception expected");
-    } catch (ProcessEngineException e) {
-      // Exception is expected
-    }
+    assertThatThrownBy(query::singleResult).isInstanceOf(ProcessEngineException.class);
 
   }
 
@@ -524,13 +520,13 @@ public class IncidentQueryTest {
       .jobDefinitionIdIn(jobDefinitionId1);
 
     assertThat(query.list()).hasSize(1);
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     query = runtimeService.createIncidentQuery()
       .jobDefinitionIdIn(jobDefinitionId2);
 
     assertThat(query.list()).hasSize(1);
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
   }
 
   @Test

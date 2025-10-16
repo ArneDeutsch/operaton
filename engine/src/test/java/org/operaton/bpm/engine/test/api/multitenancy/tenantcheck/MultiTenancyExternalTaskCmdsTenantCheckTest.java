@@ -16,15 +16,12 @@
  */
 package org.operaton.bpm.engine.test.api.multitenancy.tenantcheck;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ExternalTaskService;
 import org.operaton.bpm.engine.IdentityService;
 import org.operaton.bpm.engine.ProcessEngineException;
@@ -32,6 +29,10 @@ import org.operaton.bpm.engine.TaskService;
 import org.operaton.bpm.engine.externaltask.LockedExternalTask;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.fail;
 
 class MultiTenancyExternalTaskCmdsTenantCheckTest {
 
@@ -209,7 +210,7 @@ class MultiTenancyExternalTaskCmdsTenantCheckTest {
       .get(0)
       .getId();
 
-    assertThat(externalTaskService.createExternalTaskQuery().active().count()).isEqualTo(1);
+    assertThat(externalTaskService.createExternalTaskQuery().active().count()).isOne();
 
     identityService.setAuthentication("aUserId", null, List.of(TENANT_ONE));
 
@@ -228,7 +229,7 @@ class MultiTenancyExternalTaskCmdsTenantCheckTest {
       .get(0)
       .getId();
 
-    assertThat(externalTaskService.createExternalTaskQuery().active().count()).isEqualTo(1);
+    assertThat(externalTaskService.createExternalTaskQuery().active().count()).isOne();
 
     identityService.setAuthentication("aUserId", null);
 
@@ -249,7 +250,7 @@ class MultiTenancyExternalTaskCmdsTenantCheckTest {
       .get(0)
       .getId();
 
-    assertThat(externalTaskService.createExternalTaskQuery().active().count()).isEqualTo(1);
+    assertThat(externalTaskService.createExternalTaskQuery().active().count()).isOne();
 
     identityService.setAuthentication("aUserId", null);
     engineRule.getProcessEngineConfiguration().setTenantCheckEnabled(false);
@@ -503,7 +504,7 @@ class MultiTenancyExternalTaskCmdsTenantCheckTest {
       .get(0)
       .getId();
 
-    assertThat(externalTaskService.createExternalTaskQuery().locked().count()).isEqualTo(1L);
+    assertThat(externalTaskService.createExternalTaskQuery().locked().count()).isOne();
 
     identityService.setAuthentication("aUserId", null, List.of(TENANT_ONE));
 

@@ -16,14 +16,14 @@
  */
 package org.operaton.bpm.engine.spring.test.servicetask;
 
-import org.operaton.bpm.engine.spring.test.SpringProcessEngineTestCase;
-import org.operaton.bpm.engine.task.Task;
-import org.operaton.bpm.engine.test.Deployment;
-import static org.operaton.bpm.engine.impl.test.ProcessEngineAssert.assertProcessEnded;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
 
+import org.operaton.bpm.engine.spring.test.SpringProcessEngineTestCase;
+import org.operaton.bpm.engine.task.Task;
+import org.operaton.bpm.engine.test.Deployment;
+
+import static org.operaton.bpm.engine.impl.test.ProcessEngineAssert.assertProcessEnded;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -44,7 +44,7 @@ class BoundaryErrorEventSpringTest extends SpringProcessEngineTestCase {
   private void assertThatErrorHasBeenCaught(String procId) {
     // The service task will throw an error event,
     // which is caught on the service task boundary
-    assertThat(taskService.createTaskQuery().count()).as("No tasks found in task list.").isEqualTo(1);
+    assertThat(taskService.createTaskQuery().count()).as("No tasks found in task list.").isOne();
     Task task = taskService.createTaskQuery().singleResult();
     assertThat(task.getName()).isEqualTo("Escalated Task");
 

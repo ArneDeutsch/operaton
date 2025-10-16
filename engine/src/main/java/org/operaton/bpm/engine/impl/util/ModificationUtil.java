@@ -27,9 +27,8 @@ import org.operaton.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 /**
  * @author Svetlana Dorokhova.
  */
-public class ModificationUtil {
+public final class ModificationUtil {
   private ModificationUtil() {
-    // utility class
   }
 
   public static void handleChildRemovalInScope(ExecutionEntity removedExecution) {
@@ -51,7 +50,7 @@ public class ModificationUtil {
     PvmExecutionImpl executionInParentScope = removedExecution.isConcurrent() ? removedExecution : removedExecution.getParent();
 
     CoreActivityBehavior<? extends BaseDelegateExecution> activityBehavior = flowScope.getActivityBehavior();
-    if (activityBehavior != null && activityBehavior instanceof ModificationObserverBehavior modificationObserverBehavior) {
+    if (activityBehavior instanceof ModificationObserverBehavior modificationObserverBehavior) {
       // let child removal be handled by the scope itself
       modificationObserverBehavior.destroyInnerInstance(executionInParentScope);
     }

@@ -18,8 +18,10 @@ package org.operaton.bpm.engine.impl.jobexecutor.historycleanup;
 
 import java.util.Calendar;
 import java.util.Date;
-import org.operaton.bpm.engine.impl.jobexecutor.JobHandlerConfiguration;
+
 import com.google.gson.JsonObject;
+
+import org.operaton.bpm.engine.impl.jobexecutor.JobHandlerConfiguration;
 import org.operaton.bpm.engine.impl.util.JsonUtil;
 
 /**
@@ -38,7 +40,7 @@ public class HistoryCleanupJobHandlerConfiguration implements JobHandlerConfigur
   /**
    * Counts runs without data. Is used within batch window to calculate the delay between two job runs in case no data for cleanup was found.
    */
-  private int countEmptyRuns = 0;
+  private int countEmptyRuns;
 
   /**
    * Indicated that the job was triggered manually and must be executed at once without waiting for batch window start time.
@@ -48,7 +50,7 @@ public class HistoryCleanupJobHandlerConfiguration implements JobHandlerConfigur
   /**
    * Process definition id.
    */
-  private int minuteFrom = 0;
+  private int minuteFrom;
 
   private int minuteTo = 59;
 

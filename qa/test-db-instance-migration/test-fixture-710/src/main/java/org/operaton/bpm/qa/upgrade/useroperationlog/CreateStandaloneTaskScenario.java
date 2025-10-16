@@ -27,26 +27,24 @@ import org.operaton.bpm.qa.upgrade.ScenarioSetup;
  * @author Yana.Vasileva
  *
  */
-public class CreateStandaloneTaskScenario {
+public final class CreateStandaloneTaskScenario {
 
   private CreateStandaloneTaskScenario() {
   }
 
   @DescribesScenario("createUserOperationLogEntries")
   public static ScenarioSetup createUserOperationLogEntries() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        IdentityService identityService = engine.getIdentityService();
-        identityService.setAuthentication("jane02", null);
+    return (engine, scenarioName) -> {
+      IdentityService identityService = engine.getIdentityService();
+      identityService.setAuthentication("jane02", null);
 
-        TaskService taskService = engine.getTaskService();
+      TaskService taskService = engine.getTaskService();
 
-        String taskId = "myTaskForUserOperationLog";
-        Task task = taskService.newTask(taskId);
-        taskService.saveTask(task);
+      String taskId = "myTaskForUserOperationLog";
+      Task task = taskService.newTask(taskId);
+      taskService.saveTask(task);
 
-        identityService.clearAuthentication();
-      }
+      identityService.clearAuthentication();
     };
   }
 }

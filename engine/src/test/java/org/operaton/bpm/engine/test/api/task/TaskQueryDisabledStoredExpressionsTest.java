@@ -16,13 +16,12 @@
  */
 package org.operaton.bpm.engine.test.api.task;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.BadUserRequestException;
 import org.operaton.bpm.engine.EntityTypes;
 import org.operaton.bpm.engine.FilterService;
@@ -35,6 +34,8 @@ import org.operaton.bpm.engine.task.TaskQuery;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author Thorben Lindhauer
  *
@@ -46,7 +47,7 @@ public class TaskQueryDisabledStoredExpressionsTest {
   public static final String STATE_MANIPULATING_EXPRESSION =
       "${''.getClass().forName('" + TaskQueryDisabledStoredExpressionsTest.class.getName() + "').getField('MUTABLE_FIELD').setLong(null, 42)}";
 
-  public static long mutableField = 0;
+  public static long mutableField;
 
   @RegisterExtension
   static ProcessEngineExtension engineRule = ProcessEngineExtension.builder()
@@ -73,7 +74,7 @@ public class TaskQueryDisabledStoredExpressionsTest {
 
     // saving the filter suceeds
     filterService.saveFilter(filter);
-    assertThat(filterService.createFilterQuery().count()).isEqualTo(1);
+    assertThat(filterService.createFilterQuery().count()).isOne();
 
     // cleanup
     filterService.deleteFilter(filter.getId());
@@ -103,7 +104,7 @@ public class TaskQueryDisabledStoredExpressionsTest {
 
     // updating the filter with an expression does not suceed
     filter.setQuery(taskQuery.dueBeforeExpression(STATE_MANIPULATING_EXPRESSION));
-    assertThat(filterService.createFilterQuery().count()).isEqualTo(1);
+    assertThat(filterService.createFilterQuery().count()).isOne();
 
     try {
       filterService.saveFilter(filter);

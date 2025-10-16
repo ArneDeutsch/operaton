@@ -16,15 +16,15 @@
  */
 package org.operaton.bpm.engine.cdi.test.impl.event;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.HashSet;
+import java.util.Set;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 
 import org.operaton.bpm.engine.cdi.BusinessProcessEvent;
 import org.operaton.bpm.engine.cdi.annotation.event.*;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.Observes;
-import java.util.HashSet;
-import java.util.Set;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ApplicationScoped
 public class TestEventListener {
@@ -72,9 +72,9 @@ public class TestEventListener {
 
   // ---------------------------------------------------------
 
-  private int startActivityService1 = 0;
-  private int endActivityService1 = 0;
-  private int takeTransition1 = 0;
+  private int startActivityService1;
+  private int endActivityService1;
+  private int takeTransition1;
 
   public void onStartActivityService1(@Observes @StartActivity("service1") BusinessProcessEvent businessProcessEvent) {
     assertThat(businessProcessEvent.getActivityId()).isEqualTo("service1");
@@ -118,10 +118,10 @@ public class TestEventListener {
 
   // ---------------------------------------------------------
 
-  private int createTaskUser1 = 0;
-  private int assignTaskUser1 = 0;
-  private int completeTaskUser1 = 0;
-  private int deleteTaskUser1 = 0;
+  private int createTaskUser1;
+  private int assignTaskUser1;
+  private int completeTaskUser1;
+  private int deleteTaskUser1;
 
   public void onCreateTask(@Observes @CreateTask("user1") BusinessProcessEvent businessProcessEvent) {
     assertThat(businessProcessEvent).isNotNull();

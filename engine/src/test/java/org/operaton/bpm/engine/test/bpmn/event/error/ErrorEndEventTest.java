@@ -16,19 +16,20 @@
  */
 package org.operaton.bpm.engine.test.bpmn.event.error;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.RuntimeService;
 import org.operaton.bpm.engine.TaskService;
 import org.operaton.bpm.engine.runtime.ProcessInstance;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ErrorEndEventTest {
 
@@ -54,7 +55,7 @@ class ErrorEndEventTest {
     taskService.complete(id);
 
     // then
-    assertThat(taskService.createTaskQuery().taskName("task after catched error").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskName("task after catched error").count()).isOne();
     // and set the output variable of the called process to the process
     assertThat(runtimeService.getVariable(processInstanceId, "cancelReason")).isNotNull();
     assertThat(runtimeService.getVariable(processInstanceId, "output")).isEqualTo(42);

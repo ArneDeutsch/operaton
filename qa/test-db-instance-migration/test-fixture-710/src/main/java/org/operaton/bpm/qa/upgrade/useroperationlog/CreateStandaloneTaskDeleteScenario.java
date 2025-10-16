@@ -27,26 +27,24 @@ import org.operaton.bpm.qa.upgrade.ScenarioSetup;
  * @author Yana.Vasileva
  *
  */
-public class CreateStandaloneTaskDeleteScenario {
+public final class CreateStandaloneTaskDeleteScenario {
 
   private CreateStandaloneTaskDeleteScenario() {
   }
 
   @DescribesScenario("createUserOperationLogEntriesForDelete")
   public static ScenarioSetup createUserOperationLogEntries() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        IdentityService identityService = engine.getIdentityService();
-        identityService.setAuthentication("mary01", null);
+    return (engine, scenarioName) -> {
+      IdentityService identityService = engine.getIdentityService();
+      identityService.setAuthentication("mary01", null);
 
-        TaskService taskService = engine.getTaskService();
+      TaskService taskService = engine.getTaskService();
 
-        String taskId = "myTaskForUserOperationLogDel";
-        Task task = taskService.newTask(taskId);
-        taskService.saveTask(task);
+      String taskId = "myTaskForUserOperationLogDel";
+      Task task = taskService.newTask(taskId);
+      taskService.saveTask(task);
 
-        identityService.clearAuthentication();
-      }
+      identityService.clearAuthentication();
     };
   }
 }

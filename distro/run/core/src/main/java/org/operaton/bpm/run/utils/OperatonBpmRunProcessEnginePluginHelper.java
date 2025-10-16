@@ -27,7 +27,7 @@ import org.operaton.bpm.run.property.OperatonBpmRunProcessEnginePluginProperty;
 import org.operaton.bpm.spring.boot.starter.util.SpringBootStarterException;
 import org.operaton.bpm.spring.boot.starter.util.SpringBootStarterPropertyHelper;
 
-public class OperatonBpmRunProcessEnginePluginHelper {
+public final class OperatonBpmRunProcessEnginePluginHelper {
 
   protected static final OperatonBpmRunLogger LOG = OperatonBpmRunLogger.LOG;
 
@@ -55,7 +55,7 @@ public class OperatonBpmRunProcessEnginePluginHelper {
     try {
       // find class on classpath
       Class<? extends ProcessEnginePlugin> pluginClass = ReflectUtil
-          .loadClass(className, null, ProcessEnginePlugin.class);
+          .loadClass(className, null);
 
       // check if an instance of the process engine plugin is already present
       Optional<ProcessEnginePlugin> plugin = processEnginePlugins.stream()

@@ -16,12 +16,12 @@
  */
 package org.operaton.bpm.engine.impl.db;
 
-import org.operaton.bpm.engine.impl.QueryOrderingProperty;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.operaton.bpm.engine.impl.QueryOrderingProperty;
 
 /**
  * @author Daniel Meyer
@@ -36,7 +36,7 @@ public class ListQueryParameterObject implements Serializable {
   protected List<QueryOrderingProperty> orderingProperties = new ArrayList<>();
 
   protected int maxResults = Integer.MAX_VALUE;
-  protected int firstResult = 0;
+  protected int firstResult;
   protected Object parameter;
   protected String databaseType;
 

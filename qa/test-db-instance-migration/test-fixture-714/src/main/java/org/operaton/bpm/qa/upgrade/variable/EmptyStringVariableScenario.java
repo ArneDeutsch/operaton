@@ -23,7 +23,7 @@ import org.operaton.bpm.engine.variable.Variables;
 import org.operaton.bpm.qa.upgrade.DescribesScenario;
 import org.operaton.bpm.qa.upgrade.ScenarioSetup;
 
-public class EmptyStringVariableScenario {
+public final class EmptyStringVariableScenario {
 
   private EmptyStringVariableScenario() {
   }
@@ -35,13 +35,10 @@ public class EmptyStringVariableScenario {
 
   @DescribesScenario("emptyStringVariableScenario")
   public static ScenarioSetup createUserOperationLogEntries() {
-    return new ScenarioSetup() {
-      @Override
-      public void execute(ProcessEngine engine, String scenarioName) {
-        RuntimeService runtimeService = engine.getRuntimeService();
-        runtimeService.startProcessInstanceByKey("oneTaskProcess_714", scenarioName,
-            Variables.createVariables().putValue("myStringVar", ""));
-      }
+    return (engine, scenarioName) -> {
+      RuntimeService runtimeService = engine.getRuntimeService();
+      runtimeService.startProcessInstanceByKey("oneTaskProcess_714", scenarioName,
+        Variables.createVariables().putValue("myStringVar", ""));
     };
   }
 }

@@ -16,15 +16,12 @@
  */
 package org.operaton.bpm.engine.test.dmn.deployment;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.io.InputStream;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.RepositoryService;
 import org.operaton.bpm.engine.impl.util.IoUtil;
@@ -49,6 +46,10 @@ import org.operaton.bpm.model.dmn.instance.Input;
 import org.operaton.bpm.model.dmn.instance.InputExpression;
 import org.operaton.bpm.model.dmn.instance.Output;
 import org.operaton.bpm.model.dmn.instance.Text;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.fail;
 
 class DecisionDefinitionDeployerTest {
 
@@ -78,11 +79,11 @@ class DecisionDefinitionDeployerTest {
     // there should be decision deployment
     DeploymentQuery deploymentQuery = repositoryService.createDeploymentQuery();
 
-    assertThat(deploymentQuery.count()).isEqualTo(1);
+    assertThat(deploymentQuery.count()).isOne();
 
     // there should be one decision definition
     DecisionDefinitionQuery query = repositoryService.createDecisionDefinitionQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     DecisionDefinition decisionDefinition = query.singleResult();
 
@@ -103,11 +104,11 @@ class DecisionDefinitionDeployerTest {
     // there should be one deployment
     DeploymentQuery deploymentQuery = repositoryService.createDeploymentQuery();
 
-    assertThat(deploymentQuery.count()).isEqualTo(1);
+    assertThat(deploymentQuery.count()).isOne();
 
     // there should be one case definition
     DecisionDefinitionQuery query = repositoryService.createDecisionDefinitionQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     DecisionDefinition decisionDefinition = query.singleResult();
 
@@ -127,11 +128,11 @@ class DecisionDefinitionDeployerTest {
 
     // there should be decision deployment
     DeploymentQuery deploymentQuery = repositoryService.createDeploymentQuery();
-    assertThat(deploymentQuery.count()).isEqualTo(1);
+    assertThat(deploymentQuery.count()).isOne();
 
     // there should be one decision definition
     DecisionDefinitionQuery query = repositoryService.createDecisionDefinitionQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     DecisionDefinition decisionDefinition = query.singleResult();
 
@@ -221,7 +222,7 @@ class DecisionDefinitionDeployerTest {
 
     // there should be one decision requirements definition
     DecisionRequirementsDefinitionQuery query = repositoryService.createDecisionRequirementsDefinitionQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     DecisionRequirementsDefinition decisionRequirementsDefinition = query.singleResult();
 
@@ -253,7 +254,7 @@ class DecisionDefinitionDeployerTest {
   @Test
   void noDrdForSingleDecisionDeployment() {
     // when the DMN file contains only a single decision definition
-    assertThat(repositoryService.createDecisionDefinitionQuery().count()).isEqualTo(1);
+    assertThat(repositoryService.createDecisionDefinitionQuery().count()).isOne();
 
     // then no decision requirements definition should be created
     assertThat(repositoryService.createDecisionRequirementsDefinitionQuery().count()).isZero();
@@ -318,7 +319,7 @@ class DecisionDefinitionDeployerTest {
 
     // there should be one decision requirements definition
     DecisionRequirementsDefinitionQuery query = repositoryService.createDecisionRequirementsDefinitionQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     DecisionRequirementsDefinition decisionRequirementsDefinition = query.singleResult();
     assertThat(decisionRequirementsDefinition.getVersion()).isEqualTo(1);

@@ -16,14 +16,10 @@
  */
 package org.operaton.bpm.engine.test.bpmn.executionlistener;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.operaton.bpm.engine.test.bpmn.executionlistener.ThrowingHistoryEventProducer.ERROR_CODE;
-import static org.operaton.bpm.engine.test.bpmn.executionlistener.ThrowingHistoryEventProducer.EXCEPTION_MESSAGE;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.ProcessEngineConfiguration;
@@ -40,6 +36,11 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
 import org.operaton.bpm.model.bpmn.builder.ProcessBuilder;
+
+import static org.operaton.bpm.engine.test.bpmn.executionlistener.ThrowingHistoryEventProducer.ERROR_CODE;
+import static org.operaton.bpm.engine.test.bpmn.executionlistener.ThrowingHistoryEventProducer.EXCEPTION_MESSAGE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_AUDIT)
 class ThrowingHistoryExecutionListenerTest {
@@ -84,7 +85,7 @@ class ThrowingHistoryExecutionListenerTest {
     // then
       .isInstanceOf(RuntimeException.class)
       .hasMessage(EXCEPTION_MESSAGE);
-    assertThat(runtimeService.createProcessInstanceQuery().count()).isEqualTo(1L);
+    assertThat(runtimeService.createProcessInstanceQuery().count()).isOne();
   }
 
   @Test
@@ -102,7 +103,7 @@ class ThrowingHistoryExecutionListenerTest {
     // then
       .isInstanceOf(RuntimeException.class)
       .hasMessage(EXCEPTION_MESSAGE);
-    assertThat(runtimeService.createProcessInstanceQuery().count()).isEqualTo(1L);
+    assertThat(runtimeService.createProcessInstanceQuery().count()).isOne();
   }
 
   @Test
@@ -120,7 +121,7 @@ class ThrowingHistoryExecutionListenerTest {
     // then
       .isInstanceOf(RuntimeException.class)
       .hasMessage(EXCEPTION_MESSAGE);
-    assertThat(runtimeService.createProcessInstanceQuery().count()).isEqualTo(1L);
+    assertThat(runtimeService.createProcessInstanceQuery().count()).isOne();
   }
 
   // UNCAUGHT EXCEPTION AFTER FAILED CUSTOM START LISTENER
@@ -140,7 +141,7 @@ class ThrowingHistoryExecutionListenerTest {
     // then
       .isInstanceOf(RuntimeException.class)
       .hasMessage(EXCEPTION_MESSAGE);
-    assertThat(runtimeService.createProcessInstanceQuery().count()).isEqualTo(1L);
+    assertThat(runtimeService.createProcessInstanceQuery().count()).isOne();
   }
 
   @Test
@@ -158,7 +159,7 @@ class ThrowingHistoryExecutionListenerTest {
     // then
       .isInstanceOf(RuntimeException.class)
       .hasMessage(EXCEPTION_MESSAGE);
-    assertThat(runtimeService.createProcessInstanceQuery().count()).isEqualTo(1L);
+    assertThat(runtimeService.createProcessInstanceQuery().count()).isOne();
   }
 
   @Test
@@ -176,7 +177,7 @@ class ThrowingHistoryExecutionListenerTest {
     // then
       .isInstanceOf(RuntimeException.class)
       .hasMessage(EXCEPTION_MESSAGE);
-    assertThat(runtimeService.createProcessInstanceQuery().count()).isEqualTo(1L);
+    assertThat(runtimeService.createProcessInstanceQuery().count()).isOne();
   }
 
   // CAUGHT EXCEPTION AFTER FAILED CUSTOM END LISTENER
@@ -252,7 +253,7 @@ class ThrowingHistoryExecutionListenerTest {
     assertThatThrownBy(() -> taskService.complete(taskId))
     // then
       .isInstanceOf(BpmnError.class);
-    assertThat(runtimeService.createProcessInstanceQuery().count()).isEqualTo(1L);
+    assertThat(runtimeService.createProcessInstanceQuery().count()).isOne();
   }
 
   @Test
@@ -269,7 +270,7 @@ class ThrowingHistoryExecutionListenerTest {
     assertThatThrownBy(() -> taskService.complete(taskId))
     // then
       .isInstanceOf(BpmnError.class);
-    assertThat(runtimeService.createProcessInstanceQuery().count()).isEqualTo(1L);
+    assertThat(runtimeService.createProcessInstanceQuery().count()).isOne();
   }
 
   @Test
@@ -286,7 +287,7 @@ class ThrowingHistoryExecutionListenerTest {
     assertThatThrownBy(() -> taskService.complete(taskId))
     // then
       .isInstanceOf(BpmnError.class);
-    assertThat(runtimeService.createProcessInstanceQuery().count()).isEqualTo(1L);
+    assertThat(runtimeService.createProcessInstanceQuery().count()).isOne();
   }
 
   protected BpmnModelInstance createModelWithCatchInServiceTaskAndListener(String eventName) {
@@ -368,9 +369,9 @@ class ThrowingHistoryExecutionListenerTest {
 
   protected void verifyActivityRunning(String activityName) {
     assertThat(historyService.createHistoricActivityInstanceQuery()
-        .activityName(activityName)
-        .unfinished()
-        .count()).isEqualTo(1);
+      .activityName(activityName)
+      .unfinished()
+      .count()).isOne();
   }
 
   public static class ThrowBPMNErrorDelegate implements ExecutionListener {

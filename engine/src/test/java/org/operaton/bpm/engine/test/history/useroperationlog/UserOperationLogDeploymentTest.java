@@ -16,12 +16,11 @@
  */
 package org.operaton.bpm.engine.test.history.useroperationlog;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+
 import org.operaton.bpm.application.impl.EmbeddedProcessApplication;
 import org.operaton.bpm.engine.EntityTypes;
 import org.operaton.bpm.engine.history.UserOperationLogEntry;
@@ -30,6 +29,8 @@ import org.operaton.bpm.engine.repository.Deployment;
 import org.operaton.bpm.engine.repository.ProcessDefinition;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Roman Smirnov
@@ -237,13 +238,13 @@ class UserOperationLogDeploymentTest extends AbstractUserOperationLogTest {
         .createUserOperationLogQuery()
         .operationType(UserOperationLogEntry.OPERATION_TYPE_CREATE);
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     // when
     repositoryService.deleteDeployment(deployment.getId(), true);
 
     // then
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -259,13 +260,13 @@ class UserOperationLogDeploymentTest extends AbstractUserOperationLogTest {
         .createUserOperationLogQuery()
         .operationType(UserOperationLogEntry.OPERATION_TYPE_CREATE);
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     // when
     repositoryService.deleteDeployment(deployment.getId(), false);
 
     // then
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -285,7 +286,7 @@ class UserOperationLogDeploymentTest extends AbstractUserOperationLogTest {
     repositoryService.deleteDeployment(deployment.getId(), false);
 
     // then
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     UserOperationLogEntry log = query.singleResult();
     assertThat(log).isNotNull();
@@ -328,7 +329,7 @@ class UserOperationLogDeploymentTest extends AbstractUserOperationLogTest {
     repositoryService.deleteDeployment(deployment.getId(), true);
 
     // then
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     UserOperationLogEntry log = query.singleResult();
     assertThat(log).isNotNull();
@@ -371,13 +372,13 @@ class UserOperationLogDeploymentTest extends AbstractUserOperationLogTest {
         .createUserOperationLogQuery()
         .operationType(UserOperationLogEntry.OPERATION_TYPE_CREATE);
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     // when
     repositoryService.deleteProcessDefinition(procDef.getId(), true);
 
     // then
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -397,13 +398,13 @@ class UserOperationLogDeploymentTest extends AbstractUserOperationLogTest {
         .createUserOperationLogQuery()
         .operationType(UserOperationLogEntry.OPERATION_TYPE_CREATE);
 
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     // when
     repositoryService.deleteProcessDefinition(procDef.getId());
 
     // then
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -427,7 +428,7 @@ class UserOperationLogDeploymentTest extends AbstractUserOperationLogTest {
     repositoryService.deleteProcessDefinition(procDef.getId(), false);
 
     // then
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     UserOperationLogEntry log = query.singleResult();
     assertThat(log).isNotNull();
@@ -474,7 +475,7 @@ class UserOperationLogDeploymentTest extends AbstractUserOperationLogTest {
     repositoryService.deleteProcessDefinition(procDef.getId(), true);
 
     // then
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     UserOperationLogEntry log = query.singleResult();
     assertThat(log).isNotNull();

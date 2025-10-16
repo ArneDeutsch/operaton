@@ -23,7 +23,7 @@ import org.operaton.bpm.qa.upgrade.DescribesScenario;
 import org.operaton.bpm.qa.upgrade.ScenarioSetup;
 import org.operaton.bpm.qa.upgrade.Times;
 
-public class DeployUserWithoutSaltForPasswordHashingScenario {
+public final class DeployUserWithoutSaltForPasswordHashingScenario {
 
   protected static final String USER_NAME = "kermit";
   protected static final String USER_PWD = "password";
@@ -34,17 +34,15 @@ public class DeployUserWithoutSaltForPasswordHashingScenario {
   @DescribesScenario("initUser")
   @Times(1)
   public static ScenarioSetup initUser() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        // given
-        IdentityService identityService = engine.getIdentityService();
-        User user = identityService.newUser(USER_NAME);
-        user.setPassword(USER_PWD);
+    return (engine, scenarioName) -> {
+      // given
+      IdentityService identityService = engine.getIdentityService();
+      User user = identityService.newUser(USER_NAME);
+      user.setPassword(USER_PWD);
 
-        // when
-        identityService.saveUser(user);
+      // when
+      identityService.saveUser(user);
 
-      }
     };
   }
 }

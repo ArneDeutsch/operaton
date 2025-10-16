@@ -16,20 +16,21 @@
  */
 package org.operaton.bpm.engine.test.api.identity;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.operaton.bpm.engine.IdentityService;
 import org.operaton.bpm.engine.identity.Group;
 import org.operaton.bpm.engine.identity.Tenant;
 import org.operaton.bpm.engine.identity.TenantQuery;
 import org.operaton.bpm.engine.identity.User;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(ProcessEngineExtension.class)
 class TenantQueryTest {
@@ -63,7 +64,7 @@ class TenantQueryTest {
   void queryById() {
     TenantQuery query = identityService.createTenantQuery().tenantId(TENANT_ONE);
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
     assertThat(query.list()).hasSize(1);
 
     Tenant tenant = query.singleResult();
@@ -91,8 +92,8 @@ class TenantQueryTest {
     TenantQuery query = identityService.createTenantQuery();
 
     assertThat(query.tenantName("nonExisting").count()).isZero();
-    assertThat(query.tenantName("Tenant_1").count()).isEqualTo(1L);
-    assertThat(query.tenantName("Tenant_2").count()).isEqualTo(1L);
+    assertThat(query.tenantName("Tenant_1").count()).isOne();
+    assertThat(query.tenantName("Tenant_2").count()).isOne();
   }
 
   @Test
@@ -100,7 +101,7 @@ class TenantQueryTest {
     TenantQuery query = identityService.createTenantQuery();
 
     assertThat(query.tenantNameLike("%nonExisting%").count()).isZero();
-    assertThat(query.tenantNameLike("%Tenant\\_1%").count()).isEqualTo(1L);
+    assertThat(query.tenantNameLike("%Tenant\\_1%").count()).isOne();
     assertThat(query.tenantNameLike("%Tenant%").count()).isEqualTo(2L);
   }
 
@@ -109,8 +110,8 @@ class TenantQueryTest {
     TenantQuery query = identityService.createTenantQuery();
 
     assertThat(query.userMember("nonExisting").count()).isZero();
-    assertThat(query.userMember(USER).count()).isEqualTo(1L);
-    assertThat(query.userMember(USER).tenantId(TENANT_ONE).count()).isEqualTo(1L);
+    assertThat(query.userMember(USER).count()).isOne();
+    assertThat(query.userMember(USER).tenantId(TENANT_ONE).count()).isOne();
   }
 
   @Test
@@ -118,15 +119,15 @@ class TenantQueryTest {
     TenantQuery query = identityService.createTenantQuery();
 
     assertThat(query.groupMember("nonExisting").count()).isZero();
-    assertThat(query.groupMember(GROUP).count()).isEqualTo(1L);
-    assertThat(query.groupMember(GROUP).tenantId(TENANT_TWO).count()).isEqualTo(1L);
+    assertThat(query.groupMember(GROUP).count()).isOne();
+    assertThat(query.groupMember(GROUP).tenantId(TENANT_TWO).count()).isOne();
   }
 
   @Test
   void queryByUserIncludingGroups() {
     TenantQuery query = identityService.createTenantQuery().userMember(USER);
 
-    assertThat(query.includingGroupsOfUser(false).count()).isEqualTo(1L);
+    assertThat(query.includingGroupsOfUser(false).count()).isOne();
     assertThat(query.includingGroupsOfUser(true).count()).isEqualTo(2L);
   }
 

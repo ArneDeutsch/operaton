@@ -16,11 +16,6 @@
  */
 package org.operaton.bpm.engine.test.api.runtime.migration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.operaton.bpm.engine.impl.migration.validation.instruction.ConditionalEventUpdateEventTriggerValidator.MIGRATION_CONDITIONAL_VALIDATION_ERROR_MSG;
-import static org.operaton.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +23,7 @@ import java.util.Map;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.impl.jobexecutor.TimerExecuteNestedActivityJobHandler;
 import org.operaton.bpm.engine.impl.util.ClockUtil;
@@ -44,6 +40,12 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.migration.MigrationTestExtension;
 import org.operaton.bpm.engine.test.util.ClockTestUtil;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.operaton.bpm.engine.impl.migration.validation.instruction.ConditionalEventUpdateEventTriggerValidator.MIGRATION_CONDITIONAL_VALIDATION_ERROR_MSG;
+import static org.operaton.bpm.engine.impl.test.TestHelper.executeJobIgnoringException;
+import static org.operaton.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class MigrationBoundaryEventsTest {
 
@@ -332,12 +334,7 @@ public class MigrationBoundaryEventsTest {
     ManagementService managementService = rule.getManagementService();
 
     while (job != null && job.getRetries() > 0) {
-      try {
-        managementService.executeJob(job.getId());
-      }
-      catch (Exception e) {
-        // ignore
-      }
+      executeJobIgnoringException(managementService, job.getId());
 
       job = managementService.createJobQuery().jobId(job.getId()).singleResult();
     }
@@ -491,7 +488,7 @@ public class MigrationBoundaryEventsTest {
     // and no event subscription for the new message name exists
     EventSubscription eventSubscription = rule.getRuntimeService().createEventSubscriptionQuery().eventName("new" + SIGNAL_NAME).singleResult();
     assertThat(eventSubscription).isNull();
-    assertThat(rule.getRuntimeService().createEventSubscriptionQuery().count()).isEqualTo(1);
+    assertThat(rule.getRuntimeService().createEventSubscriptionQuery().count()).isOne();
 
     // and it is possible to trigger the event with the old message name and successfully complete the migrated instance
     rule.getProcessEngine().getRuntimeService().signalEventReceived(SIGNAL_NAME);
@@ -537,7 +534,7 @@ public class MigrationBoundaryEventsTest {
     // and no event subscription for the new message name exists
     EventSubscription eventSubscription = rule.getRuntimeService().createEventSubscriptionQuery().eventName("new" + MESSAGE_NAME).singleResult();
     assertThat(eventSubscription).isNull();
-    assertThat(rule.getRuntimeService().createEventSubscriptionQuery().count()).isEqualTo(1);
+    assertThat(rule.getRuntimeService().createEventSubscriptionQuery().count()).isOne();
 
     // and it is possible to trigger the event with the old message name and successfully complete the migrated instance
     rule.getProcessEngine().getRuntimeService().correlateMessage(MESSAGE_NAME);

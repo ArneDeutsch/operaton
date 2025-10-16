@@ -16,9 +16,6 @@
  */
 package org.operaton.bpm.engine.test.history;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,6 +24,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.CaseService;
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ManagementService;
@@ -51,6 +49,8 @@ import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.RequiredHistoryLevel;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
+
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * @author Tom Baeyens
@@ -229,7 +229,7 @@ class HistoricActivityInstanceTest {
   @Test
   void testHistoricActivityInstanceForEventsQuery() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("eventProcess");
-    assertThat(taskService.createTaskQuery().count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().count()).isOne();
     runtimeService.signalEventReceived("signal");
     testRule.assertProcessEnded(pi.getId());
 
@@ -355,26 +355,11 @@ class HistoricActivityInstanceTest {
   @Test
   void testInvalidSorting() {
     var historicActivityInstanceQuery = historyService.createHistoricActivityInstanceQuery().orderByHistoricActivityInstanceDuration();
-    try {
-      historicActivityInstanceQuery.list();
-      fail("");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    assertThatThrownBy(historicActivityInstanceQuery::list).isInstanceOf(ProcessEngineException.class);
 
-    try {
-      historicActivityInstanceQuery.list();
-      fail("");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    assertThatThrownBy(historicActivityInstanceQuery::list).isInstanceOf(ProcessEngineException.class);
 
-    try {
-      historicActivityInstanceQuery.list();
-      fail("");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    assertThatThrownBy(historicActivityInstanceQuery::list).isInstanceOf(ProcessEngineException.class);
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
@@ -395,18 +380,18 @@ class HistoricActivityInstanceTest {
     assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").finishedBefore(hourFromNow.getTime()).count()).isZero();
     assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").finishedAfter(hourAgo.getTime()).count()).isZero();
     assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").finishedAfter(hourFromNow.getTime()).count()).isZero();
-    assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").startedBefore(hourFromNow.getTime()).count()).isEqualTo(1);
+    assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").startedBefore(hourFromNow.getTime()).count()).isOne();
     assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").startedBefore(hourAgo.getTime()).count()).isZero();
-    assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").startedAfter(hourAgo.getTime()).count()).isEqualTo(1);
+    assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").startedAfter(hourAgo.getTime()).count()).isOne();
     assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").startedAfter(hourFromNow.getTime()).count()).isZero();
     assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").startedAfter(hourFromNow.getTime()).startedBefore(hourAgo.getTime()).count()).isZero();
 
     // After finishing process
     taskService.complete(taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult().getId());
-    assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").finished().count()).isEqualTo(1);
+    assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").finished().count()).isOne();
     assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").finishedBefore(hourAgo.getTime()).count()).isZero();
-    assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").finishedBefore(hourFromNow.getTime()).count()).isEqualTo(1);
-    assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").finishedAfter(hourAgo.getTime()).count()).isEqualTo(1);
+    assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").finishedBefore(hourFromNow.getTime()).count()).isOne();
+    assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").finishedAfter(hourAgo.getTime()).count()).isOne();
     assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").finishedAfter(hourFromNow.getTime()).count()).isZero();
     assertThat(historyService.createHistoricActivityInstanceQuery().activityId("theTask").finishedBefore(hourAgo.getTime()).finishedAfter(hourFromNow.getTime()).count()).isZero();
   }
@@ -464,12 +449,7 @@ class HistoricActivityInstanceTest {
     var historicActivityInstanceQuery = historyService
           .createHistoricActivityInstanceQuery()
           .completeScope();
-    try {
-      historicActivityInstanceQuery.canceled();
-      fail("It should not be possible to query by completeScope and canceled.");
-    } catch (ProcessEngineException e) {
-      // exception expected
-    }
+    assertThatThrownBy(historicActivityInstanceQuery::canceled).isInstanceOf(ProcessEngineException.class);
   }
 
   /**
@@ -504,10 +484,10 @@ class HistoricActivityInstanceTest {
   void testHistoricActivityInstanceTimerEvent() {
     runtimeService.startProcessInstanceByKey("catchSignal");
 
-    assertThat(runtimeService.createEventSubscriptionQuery().count()).isEqualTo(1);
+    assertThat(runtimeService.createEventSubscriptionQuery().count()).isOne();
 
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
 
     Job timer = jobQuery.singleResult();
     managementService.executeJob(timer.getId());
@@ -518,11 +498,11 @@ class HistoricActivityInstanceTest {
     assertThat(task.getName()).isEqualTo("afterTimer");
 
     HistoricActivityInstanceQuery historicActivityInstanceQuery = historyService.createHistoricActivityInstanceQuery().activityId("gw1");
-    assertThat(historicActivityInstanceQuery.count()).isEqualTo(1);
+    assertThat(historicActivityInstanceQuery.count()).isOne();
     assertThat(historicActivityInstanceQuery.singleResult().getEndTime()).isNotNull();
 
     historicActivityInstanceQuery = historyService.createHistoricActivityInstanceQuery().activityId("timerEvent");
-    assertThat(historicActivityInstanceQuery.count()).isEqualTo(1);
+    assertThat(historicActivityInstanceQuery.count()).isOne();
     assertThat(historicActivityInstanceQuery.singleResult().getEndTime()).isNotNull();
     assertThat(historicActivityInstanceQuery.singleResult().getActivityType()).isEqualTo("intermediateTimer");
   }
@@ -533,10 +513,10 @@ class HistoricActivityInstanceTest {
     runtimeService.startProcessInstanceByKey("catchSignal");
 
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
 
     EventSubscriptionQuery eventSubscriptionQuery = runtimeService.createEventSubscriptionQuery();
-    assertThat(eventSubscriptionQuery.count()).isEqualTo(1);
+    assertThat(eventSubscriptionQuery.count()).isOne();
 
     runtimeService.correlateMessage("newInvoice");
 
@@ -546,11 +526,11 @@ class HistoricActivityInstanceTest {
     assertThat(task.getName()).isEqualTo("afterMessage");
 
     HistoricActivityInstanceQuery historicActivityInstanceQuery = historyService.createHistoricActivityInstanceQuery().activityId("gw1");
-    assertThat(historicActivityInstanceQuery.count()).isEqualTo(1);
+    assertThat(historicActivityInstanceQuery.count()).isOne();
     assertThat(historicActivityInstanceQuery.singleResult().getEndTime()).isNotNull();
 
     historicActivityInstanceQuery = historyService.createHistoricActivityInstanceQuery().activityId("messageEvent");
-    assertThat(historicActivityInstanceQuery.count()).isEqualTo(1);
+    assertThat(historicActivityInstanceQuery.count()).isOne();
     assertThat(historicActivityInstanceQuery.singleResult().getEndTime()).isNotNull();
     assertThat(historicActivityInstanceQuery.singleResult().getActivityType()).isEqualTo("intermediateMessageCatch");
   }
@@ -561,23 +541,23 @@ class HistoricActivityInstanceTest {
     runtimeService.startProcessInstanceByKey("nonInterruptingEvent");
 
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.count()).isEqualTo(1);
+    assertThat(jobQuery.count()).isOne();
 
     managementService.executeJob(jobQuery.singleResult().getId());
 
     HistoricActivityInstanceQuery historicActivityInstanceQuery = historyService.createHistoricActivityInstanceQuery().activityId("userTask");
-    assertThat(historicActivityInstanceQuery.count()).isEqualTo(1);
+    assertThat(historicActivityInstanceQuery.count()).isOne();
     assertThat(historicActivityInstanceQuery.singleResult().getEndTime()).isNull();
 
     historicActivityInstanceQuery = historyService.createHistoricActivityInstanceQuery().activityId("end1");
     assertThat(historicActivityInstanceQuery.count()).isZero();
 
     historicActivityInstanceQuery = historyService.createHistoricActivityInstanceQuery().activityId("timer");
-    assertThat(historicActivityInstanceQuery.count()).isEqualTo(1);
+    assertThat(historicActivityInstanceQuery.count()).isOne();
     assertThat(historicActivityInstanceQuery.singleResult().getEndTime()).isNotNull();
 
     historicActivityInstanceQuery = historyService.createHistoricActivityInstanceQuery().activityId("end2");
-    assertThat(historicActivityInstanceQuery.count()).isEqualTo(1);
+    assertThat(historicActivityInstanceQuery.count()).isOne();
     assertThat(historicActivityInstanceQuery.singleResult().getEndTime()).isNotNull();
   }
 
@@ -593,7 +573,7 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = historyService.createHistoricActivityInstanceQuery();
 
     query.activityId("message");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getEndTime()).isNotNull();
     assertThat(query.singleResult().getActivityType()).isEqualTo("boundaryMessage");
 
@@ -615,7 +595,7 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = historyService.createHistoricActivityInstanceQuery();
 
     query.activityId("message");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getEndTime()).isNotNull();
     assertThat(query.singleResult().getActivityType()).isEqualTo("boundaryMessage");
 
@@ -639,7 +619,7 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = historyService.createHistoricActivityInstanceQuery();
 
     query.activityId("signal");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getEndTime()).isNotNull();
     assertThat(query.singleResult().getActivityType()).isEqualTo("boundarySignal");
 
@@ -661,7 +641,7 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = historyService.createHistoricActivityInstanceQuery();
 
     query.activityId("signal");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getEndTime()).isNotNull();
     assertThat(query.singleResult().getActivityType()).isEqualTo("boundarySignal");
 
@@ -686,7 +666,7 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = historyService.createHistoricActivityInstanceQuery();
 
     query.activityId("timer");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getEndTime()).isNotNull();
     assertThat(query.singleResult().getActivityType()).isEqualTo("boundaryTimer");
 
@@ -709,7 +689,7 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = historyService.createHistoricActivityInstanceQuery();
 
     query.activityId("timer");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getEndTime()).isNotNull();
     assertThat(query.singleResult().getActivityType()).isEqualTo("boundaryTimer");
 
@@ -729,7 +709,7 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = historyService.createHistoricActivityInstanceQuery();
 
     query.activityId("error");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getEndTime()).isNotNull();
     assertThat(query.singleResult().getActivityType()).isEqualTo("boundaryError");
 
@@ -747,7 +727,7 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = historyService.createHistoricActivityInstanceQuery();
 
     query.activityId("catchCancel");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getEndTime()).isNotNull();
     assertThat(query.singleResult().getActivityType()).isEqualTo("cancelBoundaryCatch");
 
@@ -779,7 +759,7 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = historyService.createHistoricActivityInstanceQuery();
 
     query.activityId("compensationServiceTask");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getEndTime()).isNotNull();
 
     testRule.assertProcessEnded(pi.getId());
@@ -793,7 +773,7 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = historyService.createHistoricActivityInstanceQuery();
 
     query.activityId("transaction");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getEndTime()).isNotNull();
 
     Task task = taskService.createTaskQuery().singleResult();
@@ -810,7 +790,7 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = historyService.createHistoricActivityInstanceQuery();
 
     query.activityId("userTask");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     HistoricActivityInstance historicActivityInstance = query.singleResult();
 
@@ -874,15 +854,15 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = startEventTestProcess("");
 
     query.activityId("intermediateSignalCatchEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("intermediateSignalCatch");
 
     query.activityId("intermediateMessageCatchEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("intermediateMessageCatch");
 
     query.activityId("intermediateTimerCatchEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("intermediateTimer");
   }
 
@@ -892,19 +872,19 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = startEventTestProcess("");
 
     query.activityId("intermediateSignalThrowEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("intermediateSignalThrow");
 
     query.activityId("intermediateMessageThrowEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("intermediateMessageThrowEvent");
 
     query.activityId("intermediateNoneThrowEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("intermediateNoneThrowEvent");
 
     query.activityId("intermediateCompensationThrowEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("intermediateCompensationThrowEvent");
   }
 
@@ -914,16 +894,16 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = startEventTestProcess("");
 
     query.activityId("timerStartEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("startTimerEvent");
 
     query.activityId("noneStartEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("startEvent");
 
     query = startEventTestProcess("CAM-2365");
     query.activityId("messageStartEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("messageStartEvent");
   }
 
@@ -933,27 +913,27 @@ class HistoricActivityInstanceTest {
     HistoricActivityInstanceQuery query = startEventTestProcess("");
 
     query.activityId("cancellationEndEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("cancelEndEvent");
 
     query.activityId("messageEndEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("messageEndEvent");
 
     query.activityId("errorEndEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("errorEndEvent");
 
     query.activityId("signalEndEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("signalEndEvent");
 
     query.activityId("terminationEndEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("terminateEndEvent");
 
     query.activityId("noneEndEvent");
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getActivityType()).isEqualTo("noneEndEvent");
   }
 

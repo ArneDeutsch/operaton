@@ -18,10 +18,10 @@ package org.operaton.bpm.engine.rest.dto.runtime.modification;
 
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.runtime.ProcessInstanceModificationBuilder;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Thorben Lindhauer
@@ -29,8 +29,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class ProcessInstanceModificationDto {
 
-  protected boolean skipCustomListeners = false;
-  protected boolean skipIoMappings = false;
+  protected boolean skipCustomListeners;
+  protected boolean skipIoMappings;
   protected List<ProcessInstanceModificationInstructionDto> instructions;
   protected String annotation;
 

@@ -27,6 +27,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.operaton.bpm.engine.delegate.DelegateExecution;
 import org.operaton.bpm.engine.delegate.Expression;
 import org.operaton.bpm.engine.impl.ProcessEngineLogger;
@@ -94,31 +95,37 @@ public class ShellActivityBehavior extends AbstractBpmnActivityBehavior {
     List<String> argList = new ArrayList<>();
     argList.add(commandStr);
 
-    if (arg1Str != null)
+    if (arg1Str != null) {
       argList.add(arg1Str);
-    if (arg2Str != null)
+    }
+    if (arg2Str != null) {
       argList.add(arg2Str);
-    if (arg3Str != null)
+    }
+    if (arg3Str != null) {
       argList.add(arg3Str);
-    if (arg4Str != null)
+    }
+    if (arg4Str != null) {
       argList.add(arg4Str);
-    if (arg5Str != null)
+    }
+    if (arg5Str != null) {
       argList.add(arg5Str);
+    }
 
     ProcessBuilder processBuilder = new ProcessBuilder(argList);
 
     try {
       processBuilder.redirectErrorStream(redirectErrorFlag);
-      if (cleanEnvBoolan) {
+      if (Boolean.TRUE.equals(cleanEnvBoolan)) {
         Map<String, String> env = processBuilder.environment();
         env.clear();
       }
-      if (directoryStr != null && !directoryStr.isEmpty())
+      if (directoryStr != null && !directoryStr.isEmpty()) {
         processBuilder.directory(new File(directoryStr));
+      }
 
       Process process = processBuilder.start();
 
-      if (waitFlag) {
+      if (Boolean.TRUE.equals(waitFlag)) {
         int errorCode = process.waitFor();
 
         if (resultVariableStr != null) {

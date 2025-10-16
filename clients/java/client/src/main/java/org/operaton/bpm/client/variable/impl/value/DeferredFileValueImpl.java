@@ -16,15 +16,16 @@
  */
 package org.operaton.bpm.client.variable.impl.value;
 
+import java.io.InputStream;
+import java.io.Serial;
+
 import org.operaton.bpm.client.impl.EngineClient;
 import org.operaton.bpm.client.impl.EngineClientException;
 import org.operaton.bpm.client.impl.ExternalTaskClientLogger;
 import org.operaton.bpm.client.variable.value.DeferredFileValue;
 import org.operaton.bpm.engine.variable.impl.value.FileValueImpl;
-import static org.operaton.bpm.engine.variable.type.ValueType.FILE;
 
-import java.io.InputStream;
-import java.io.Serial;
+import static org.operaton.bpm.engine.variable.type.ValueType.FILE;
 
 /**
  * @author Tassilo Weidner
@@ -35,7 +36,7 @@ public class DeferredFileValueImpl extends FileValueImpl implements DeferredFile
 
   protected static final ExternalTaskClientLogger LOG = ExternalTaskClientLogger.CLIENT_LOGGER;
 
-  protected boolean isLoaded = false;
+  protected boolean isLoaded;
 
   protected String variableName;
   protected String executionId;

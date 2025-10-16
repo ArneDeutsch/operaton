@@ -16,14 +16,13 @@
  */
 package org.operaton.bpm.engine.test.history;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.CaseService;
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ProcessEngineConfiguration;
@@ -44,6 +43,8 @@ import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.RequiredHistoryLevel;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Roman Smirnov
@@ -71,7 +72,7 @@ class HistoricVariableInstanceScopeTest {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("oneTaskProcess", variables);
 
     HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     HistoricVariableInstance variable = query.singleResult();
     assertThat(variable).isNotNull();
@@ -98,7 +99,7 @@ class HistoricVariableInstanceScopeTest {
     assertThat(taskExecution).isNotNull();
 
     HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     HistoricVariableInstance variable = query.singleResult();
     assertThat(variable).isNotNull();
@@ -157,7 +158,7 @@ class HistoricVariableInstanceScopeTest {
     taskService.setVariable(task.getId(), "testVar", "testValue");
 
     HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     HistoricVariableInstance variable = query.singleResult();
     // the variable is in the process instance scope
@@ -173,7 +174,7 @@ class HistoricVariableInstanceScopeTest {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("process");
 
     HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     HistoricVariableInstance variable = query.singleResult();
     // the variable is in the process instance scope
@@ -188,7 +189,7 @@ class HistoricVariableInstanceScopeTest {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("process");
 
     HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     String activityInstanceId = historyService.createHistoricActivityInstanceQuery()
         .activityId("SubProcess_1")
@@ -217,7 +218,7 @@ class HistoricVariableInstanceScopeTest {
     assertThat(taskExecution).isNotNull();
 
     HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     HistoricVariableInstance variable = query.singleResult();
     // the variable is in the user task scope
@@ -239,7 +240,7 @@ class HistoricVariableInstanceScopeTest {
     taskService.setVariable(task.getId(), "testVar", "testValue");
 
     HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     HistoricVariableInstance variable = query.singleResult();
     // the variable is in the process instance scope
@@ -256,7 +257,7 @@ class HistoricVariableInstanceScopeTest {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("process");
 
     HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     HistoricVariableInstance variable = query.singleResult();
     // the variable is in the process instance scope
@@ -276,7 +277,7 @@ class HistoricVariableInstanceScopeTest {
     assertThat(serviceTask).isNotNull();
 
     HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     HistoricVariableInstance variable = query.singleResult();
     // the variable is in the service task scope
@@ -308,7 +309,7 @@ class HistoricVariableInstanceScopeTest {
     assertThat(historyService.createHistoricVariableInstanceQuery().caseInstanceId(caseInstanceId).count()).isEqualTo(3);
     assertThat(historyService.createHistoricVariableInstanceQuery().caseExecutionIdIn(caseExecutionId, taskExecutionId).count()).isEqualTo(3);
     assertThat(historyService.createHistoricVariableInstanceQuery().caseExecutionIdIn(caseExecutionId).count()).isEqualTo(2);
-    assertThat(historyService.createHistoricVariableInstanceQuery().caseExecutionIdIn(taskExecutionId).count()).isEqualTo(1);
+    assertThat(historyService.createHistoricVariableInstanceQuery().caseExecutionIdIn(taskExecutionId).count()).isOne();
 
     HistoryLevel historyLevel = processEngineConfiguration.getHistoryLevel();
     if (historyLevel.equals(HistoryLevel.HISTORY_LEVEL_FULL)) {

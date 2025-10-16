@@ -16,9 +16,6 @@
  */
 package org.operaton.bpm.engine.impl.cmmn.entity.repository;
 
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensurePositive;
-
 import java.io.Serial;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +28,9 @@ import org.operaton.bpm.engine.impl.interceptor.CommandExecutor;
 import org.operaton.bpm.engine.impl.util.CompareUtil;
 import org.operaton.bpm.engine.repository.CaseDefinition;
 import org.operaton.bpm.engine.repository.CaseDefinitionQuery;
+
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensurePositive;
 
 /**
  * @author Roman Smirnov
@@ -52,11 +52,11 @@ public class CaseDefinitionQueryImpl extends AbstractQuery<CaseDefinitionQuery, 
   protected String resourceName;
   protected String resourceNameLike;
   protected Integer version;
-  protected boolean latest = false;
+  protected boolean latest;
 
-  protected boolean isTenantIdSet = false;
+  protected boolean isTenantIdSet;
   protected String[] tenantIds;
-  protected boolean includeDefinitionsWithoutTenantId = false;
+  protected boolean includeDefinitionsWithoutTenantId;
 
   public CaseDefinitionQueryImpl() {
   }

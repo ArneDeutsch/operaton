@@ -16,8 +16,6 @@
  */
 package org.operaton.bpm.engine.test.bpmn.tasklistener;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +23,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.operaton.bpm.engine.IdentityService;
 import org.operaton.bpm.engine.RepositoryService;
 import org.operaton.bpm.engine.RuntimeService;
@@ -32,6 +31,8 @@ import org.operaton.bpm.engine.TaskService;
 import org.operaton.bpm.engine.task.Task;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Joram Barrez
@@ -72,8 +73,8 @@ class CustomTaskAssignmentTest {
   @Test
   void testCandidateGroupAssignment() {
     runtimeService.startProcessInstanceByKey("customTaskAssignment");
-    assertThat(taskService.createTaskQuery().taskCandidateGroup("management").count()).isEqualTo(1);
-    assertThat(taskService.createTaskQuery().taskCandidateUser("kermit").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskCandidateGroup("management").count()).isOne();
+    assertThat(taskService.createTaskQuery().taskCandidateUser("kermit").count()).isOne();
     assertThat(taskService.createTaskQuery().taskCandidateUser("fozzie").count()).isZero();
   }
 
@@ -81,8 +82,8 @@ class CustomTaskAssignmentTest {
   @Test
   void testCandidateUserAssignment() {
     runtimeService.startProcessInstanceByKey("customTaskAssignment");
-    assertThat(taskService.createTaskQuery().taskCandidateUser("kermit").count()).isEqualTo(1);
-    assertThat(taskService.createTaskQuery().taskCandidateUser("fozzie").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskCandidateUser("kermit").count()).isOne();
+    assertThat(taskService.createTaskQuery().taskCandidateUser("fozzie").count()).isOne();
     assertThat(taskService.createTaskQuery().taskCandidateUser("gonzo").count()).isZero();
   }
 

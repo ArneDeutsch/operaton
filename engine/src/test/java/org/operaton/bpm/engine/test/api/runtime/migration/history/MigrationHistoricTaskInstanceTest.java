@@ -16,13 +16,11 @@
  */
 package org.operaton.bpm.engine.test.api.runtime.migration.history;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.operaton.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
-
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ProcessEngineConfiguration;
 import org.operaton.bpm.engine.RuntimeService;
@@ -39,6 +37,9 @@ import org.operaton.bpm.engine.test.RequiredHistoryLevel;
 import org.operaton.bpm.engine.test.api.runtime.migration.models.ProcessModels;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.migration.MigrationTestExtension;
+
+import static org.operaton.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Thorben Lindhauer
@@ -81,7 +82,7 @@ class MigrationHistoricTaskInstanceTest {
     ActivityInstance activityInstance = runtimeService.getActivityInstance(processInstance.getId());
 
     //when
-    assertThat(sourceHistoryTaskInstanceQuery.count()).isEqualTo(1);
+    assertThat(sourceHistoryTaskInstanceQuery.count()).isOne();
     assertThat(targetHistoryTaskInstanceQuery.count()).isZero();
     ProcessInstanceQuery sourceProcessInstanceQuery = runtimeService.createProcessInstanceQuery().processDefinitionId(sourceProcessDefinition.getId());
     runtimeService.newMigration(migrationPlan)
@@ -90,7 +91,7 @@ class MigrationHistoricTaskInstanceTest {
 
     //then
     assertThat(sourceHistoryTaskInstanceQuery.count()).isZero();
-    assertThat(targetHistoryTaskInstanceQuery.count()).isEqualTo(1);
+    assertThat(targetHistoryTaskInstanceQuery.count()).isOne();
 
     HistoricTaskInstance instance = targetHistoryTaskInstanceQuery.singleResult();
     assertThat(instance.getProcessDefinitionKey()).isEqualTo(targetProcessDefinition.getKey());

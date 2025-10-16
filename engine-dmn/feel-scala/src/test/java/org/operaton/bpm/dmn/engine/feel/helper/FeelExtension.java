@@ -16,17 +16,17 @@
  */
 package org.operaton.bpm.dmn.engine.feel.helper;
 
-import org.operaton.bpm.dmn.engine.feel.function.helper.FunctionProvider;
-import org.operaton.bpm.dmn.feel.impl.scala.ScalaFeelEngine;
-import org.operaton.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
-import org.operaton.bpm.engine.variable.Variables;
-import org.operaton.bpm.engine.variable.context.VariableContext;
-
 import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+
+import org.operaton.bpm.dmn.engine.feel.function.helper.FunctionProvider;
+import org.operaton.bpm.dmn.feel.impl.scala.ScalaFeelEngine;
+import org.operaton.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
+import org.operaton.bpm.engine.variable.Variables;
+import org.operaton.bpm.engine.variable.context.VariableContext;
 
 /**
  * JUnit 5 extension for managing the FeelEngine and FunctionProvider.
@@ -50,7 +50,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
  * through the getters of the {@code feelExtension} (see {@link #getFunctionProvider()}).
  * </p>
  */
-public class FeelExtension implements AfterEachCallback {
+public final class FeelExtension implements AfterEachCallback {
 
   private FunctionProvider functionProvider;
   private ScalaFeelEngine feelEngine;

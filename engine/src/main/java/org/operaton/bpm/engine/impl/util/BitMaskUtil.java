@@ -27,7 +27,7 @@ import org.operaton.bpm.engine.impl.ProcessEngineLogger;
  *
  * @author Frederik Heremans
  */
-public class BitMaskUtil {
+public final class BitMaskUtil {
 
   private static final EngineUtilLogger LOG = ProcessEngineLogger.UTIL_LOGGER;
 
@@ -75,7 +75,7 @@ public class BitMaskUtil {
    */
   public static boolean isBitOn(int value, int bitNumber) {
     ensureBitRange(bitNumber);
-    return ((value & MASKS[bitNumber - 1]) == MASKS[bitNumber - 1]);
+    return (value & MASKS[bitNumber - 1]) == MASKS[bitNumber - 1];
   }
 
   /**

@@ -16,11 +16,8 @@
  */
 package org.operaton.bpm.engine.impl.runtime;
 
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureOnlyOneNotNull;
-
-
 import java.util.List;
+
 import org.operaton.bpm.engine.history.HistoricProcessInstanceQuery;
 import org.operaton.bpm.engine.impl.ProcessEngineLogger;
 import org.operaton.bpm.engine.impl.UpdateProcessInstancesSuspensionStateBuilderImpl;
@@ -33,6 +30,9 @@ import org.operaton.bpm.engine.runtime.UpdateProcessInstanceSuspensionStateBuild
 import org.operaton.bpm.engine.runtime.UpdateProcessInstanceSuspensionStateSelectBuilder;
 import org.operaton.bpm.engine.runtime.UpdateProcessInstanceSuspensionStateTenantBuilder;
 import org.operaton.bpm.engine.runtime.UpdateProcessInstancesSuspensionStateBuilder;
+
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureOnlyOneNotNull;
 
 public class UpdateProcessInstanceSuspensionStateBuilderImpl implements UpdateProcessInstanceSuspensionStateBuilder,
     UpdateProcessInstanceSuspensionStateSelectBuilder, UpdateProcessInstanceSuspensionStateTenantBuilder {
@@ -47,7 +47,7 @@ public class UpdateProcessInstanceSuspensionStateBuilderImpl implements UpdatePr
   protected String processDefinitionId;
 
   protected String processDefinitionTenantId;
-  protected boolean isProcessDefinitionTenantIdSet = false;
+  protected boolean isProcessDefinitionTenantIdSet;
 
   public UpdateProcessInstanceSuspensionStateBuilderImpl(CommandExecutor commandExecutor) {
     this.commandExecutor = commandExecutor;

@@ -16,10 +16,11 @@
  */
 package org.operaton.bpm.engine.test.concurrency;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import org.operaton.bpm.engine.impl.cmd.DeployCmd;
 import org.operaton.bpm.engine.impl.db.sql.DbSqlSessionFactory;
@@ -32,8 +33,8 @@ import org.operaton.bpm.engine.repository.DeploymentQuery;
 import org.operaton.bpm.engine.repository.ProcessDefinition;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * <p>Tests the deployment from two threads simultaneously.</p>
@@ -62,7 +63,7 @@ class ConcurrentDeploymentTest extends ConcurrencyTestCase {
    * @see <a href="https://app.camunda.com/jira/browse/CAM-2128">https://app.camunda.com/jira/browse/CAM-2128</a>
    */
   @Test
-  void testDuplicateFiltering() throws InterruptedException {
+  void testDuplicateFiltering() throws Exception {
 
     deployOnTwoConcurrentThreads(
         createDeploymentBuilder().enableDuplicateFiltering(false),
@@ -71,11 +72,11 @@ class ConcurrentDeploymentTest extends ConcurrencyTestCase {
     // ensure that although both transactions were run concurrently, only one deployment was constructed.
     assertThat(thread1.getException()).isNull();
     DeploymentQuery deploymentQuery = repositoryService.createDeploymentQuery();
-    assertThat(deploymentQuery.count()).isEqualTo(1L);
+    assertThat(deploymentQuery.count()).isOne();
   }
 
   @Test
-  void testVersioning() throws InterruptedException {
+  void testVersioning() throws Exception {
 
     deployOnTwoConcurrentThreads(
         createDeploymentBuilder(),

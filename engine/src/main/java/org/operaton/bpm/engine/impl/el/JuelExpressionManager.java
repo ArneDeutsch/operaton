@@ -16,6 +16,11 @@
  */
 package org.operaton.bpm.engine.impl.el;
 
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+import jakarta.el.*;
+
 import org.operaton.bpm.dmn.engine.impl.spi.el.ElProvider;
 import org.operaton.bpm.engine.delegate.VariableScope;
 import org.operaton.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
@@ -24,11 +29,6 @@ import org.operaton.bpm.engine.impl.mock.MockElResolver;
 import org.operaton.bpm.engine.impl.util.EnsureUtil;
 import org.operaton.bpm.engine.variable.context.VariableContext;
 import org.operaton.bpm.impl.juel.ExpressionFactoryImpl;
-
-import jakarta.el.*;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * JUEL-specific implementation of an {@link ExpressionManager}.
@@ -42,7 +42,7 @@ public class JuelExpressionManager implements ExpressionManager, ElProviderCompa
   protected Map<String, Method> functions = new HashMap<>();
   protected ExpressionFactory expressionFactory;
   protected Map<Object, Object> beans;
-  protected volatile boolean initialized = false;
+  protected volatile boolean initialized;
   protected ELResolver elResolver;
   protected FunctionMapper functionMapper;
   // Default implementation (does nothing)

@@ -16,9 +16,13 @@
  */
 package org.operaton.bpm.engine.test.concurrency;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.slf4j.Logger;
 
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.OptimisticLockingException;
@@ -45,16 +49,12 @@ import org.operaton.bpm.engine.repository.ProcessDefinition;
 import org.operaton.bpm.engine.runtime.Job;
 import org.operaton.bpm.engine.runtime.ProcessInstance;
 import org.operaton.bpm.engine.test.Deployment;
-import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
+import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.RegisterExtension;
-import org.junit.jupiter.api.Test;
 
-import org.slf4j.Logger;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Thorben Lindhauer
@@ -357,17 +357,17 @@ class ConcurrentJobExecutorTest {
     repositoryService.suspendProcessDefinitionById(processDefinition.getId());
 
     // assert that there still exists a running and active process instance
-    assertThat(runtimeService.createProcessInstanceQuery().active().count()).isEqualTo(1);
+    assertThat(runtimeService.createProcessInstanceQuery().active().count()).isOne();
 
     // when
     runtimeService.signal(processInstance.getId());
 
     // then
     // there should be one suspended job
-    assertThat(managementService.createJobQuery().suspended().count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().suspended().count()).isOne();
     assertThat(managementService.createJobQuery().active().count()).isZero();
 
-    assertThat(runtimeService.createProcessInstanceQuery().active().count()).isEqualTo(1);
+    assertThat(runtimeService.createProcessInstanceQuery().active().count()).isOne();
 
   }
 
@@ -410,7 +410,7 @@ class ConcurrentJobExecutorTest {
     assertThat(executionThread.exception).isNull();
 
     // and ultimately only one job with an updated priority is left
-    assertThat(remainingJobCount).isEqualTo(1L);
+    assertThat(remainingJobCount).isOne();
   }
 
   @Test
@@ -466,7 +466,7 @@ class ConcurrentJobExecutorTest {
     public void run() {
       try {
         JobFailureCollector jobFailureCollector = new JobFailureCollector(jobId);
-        ExecuteJobHelper.executeJob(jobId, processEngineConfiguration.getCommandExecutorTxRequired(),jobFailureCollector,
+        ExecuteJobHelper.executeJob(processEngineConfiguration.getCommandExecutorTxRequired(),jobFailureCollector,
             new ControlledCommand<>(activeThread, new ExecuteJobsCmd(jobId, jobFailureCollector)));
 
       }

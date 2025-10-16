@@ -18,10 +18,12 @@ package org.operaton.bpm.spring.boot.starter.actuator;
 
 import java.util.HashSet;
 import java.util.Set;
-import org.operaton.bpm.engine.impl.ProcessEngineImpl;
-import org.operaton.bpm.engine.impl.jobexecutor.JobExecutor;
+
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health.Builder;
+
+import org.operaton.bpm.engine.impl.ProcessEngineImpl;
+import org.operaton.bpm.engine.impl.jobexecutor.JobExecutor;
 
 import static java.util.Objects.requireNonNull;
 
@@ -44,7 +46,7 @@ public class JobExecutorHealthIndicator extends AbstractHealthIndicator {
     builder.withDetail("jobExecutor", Details.from(jobExecutor));
   }
 
-  public static class Details {
+  public static final class Details {
 
     private final String name;
     private final String lockOwner;
@@ -136,7 +138,7 @@ public class JobExecutorHealthIndicator extends AbstractHealthIndicator {
 
       public DetailsBuilder clearProcessEngineNames(Set<String> processEngineNames) {
         if (this.processEngineNames != null) {
-          this.processEngineNames.clear();
+          this.processEngineNames.removeAll(processEngineNames);
         }
         return this;
       }

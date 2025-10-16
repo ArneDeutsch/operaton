@@ -16,14 +16,12 @@
  */
 package org.operaton.bpm.engine.test.api.mgmt;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.RepositoryService;
@@ -37,6 +35,9 @@ import org.operaton.bpm.engine.runtime.ProcessInstance;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.variable.Variables;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author roman.smirnov
@@ -80,7 +81,7 @@ class ActivateJobTest {
 
     // then
     // the job should be active
-    assertThat(jobQuery.active().count()).isEqualTo(1);
+    assertThat(jobQuery.active().count()).isOne();
     assertThat(jobQuery.suspended().count()).isZero();
 
     Job activeJob = jobQuery.active().singleResult();
@@ -117,7 +118,7 @@ class ActivateJobTest {
     // then
     // the job should be activated
     assertThat(jobQuery.suspended().count()).isZero();
-    assertThat(jobQuery.active().count()).isEqualTo(1);
+    assertThat(jobQuery.active().count()).isOne();
 
     Job activeJob = jobQuery.active().singleResult();
 
@@ -153,7 +154,7 @@ class ActivateJobTest {
 
     // then
     // the job should be suspended
-    assertThat(jobQuery.active().count()).isEqualTo(1);
+    assertThat(jobQuery.active().count()).isOne();
     assertThat(jobQuery.suspended().count()).isZero();
 
     Job suspendedJob = jobQuery.active().singleResult();
@@ -189,7 +190,7 @@ class ActivateJobTest {
 
     // then
     // the job should be active
-    assertThat(jobQuery.active().count()).isEqualTo(1);
+    assertThat(jobQuery.active().count()).isOne();
     assertThat(jobQuery.suspended().count()).isZero();
 
     Job activeJob = jobQuery.active().singleResult();
@@ -225,7 +226,7 @@ class ActivateJobTest {
     // then
     // the job should be suspended
     assertThat(jobQuery.suspended().count()).isZero();
-    assertThat(jobQuery.active().count()).isEqualTo(1);
+    assertThat(jobQuery.active().count()).isOne();
 
     Job activeJob = jobQuery.active().singleResult();
 
@@ -296,7 +297,7 @@ class ActivateJobTest {
 
     // then
     // the job should be active
-    assertThat(jobQuery.active().count()).isEqualTo(1);
+    assertThat(jobQuery.active().count()).isOne();
     assertThat(jobQuery.suspended().count()).isZero();
   }
 
@@ -314,7 +315,7 @@ class ActivateJobTest {
 
     // the failed job
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.suspended().count()).isEqualTo(1);
+    assertThat(jobQuery.suspended().count()).isOne();
 
     JobDefinition jobDefinition = managementService.createJobDefinitionQuery().singleResult();
 
@@ -327,7 +328,7 @@ class ActivateJobTest {
 
     // then
     // the job should be active
-    assertThat(jobQuery.active().count()).isEqualTo(1);
+    assertThat(jobQuery.active().count()).isOne();
     assertThat(jobQuery.suspended().count()).isZero();
   }
 
@@ -345,7 +346,7 @@ class ActivateJobTest {
 
     // the failed job
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.suspended().count()).isEqualTo(1);
+    assertThat(jobQuery.suspended().count()).isOne();
 
     // when
     // the job will be activated
@@ -356,7 +357,7 @@ class ActivateJobTest {
 
     // then
     // the job should be active
-    assertThat(jobQuery.active().count()).isEqualTo(1);
+    assertThat(jobQuery.active().count()).isOne();
     assertThat(jobQuery.suspended().count()).isZero();
   }
 
@@ -374,7 +375,7 @@ class ActivateJobTest {
 
     // the failed job
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.suspended().count()).isEqualTo(1);
+    assertThat(jobQuery.suspended().count()).isOne();
 
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
 
@@ -387,7 +388,7 @@ class ActivateJobTest {
 
     // then
     // the job should be active
-    assertThat(jobQuery.active().count()).isEqualTo(1);
+    assertThat(jobQuery.active().count()).isOne();
     assertThat(jobQuery.suspended().count()).isZero();
   }
 
@@ -405,7 +406,7 @@ class ActivateJobTest {
 
     // the failed job
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.suspended().count()).isEqualTo(1);
+    assertThat(jobQuery.suspended().count()).isOne();
 
     // when
     // the job will be activated
@@ -416,7 +417,7 @@ class ActivateJobTest {
 
     // then
     // the job should be active
-    assertThat(jobQuery.active().count()).isEqualTo(1);
+    assertThat(jobQuery.active().count()).isOne();
     assertThat(jobQuery.suspended().count()).isZero();
   }
 

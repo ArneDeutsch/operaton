@@ -16,14 +16,13 @@
  */
 package org.operaton.bpm.engine.test.jobexecutor;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.batch.Batch;
 import org.operaton.bpm.engine.impl.ProcessEngineImpl;
 import org.operaton.bpm.engine.impl.batch.BatchConfiguration;
@@ -36,6 +35,8 @@ import org.operaton.bpm.engine.impl.jobexecutor.JobExecutor;
 import org.operaton.bpm.engine.test.api.runtime.migration.batch.BatchMigrationHelper;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.migration.MigrationTestExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class JobExecutorBatchTest {
 
@@ -89,7 +90,7 @@ class JobExecutorBatchTest {
     helper.migrateProcessInstancesAsync(2);
 
     // then the job executor is hinted for the seed job
-    assertThat(jobExecutor.getJobsAdded()).isEqualTo(1);
+    assertThat(jobExecutor.getJobsAdded()).isOne();
   }
 
   @Test
@@ -152,8 +153,8 @@ class JobExecutorBatchTest {
 
   public class CountingJobExecutor extends JobExecutor {
 
-    public boolean recordStarted = false;
-    public long jobsAdded = 0;
+    public boolean recordStarted;
+    public long jobsAdded;
 
     @Override
     public boolean isActive() {

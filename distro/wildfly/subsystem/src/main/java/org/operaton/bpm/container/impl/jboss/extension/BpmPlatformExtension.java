@@ -16,7 +16,6 @@
  */
 package org.operaton.bpm.container.impl.jboss.extension;
 
-import org.operaton.bpm.container.impl.jboss.extension.resource.BpmPlatformRootDefinition;
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
 import org.jboss.as.controller.ModelVersion;
@@ -24,6 +23,8 @@ import org.jboss.as.controller.PathElement;
 import org.jboss.as.controller.SubsystemRegistration;
 import org.jboss.as.controller.descriptions.StandardResourceDescriptionResolver;
 import org.jboss.as.controller.parsing.ExtensionParsingContext;
+
+import org.operaton.bpm.container.impl.jboss.extension.resource.BpmPlatformRootDefinition;
 
 import static org.operaton.bpm.container.impl.jboss.extension.ModelConstants.SUBSYSTEM_NAME;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
@@ -60,7 +61,7 @@ public class BpmPlatformExtension implements Extension {
 
   @Override
   public void initializeParsers(ExtensionParsingContext context) {
-    context.setSubsystemXmlMapping(ModelConstants.SUBSYSTEM_NAME, Namespace.CAMUNDA_BPM_PLATFORM_1_1.getUriString(), parser);
+    context.setSubsystemXmlMapping(ModelConstants.SUBSYSTEM_NAME, Namespace.OPERATON_BPM_PLATFORM_1_1.getUriString(), parser);
   }
 
   /**

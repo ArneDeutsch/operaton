@@ -17,13 +17,14 @@
 package org.operaton.bpm.engine.test.api.runtime.migration.models;
 
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
 import static org.operaton.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
 
 /**
  * @author Thorben Lindhauer
  *
  */
-public class AsyncProcessModels {
+public final class AsyncProcessModels {
   private AsyncProcessModels() {
   }
 

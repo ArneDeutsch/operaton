@@ -16,8 +16,6 @@
  */
 package org.operaton.bpm.engine.impl;
 
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
@@ -27,13 +25,15 @@ import org.operaton.bpm.engine.impl.interceptor.CommandExecutor;
 import org.operaton.bpm.engine.runtime.EventSubscription;
 import org.operaton.bpm.engine.runtime.EventSubscriptionQuery;
 
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+
 
 /**
  * @author Daniel Meyer
  */
 public class EventSubscriptionQueryImpl
-                extends AbstractQuery<EventSubscriptionQuery, EventSubscription>
-                implements Serializable, EventSubscriptionQuery {
+  extends AbstractQuery<EventSubscriptionQuery, EventSubscription>
+  implements Serializable, EventSubscriptionQuery {
 
   @Serial private static final long serialVersionUID = 1L;
 
@@ -44,9 +44,9 @@ public class EventSubscriptionQueryImpl
   protected String processInstanceId;
   protected String activityId;
 
-  protected boolean isTenantIdSet = false;
+  protected boolean isTenantIdSet;
   protected String[] tenantIds;
-  protected boolean includeEventSubscriptionsWithoutTenantId = false;
+  protected boolean includeEventSubscriptionsWithoutTenantId;
 
   public EventSubscriptionQueryImpl() {
   }

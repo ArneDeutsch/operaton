@@ -17,7 +17,6 @@
 package org.operaton.bpm.webapp.impl.security.auth;
 
 import java.io.IOException;
-
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -47,7 +46,7 @@ public class AuthenticationFilter implements Filter {
 
   public static final String AUTH_CACHE_TTL_INIT_PARAM_NAME = "cacheTimeToLive";
 
-  protected Long cacheTimeToLive = null;
+  protected Long cacheTimeToLive;
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
@@ -61,6 +60,7 @@ public class AuthenticationFilter implements Filter {
     }
   }
 
+  @Override
   public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
     throws IOException, ServletException {
 

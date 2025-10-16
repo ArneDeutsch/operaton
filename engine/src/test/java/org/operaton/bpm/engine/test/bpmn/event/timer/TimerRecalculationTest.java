@@ -16,9 +16,6 @@
  */
 package org.operaton.bpm.engine.test.bpmn.event.timer;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,6 +24,7 @@ import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.ProcessEngineException;
@@ -42,6 +40,9 @@ import org.operaton.bpm.engine.runtime.ProcessInstance;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 
 /**
@@ -120,10 +121,10 @@ class TimerRecalculationTest {
     variables1.put("dueDate", new Date());
 
     ProcessInstance pi1 = runtimeService.startProcessInstanceByKey("intermediateTimerEventExample", variables1);
-    assertThat(managementService.createJobQuery().processInstanceId(pi1.getId()).count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().processInstanceId(pi1.getId()).count()).isOne();
 
     JobQuery jobQuery = managementService.createJobQuery().executable();
-    assertThat(jobQuery.count()).isEqualTo(1L);
+    assertThat(jobQuery.count()).isOne();
 
     // job duedate can be recalculated, job still exists in runtime
     String jobId = jobQuery.singleResult().getId();

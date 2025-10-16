@@ -16,17 +16,12 @@
  */
 package org.operaton.bpm.engine.test.bpmn.async;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.assertThat;
-import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
-import static org.operaton.bpm.engine.test.util.ExecutionAssert.assertThat;
-import static org.operaton.bpm.engine.test.util.ExecutionAssert.describeExecutionTree;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.RepositoryService;
@@ -41,6 +36,12 @@ import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.engine.test.util.ExecutionTree;
+
+import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.assertThat;
+import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
+import static org.operaton.bpm.engine.test.util.ExecutionAssert.assertThat;
+import static org.operaton.bpm.engine.test.util.ExecutionAssert.describeExecutionTree;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class AsyncStartEventTest {
 
@@ -63,7 +64,7 @@ class AsyncStartEventTest {
     Task task = taskService.createTaskQuery().singleResult();
     assertThat(task).as("The user task should not have been reached yet").isNull();
 
-    assertThat(runtimeService.createExecutionQuery().activityId("startEvent").count()).isEqualTo(1);
+    assertThat(runtimeService.createExecutionQuery().activityId("startEvent").count()).isOne();
 
     testRule.executeAvailableJobs();
     task = taskService.createTaskQuery().singleResult();
@@ -104,7 +105,7 @@ class AsyncStartEventTest {
     variables.put("foo", "bar");
     runtimeService.correlateMessage("newInvoiceMessage", new HashMap<>(), variables);
 
-    assertThat(runtimeService.createProcessInstanceQuery().count()).isEqualTo(1);
+    assertThat(runtimeService.createProcessInstanceQuery().count()).isOne();
 
     testRule.executeAvailableJobs();
 
@@ -146,7 +147,7 @@ class AsyncStartEventTest {
     Task task = taskService.createTaskQuery().singleResult();
     assertThat(task).as("The subprocess user task should not have been reached yet").isNull();
 
-    assertThat(runtimeService.createExecutionQuery().activityId("StartEvent_2").count()).isEqualTo(1);
+    assertThat(runtimeService.createExecutionQuery().activityId("StartEvent_2").count()).isOne();
 
     testRule.executeAvailableJobs();
     task = taskService.createTaskQuery().singleResult();

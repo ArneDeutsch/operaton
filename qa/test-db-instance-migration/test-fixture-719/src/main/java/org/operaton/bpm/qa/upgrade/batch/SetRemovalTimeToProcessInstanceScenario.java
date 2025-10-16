@@ -17,6 +17,7 @@
 package org.operaton.bpm.qa.upgrade.batch;
 
 import java.util.Date;
+
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.RepositoryService;
@@ -27,7 +28,7 @@ import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.qa.upgrade.DescribesScenario;
 import org.operaton.bpm.qa.upgrade.ScenarioSetup;
 
-public class SetRemovalTimeToProcessInstanceScenario {
+public final class SetRemovalTimeToProcessInstanceScenario {
 
   private SetRemovalTimeToProcessInstanceScenario() {
   }

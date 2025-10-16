@@ -16,6 +16,10 @@
  */
 package org.operaton.bpm.webapp.impl.security;
 
+import java.io.IOException;
+import java.util.List;
+import jakarta.servlet.ServletException;
+
 import org.operaton.bpm.cockpit.Cockpit;
 import org.operaton.bpm.engine.IdentityService;
 import org.operaton.bpm.engine.ProcessEngine;
@@ -23,15 +27,11 @@ import org.operaton.bpm.webapp.impl.security.auth.Authentication;
 import org.operaton.bpm.webapp.impl.security.auth.Authentications;
 import org.operaton.bpm.webapp.impl.security.auth.UserAuthentication;
 
-import jakarta.servlet.ServletException;
-import java.io.IOException;
-import java.util.List;
-
 /**
  * @author Daniel Meyer
  *
  */
-public class SecurityActions {
+public final class SecurityActions {
 
   private SecurityActions() {
   }
@@ -93,6 +93,7 @@ public class SecurityActions {
     }
 
   }
+
   public interface SecurityAction<T> {
     T execute() throws IOException, ServletException;
 

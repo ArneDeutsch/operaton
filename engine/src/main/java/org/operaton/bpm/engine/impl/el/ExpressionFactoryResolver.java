@@ -17,8 +17,8 @@
 package org.operaton.bpm.engine.impl.el;
 
 import jakarta.el.ExpressionFactory;
-import org.operaton.bpm.impl.juel.ExpressionFactoryImpl;
 
+import org.operaton.bpm.impl.juel.ExpressionFactoryImpl;
 
 
 /**
@@ -26,7 +26,7 @@ import org.operaton.bpm.impl.juel.ExpressionFactoryImpl;
  *
  * @author Frederik Heremans
  */
-public class ExpressionFactoryResolver {
+public final class ExpressionFactoryResolver {
   private ExpressionFactoryResolver() {
     // private constructor to prevent instantiation
   }

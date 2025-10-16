@@ -26,7 +26,7 @@ import org.operaton.bpm.qa.upgrade.Times;
  * @author Thorben Lindhauer
  *
  */
-public class NonInterruptingBoundaryEventScenario {
+public final class NonInterruptingBoundaryEventScenario {
 
   private NonInterruptingBoundaryEventScenario() {
   }
@@ -39,14 +39,12 @@ public class NonInterruptingBoundaryEventScenario {
   @DescribesScenario("init")
   @Times(1)
   public static ScenarioSetup initMessage() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        engine
-          .getRuntimeService()
-          .startProcessInstanceByKey("NonInterruptingMessageBoundaryEventScenario", scenarioName);
+    return (engine, scenarioName) -> {
+      engine
+        .getRuntimeService()
+        .startProcessInstanceByKey("NonInterruptingMessageBoundaryEventScenario", scenarioName);
 
-        engine.getRuntimeService().correlateMessage("BoundaryEventMessage", scenarioName);
-      }
+      engine.getRuntimeService().correlateMessage("BoundaryEventMessage", scenarioName);
     };
   }
 }

@@ -16,6 +16,11 @@
  */
 package org.operaton.bpm.engine.test.cmmn.deployment;
 
+import java.io.InputStream;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.RepositoryService;
 import org.operaton.bpm.engine.impl.util.IoUtil;
@@ -29,11 +34,6 @@ import org.operaton.bpm.model.cmmn.Cmmn;
 import org.operaton.bpm.model.cmmn.CmmnModelInstance;
 import org.operaton.bpm.model.cmmn.instance.Case;
 import org.operaton.bpm.model.cmmn.instance.CasePlanModel;
-
-import java.io.InputStream;
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -57,11 +57,11 @@ class CmmnDeployerTest extends CmmnTest {
     RepositoryService repositoryService = processEngine.getRepositoryService();
     DeploymentQuery deploymentQuery = repositoryService.createDeploymentQuery();
 
-    assertThat(deploymentQuery.count()).isEqualTo(1);
+    assertThat(deploymentQuery.count()).isOne();
 
     // there should be one case definition
     CaseDefinitionQuery query = processEngine.getRepositoryService().createCaseDefinitionQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     CaseDefinition caseDefinition = query.singleResult();
     assertThat(caseDefinition.getKey()).isEqualTo("Case_1");
@@ -143,11 +143,11 @@ class CmmnDeployerTest extends CmmnTest {
     RepositoryService repositoryService = processEngine.getRepositoryService();
     DeploymentQuery deploymentQuery = repositoryService.createDeploymentQuery();
 
-    assertThat(deploymentQuery.count()).isEqualTo(1);
+    assertThat(deploymentQuery.count()).isOne();
 
     // there should be one case definition
     CaseDefinitionQuery query = processEngine.getRepositoryService().createCaseDefinitionQuery();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
 
     CaseDefinition caseDefinition = query.singleResult();
     assertThat(caseDefinition.getKey()).isEqualTo("Case_1");

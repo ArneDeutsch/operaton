@@ -16,13 +16,6 @@
  */
 package org.operaton.bpm.engine.test.api.repository;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -42,6 +35,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.Mockito;
+
 import org.operaton.bpm.engine.BadUserRequestException;
 import org.operaton.bpm.engine.EntityTypes;
 import org.operaton.bpm.engine.HistoryService;
@@ -96,6 +90,13 @@ import org.operaton.bpm.engine.test.util.TestExecutionListener;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.fail;
+
 /**
  * @author Frederik Heremans
  * @author Joram Barrez
@@ -147,7 +148,7 @@ class RepositoryServiceTest {
   }
 
   @Test
-  void testUTF8DeploymentMethod() throws IOException {
+  void testUTF8DeploymentMethod() throws Exception {
     //given utf8 charset
     Charset utf8Charset = StandardCharsets.UTF_8;
     Charset defaultCharset = processEngineConfiguration.getDefaultCharset();
@@ -415,7 +416,7 @@ class RepositoryServiceTest {
             .activateProcessDefinitionsOn(inThreeDays)
             .deploy();
 
-    assertThat(repositoryService.createDeploymentQuery().count()).isEqualTo(1);
+    assertThat(repositoryService.createDeploymentQuery().count()).isOne();
     assertThat(repositoryService.createProcessDefinitionQuery().count()).isEqualTo(2);
     assertThat(repositoryService.createProcessDefinitionQuery().suspended().count()).isEqualTo(2);
     assertThat(repositoryService.createProcessDefinitionQuery().active().count()).isZero();
@@ -432,14 +433,14 @@ class RepositoryServiceTest {
     managementService.executeJob(jobs.get(0).getId());
     managementService.executeJob(jobs.get(1).getId());
 
-    assertThat(repositoryService.createDeploymentQuery().count()).isEqualTo(1);
+    assertThat(repositoryService.createDeploymentQuery().count()).isOne();
     assertThat(repositoryService.createProcessDefinitionQuery().count()).isEqualTo(2);
     assertThat(repositoryService.createProcessDefinitionQuery().suspended().count()).isZero();
     assertThat(repositoryService.createProcessDefinitionQuery().active().count()).isEqualTo(2);
 
     // Should be able to start process instance
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
-    assertThat(runtimeService.createProcessInstanceQuery().count()).isEqualTo(1);
+    assertThat(runtimeService.createProcessInstanceQuery().count()).isOne();
 
     // Cleanup
     repositoryService.deleteDeployment(deployment.getId(), true);
@@ -458,14 +459,14 @@ class RepositoryServiceTest {
             .activateProcessDefinitionsOn(inThreeDays)
             .deploy();
 
-    assertThat(repositoryService.createDeploymentQuery().count()).isEqualTo(1);
+    assertThat(repositoryService.createDeploymentQuery().count()).isOne();
 
-    assertThat(repositoryService.createProcessDefinitionQuery().count()).isEqualTo(1);
-    assertThat(repositoryService.createProcessDefinitionQuery().suspended().count()).isEqualTo(1);
+    assertThat(repositoryService.createProcessDefinitionQuery().count()).isOne();
+    assertThat(repositoryService.createProcessDefinitionQuery().suspended().count()).isOne();
     assertThat(repositoryService.createProcessDefinitionQuery().active().count()).isZero();
 
-    assertThat(managementService.createJobDefinitionQuery().count()).isEqualTo(1);
-    assertThat(managementService.createJobDefinitionQuery().suspended().count()).isEqualTo(1);
+    assertThat(managementService.createJobDefinitionQuery().count()).isOne();
+    assertThat(managementService.createJobDefinitionQuery().suspended().count()).isOne();
     assertThat(managementService.createJobDefinitionQuery().active().count()).isZero();
 
     // Shouldn't be able to start a process instance
@@ -479,19 +480,19 @@ class RepositoryServiceTest {
     Job job = managementService.createJobQuery().singleResult();
     managementService.executeJob(job.getId());
 
-    assertThat(repositoryService.createDeploymentQuery().count()).isEqualTo(1);
+    assertThat(repositoryService.createDeploymentQuery().count()).isOne();
 
-    assertThat(repositoryService.createProcessDefinitionQuery().count()).isEqualTo(1);
+    assertThat(repositoryService.createProcessDefinitionQuery().count()).isOne();
     assertThat(repositoryService.createProcessDefinitionQuery().suspended().count()).isZero();
-    assertThat(repositoryService.createProcessDefinitionQuery().active().count()).isEqualTo(1);
+    assertThat(repositoryService.createProcessDefinitionQuery().active().count()).isOne();
 
-    assertThat(managementService.createJobDefinitionQuery().count()).isEqualTo(1);
+    assertThat(managementService.createJobDefinitionQuery().count()).isOne();
     assertThat(managementService.createJobDefinitionQuery().suspended().count()).isZero();
-    assertThat(managementService.createJobDefinitionQuery().active().count()).isEqualTo(1);
+    assertThat(managementService.createJobDefinitionQuery().active().count()).isOne();
 
     // Should be able to start process instance
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
-    assertThat(runtimeService.createProcessInstanceQuery().count()).isEqualTo(1);
+    assertThat(runtimeService.createProcessInstanceQuery().count()).isOne();
 
     // Cleanup
     repositoryService.deleteDeployment(deployment.getId(), true);
@@ -1229,7 +1230,7 @@ class RepositoryServiceTest {
     assertThat(start.getId()).isEqualTo("start");
     assertThat(start.getProperty("name")).isEqualTo("S t a r t");
     assertThat(start.getProperty("documentation")).isEqualTo("the start event");
-    assertThat(start.getActivities()).isEqualTo(Collections.EMPTY_LIST);
+    assertThat(start.getActivities()).isEqualTo(Collections.emptyList());
     List<PvmTransition> outgoingTransitions = start.getOutgoingTransitions();
     assertThat(outgoingTransitions).hasSize(1);
     assertThat(outgoingTransitions.get(0).getProperty(BpmnParse.PROPERTYNAME_CONDITION_TEXT)).isEqualTo("${a == b}");
@@ -1280,11 +1281,11 @@ class RepositoryServiceTest {
   @Test
   void testGetProcessDefinitions() {
     List<String> deploymentIds = new ArrayList<>();
-    deploymentIds.add(deployProcessString(("<definitions " + NAMESPACE + " " + TARGET_NAMESPACE + ">" + "  <process id='IDR' name='Insurance Damage Report 1' isExecutable='true'><startEvent id='start'/></process></definitions>")));
-    deploymentIds.add(deployProcessString(("<definitions " + NAMESPACE + " " + TARGET_NAMESPACE + ">" + "  <process id='IDR' name='Insurance Damage Report 2' isExecutable='true'><startEvent id='start'/></process></definitions>")));
-    deploymentIds.add(deployProcessString(("<definitions " + NAMESPACE + " " + TARGET_NAMESPACE + ">" + "  <process id='IDR' name='Insurance Damage Report 3' isExecutable='true'><startEvent id='start'/></process></definitions>")));
-    deploymentIds.add(deployProcessString(("<definitions " + NAMESPACE + " " + TARGET_NAMESPACE + ">" + "  <process id='EN' name='Expense Note 1' isExecutable='true'><startEvent id='start'/></process></definitions>")));
-    deploymentIds.add(deployProcessString(("<definitions " + NAMESPACE + " " + TARGET_NAMESPACE + ">" + "  <process id='EN' name='Expense Note 2' isExecutable='true'><startEvent id='start'/></process></definitions>")));
+    deploymentIds.add(deployProcessString("<definitions " + NAMESPACE + " " + TARGET_NAMESPACE + ">" + "  <process id='IDR' name='Insurance Damage Report 1' isExecutable='true'><startEvent id='start'/></process></definitions>"));
+    deploymentIds.add(deployProcessString("<definitions " + NAMESPACE + " " + TARGET_NAMESPACE + ">" + "  <process id='IDR' name='Insurance Damage Report 2' isExecutable='true'><startEvent id='start'/></process></definitions>"));
+    deploymentIds.add(deployProcessString("<definitions " + NAMESPACE + " " + TARGET_NAMESPACE + ">" + "  <process id='IDR' name='Insurance Damage Report 3' isExecutable='true'><startEvent id='start'/></process></definitions>"));
+    deploymentIds.add(deployProcessString("<definitions " + NAMESPACE + " " + TARGET_NAMESPACE + ">" + "  <process id='EN' name='Expense Note 1' isExecutable='true'><startEvent id='start'/></process></definitions>"));
+    deploymentIds.add(deployProcessString("<definitions " + NAMESPACE + " " + TARGET_NAMESPACE + ">" + "  <process id='EN' name='Expense Note 2' isExecutable='true'><startEvent id='start'/></process></definitions>"));
 
     List<ProcessDefinition> processDefinitions = repositoryService
       .createProcessDefinitionQuery()
@@ -1332,8 +1333,8 @@ class RepositoryServiceTest {
   @Test
   void testDeployIdenticalProcessDefinitions() {
     List<String> deploymentIds = new ArrayList<>();
-    deploymentIds.add(deployProcessString(("<definitions " + NAMESPACE + " " + TARGET_NAMESPACE + "><process id='IDR' name='Insurance Damage Report' isExecutable='true'><startEvent id='start'/></process></definitions>")));
-    deploymentIds.add(deployProcessString(("<definitions " + NAMESPACE + " " + TARGET_NAMESPACE + "><process id='IDR' name='Insurance Damage Report' isExecutable='true'><startEvent id='start'/></process></definitions>")));
+    deploymentIds.add(deployProcessString("<definitions " + NAMESPACE + " " + TARGET_NAMESPACE + "><process id='IDR' name='Insurance Damage Report' isExecutable='true'><startEvent id='start'/></process></definitions>"));
+    deploymentIds.add(deployProcessString("<definitions " + NAMESPACE + " " + TARGET_NAMESPACE + "><process id='IDR' name='Insurance Damage Report' isExecutable='true'><startEvent id='start'/></process></definitions>"));
 
     List<ProcessDefinition> processDefinitions = repositoryService
       .createProcessDefinitionQuery()

@@ -16,8 +16,6 @@
  */
 package org.operaton.bpm.engine.test.api.multitenancy;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +24,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.FilterService;
 import org.operaton.bpm.engine.IdentityService;
 import org.operaton.bpm.engine.TaskService;
@@ -37,13 +36,15 @@ import org.operaton.bpm.engine.task.TaskQuery;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class MultiTenancyFilterServiceTest {
 
   protected static final String TENANT_ONE = "tenant1";
   protected static final String TENANT_TWO = "tenant2";
   protected static final String[] TENANT_IDS = new String[] {TENANT_ONE, TENANT_TWO};
 
-  protected String filterId = null;
+  protected String filterId;
   protected final List<String> taskIds = new ArrayList<>();
 
   @RegisterExtension
@@ -110,10 +111,10 @@ class MultiTenancyFilterServiceTest {
     TaskQuery query = taskService.createTaskQuery().withoutTenantId();
     filterId = createFilter(query);
 
-    assertThat(filterService.count(filterId)).isEqualTo(1L);
+    assertThat(filterService.count(filterId)).isOne();
 
     TaskQuery extendingQuery = taskService.createTaskQuery().taskName("testTask");
-    assertThat(filterService.count(filterId, extendingQuery)).isEqualTo(1L);
+    assertThat(filterService.count(filterId, extendingQuery)).isOne();
   }
 
   @Test
@@ -122,7 +123,7 @@ class MultiTenancyFilterServiceTest {
     filterId = createFilter(query);
 
     TaskQuery extendingQuery = taskService.createTaskQuery().tenantIdIn(TENANT_ONE);
-    assertThat(filterService.count(filterId, extendingQuery)).isEqualTo(1L);
+    assertThat(filterService.count(filterId, extendingQuery)).isOne();
   }
 
   @Test
@@ -131,7 +132,7 @@ class MultiTenancyFilterServiceTest {
     filterId = createFilter(query);
 
     TaskQuery extendingQuery = taskService.createTaskQuery().withoutTenantId();
-    assertThat(filterService.count(filterId, extendingQuery)).isEqualTo(1L);
+    assertThat(filterService.count(filterId, extendingQuery)).isOne();
   }
 
   @Test
@@ -141,7 +142,7 @@ class MultiTenancyFilterServiceTest {
 
     identityService.setAuthentication("user", null, null);
 
-    assertThat(filterService.count(filterId)).isEqualTo(1L);
+    assertThat(filterService.count(filterId)).isOne();
   }
 
   @Test
@@ -181,7 +182,7 @@ class MultiTenancyFilterServiceTest {
 
     identityService.setAuthentication("user", null, Arrays.asList(TENANT_ONE));
 
-    assertThat(filterService.count(filterId)).isEqualTo(1L);
+    assertThat(filterService.count(filterId)).isOne();
   }
 
   @Test
@@ -203,7 +204,7 @@ class MultiTenancyFilterServiceTest {
     identityService.setAuthentication("user", null, Arrays.asList(TENANT_ONE));
 
     TaskQuery extendingQuery = taskService.createTaskQuery().tenantIdIn(TENANT_ONE);
-    assertThat(filterService.count(filterId, extendingQuery)).isEqualTo(1L);
+    assertThat(filterService.count(filterId, extendingQuery)).isOne();
   }
 
   @Test

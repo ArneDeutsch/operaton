@@ -16,19 +16,12 @@
  */
 package org.operaton.bpm.engine.test.api.runtime;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.junit.Assert.assertNotSame;
-import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.assertThat;
-import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
-import static org.operaton.bpm.engine.test.util.ExecutionAssert.assertThat;
-import static org.operaton.bpm.engine.test.util.ExecutionAssert.describeExecutionTree;
-
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.ProcessEngineException;
@@ -50,6 +43,13 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.engine.test.util.ExecutionTree;
 import org.operaton.bpm.engine.variable.Variables;
+
+import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.assertThat;
+import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
+import static org.operaton.bpm.engine.test.util.ExecutionAssert.assertThat;
+import static org.operaton.bpm.engine.test.util.ExecutionAssert.describeExecutionTree;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 /**
  * @author Thorben Lindhauer
@@ -299,7 +299,7 @@ class ProcessInstanceModificationAsyncTest {
 
     ActivityInstance tree = runtimeService.getActivityInstance(processInstance.getId());
 
-    assertThat(managementService.createJobQuery().count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().count()).isOne();
 
     // when the async task is cancelled via cancelTransitionInstance
     runtimeService.createProcessInstanceModification(processInstance.getId())
@@ -512,7 +512,7 @@ class ProcessInstanceModificationAsyncTest {
 
     ActivityInstance tree = runtimeService.getActivityInstance(processInstance.getId());
 
-    assertThat(managementService.createJobQuery().count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().count()).isOne();
 
     // when the async task is cancelled via cancelTransitionInstance
     runtimeService.createProcessInstanceModification(processInstance.getId())
@@ -540,7 +540,7 @@ class ProcessInstanceModificationAsyncTest {
 
     ActivityInstance tree = runtimeService.getActivityInstance(processInstance.getId());
 
-    assertThat(managementService.createJobQuery().count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().count()).isOne();
 
     // when the async task is cancelled via cancelTransitionInstance
     runtimeService.createProcessInstanceModification(processInstance.getId())
@@ -577,7 +577,7 @@ class ProcessInstanceModificationAsyncTest {
 
     ActivityInstance tree = runtimeService.getActivityInstance(processInstance.getId());
 
-    assertThat(managementService.createJobQuery().count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().count()).isOne();
 
     // when the async task is cancelled via cancelTransitionInstance
     runtimeService.createProcessInstanceModification(processInstance.getId())
@@ -654,7 +654,7 @@ class ProcessInstanceModificationAsyncTest {
     // given a process instance with an async task in a subprocess
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("nestedOneTaskProcess");
 
-    assertThat(managementService.createJobQuery().count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().count()).isOne();
 
     // when the async task is cancelled via cancelAll
     runtimeService.createProcessInstanceModification(processInstance.getId())
@@ -1145,7 +1145,7 @@ class ProcessInstanceModificationAsyncTest {
     Incident newIncident = runtimeService.createIncidentQuery().singleResult();
     assertThat(newIncident).isNotNull();
 
-    assertNotSame(incident.getId(), newIncident.getId());
+    assertThat(newIncident.getId()).isNotSameAs(incident.getId());
   }
 
   protected String getInstanceIdForActivity(ActivityInstance activityInstance, String activityId) {

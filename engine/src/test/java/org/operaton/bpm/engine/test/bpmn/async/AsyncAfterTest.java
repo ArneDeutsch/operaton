@@ -16,9 +16,6 @@
  */
 package org.operaton.bpm.engine.test.bpmn.async;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.ParseException;
 import org.operaton.bpm.engine.RepositoryService;
@@ -45,6 +43,10 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.operaton.bpm.engine.impl.test.TestHelper.executeJobIgnoringException;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 /**
  * @author Daniel Meyer
@@ -174,7 +176,7 @@ class AsyncAfterTest {
     // end the process
     runtimeService.signal(pi.getId());
 
-    //////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////
 
     // start process instance
     varMap = new HashMap<>();
@@ -494,13 +496,13 @@ class AsyncAfterTest {
     assertListenerEndInvoked(pi);
 
     // the process should wait *after* the gateway
-    assertThat(managementService.createJobQuery().active().count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().active().count()).isOne();
 
     testRule.executeAvailableJobs();
 
     // if the waiting job is executed there should be 2 user tasks
     TaskQuery taskQuery = taskService.createTaskQuery();
-    assertThat(taskQuery.active().count()).isEqualTo(1);
+    assertThat(taskQuery.active().count()).isOne();
 
     // finish tasks
     List<Task> tasks = taskQuery.active().list();
@@ -536,7 +538,7 @@ class AsyncAfterTest {
     assertListenerEndInvoked(pi);
 
     // and we will wait *after* the gateway:
-    assertThat(managementService.createJobQuery().active().count()).isEqualTo(1);
+    assertThat(managementService.createJobQuery().active().count()).isOne();
   }
 
   /**
@@ -647,7 +649,7 @@ class AsyncAfterTest {
     assertListenerEndInvoked(pi);
 
     // the process should wait *after* execute each service task step-by-step
-    assertThat(managementService.createJobQuery().count()).isEqualTo(1L);
+    assertThat(managementService.createJobQuery().count()).isOne();
     // execute all jobs - one for each service task wrapped in the multi-instance body
     testRule.executeAvailableJobs(5);
 
@@ -759,11 +761,7 @@ class AsyncAfterTest {
     Job job = managementService.createJobQuery().singleResult();
 
    // when job fails
-    try {
-      managementService.executeJob(job.getId());
-    } catch (Exception e) {
-      // ignore
-    }
+    executeJobIgnoringException(managementService, job.getId());
 
     // then
     job = managementService.createJobQuery().singleResult();

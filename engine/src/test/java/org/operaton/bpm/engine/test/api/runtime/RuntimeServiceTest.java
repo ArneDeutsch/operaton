@@ -16,15 +16,6 @@
  */
 package org.operaton.bpm.engine.test.api.runtime;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
-import static org.operaton.bpm.engine.test.util.ExecutableProcessUtil.USER_TASK_PROCESS;
-import static org.operaton.bpm.engine.variable.Variables.createVariables;
-import static org.operaton.bpm.engine.variable.Variables.objectValue;
-
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +30,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.BadUserRequestException;
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ManagementService;
@@ -64,7 +56,6 @@ import org.operaton.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguratio
 import org.operaton.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.operaton.bpm.engine.impl.history.HistoryLevel;
 import org.operaton.bpm.engine.impl.persistence.entity.HistoricDetailVariableInstanceUpdateEntity;
-import org.operaton.commons.utils.CollectionUtil;
 import org.operaton.bpm.engine.repository.ProcessDefinition;
 import org.operaton.bpm.engine.runtime.ActivityInstance;
 import org.operaton.bpm.engine.runtime.Execution;
@@ -94,6 +85,16 @@ import org.operaton.bpm.engine.variable.value.ObjectValue;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
 import org.operaton.bpm.model.bpmn.builder.SubProcessBuilder;
+import org.operaton.commons.utils.CollectionUtil;
+
+import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
+import static org.operaton.bpm.engine.test.util.ExecutableProcessUtil.USER_TASK_PROCESS;
+import static org.operaton.bpm.engine.variable.Variables.createVariables;
+import static org.operaton.bpm.engine.variable.Variables.objectValue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.fail;
 
 /**
  * @author Frederik Heremans
@@ -121,12 +122,7 @@ public class RuntimeServiceTest {
 
   @Test
   void testStartProcessInstanceByKeyNullKey() {
-    try {
-      runtimeService.startProcessInstanceByKey(null);
-      fail("ProcessEngineException expected");
-    } catch (ProcessEngineException e) {
-      // Expected exception
-    }
+    assertThatThrownBy(() -> runtimeService.startProcessInstanceByKey(null)).isInstanceOf(ProcessEngineException.class);
   }
 
   @Test
@@ -141,12 +137,7 @@ public class RuntimeServiceTest {
 
   @Test
   void testStartProcessInstanceByIdNullId() {
-    try {
-      runtimeService.startProcessInstanceById(null);
-      fail("ProcessEngineException expected");
-    } catch (ProcessEngineException e) {
-      // Expected exception
-    }
+    assertThatThrownBy(() -> runtimeService.startProcessInstanceById(null)).isInstanceOf(ProcessEngineException.class);
   }
 
   @Test
@@ -164,7 +155,7 @@ public class RuntimeServiceTest {
   @Test
   void testStartProcessInstanceByIdNullVariables() {
     runtimeService.startProcessInstanceByKey("oneTaskProcess", (Map<String, Object>) null);
-    assertThat(runtimeService.createProcessInstanceQuery().processDefinitionKey("oneTaskProcess").count()).isEqualTo(1);
+    assertThat(runtimeService.createProcessInstanceQuery().processDefinitionKey("oneTaskProcess").count()).isOne();
   }
 
   @Test
@@ -177,7 +168,7 @@ public class RuntimeServiceTest {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess", "123");
     assertThat(processInstance).isNotNull();
     assertThat(processInstance.getBusinessKey()).isEqualTo("123");
-    assertThat(runtimeService.createProcessInstanceQuery().processDefinitionKey("oneTaskProcess").count()).isEqualTo(1);
+    assertThat(runtimeService.createProcessInstanceQuery().processDefinitionKey("oneTaskProcess").count()).isOne();
 
     // by key with variables
     processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess", "456", CollectionUtil.singletonMap("var", "value"));
@@ -202,7 +193,7 @@ public class RuntimeServiceTest {
   @Test
   void testDeleteProcessInstance() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
-    assertThat(runtimeService.createProcessInstanceQuery().processDefinitionKey("oneTaskProcess").count()).isEqualTo(1);
+    assertThat(runtimeService.createProcessInstanceQuery().processDefinitionKey("oneTaskProcess").count()).isOne();
 
     runtimeService.deleteProcessInstance(processInstance.getId(), TESTING_INSTANCE_DELETION);
     assertThat(runtimeService.createProcessInstanceQuery().processDefinitionKey("oneTaskProcess").count()).isZero();
@@ -380,7 +371,7 @@ public class RuntimeServiceTest {
     // then
     testRule.assertProcessEnded(instance.getId());
     assertThat(historyService.createHistoricVariableInstanceQuery().processInstanceId(instance.getId()).list()).hasSize(1);
-    assertThat(historyService.createHistoricVariableInstanceQuery().variableName("inputMappingExecuted").count()).isEqualTo(1);
+    assertThat(historyService.createHistoricVariableInstanceQuery().variableName("inputMappingExecuted").count()).isOne();
   }
 
   @Deployment(resources = {
@@ -398,8 +389,8 @@ public class RuntimeServiceTest {
     // then
     testRule.assertProcessEnded(instance.getId());
     assertThat(historyService.createHistoricVariableInstanceQuery().processInstanceId(instance.getId()).list()).hasSize(2);
-    assertThat(historyService.createHistoricVariableInstanceQuery().variableName("inputMappingExecuted").count()).isEqualTo(1);
-    assertThat(historyService.createHistoricVariableInstanceQuery().variableName("outputMappingExecuted").count()).isEqualTo(1);
+    assertThat(historyService.createHistoricVariableInstanceQuery().variableName("inputMappingExecuted").count()).isOne();
+    assertThat(historyService.createHistoricVariableInstanceQuery().variableName("outputMappingExecuted").count()).isOne();
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/runtime/RuntimeServiceTest.testCascadingDeleteSubprocessInstanceSkipIoMappings.Calling.bpmn20.xml",
@@ -419,7 +410,7 @@ public class RuntimeServiceTest {
     // then
     testRule.assertProcessEnded(instance.getId());
     assertThat(historyService.createHistoricVariableInstanceQuery().processInstanceId(instance2.getId()).list()).hasSize(1);
-    assertThat(historyService.createHistoricVariableInstanceQuery().variableName("inputMappingExecuted").count()).isEqualTo(1);
+    assertThat(historyService.createHistoricVariableInstanceQuery().variableName("inputMappingExecuted").count()).isOne();
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/runtime/RuntimeServiceTest.testCascadingDeleteSubprocessInstanceSkipIoMappings.Calling.bpmn20.xml",
@@ -439,8 +430,8 @@ public class RuntimeServiceTest {
     // then
     testRule.assertProcessEnded(instance.getId());
     assertThat(historyService.createHistoricVariableInstanceQuery().processInstanceId(instance2.getId()).list()).hasSize(2);
-    assertThat(historyService.createHistoricVariableInstanceQuery().variableName("inputMappingExecuted").count()).isEqualTo(1);
-    assertThat(historyService.createHistoricVariableInstanceQuery().variableName("outputMappingExecuted").count()).isEqualTo(1);
+    assertThat(historyService.createHistoricVariableInstanceQuery().variableName("inputMappingExecuted").count()).isOne();
+    assertThat(historyService.createHistoricVariableInstanceQuery().variableName("outputMappingExecuted").count()).isOne();
   }
 
   @Deployment(resources = {
@@ -448,7 +439,7 @@ public class RuntimeServiceTest {
   @Test
   void testDeleteProcessInstanceNullReason() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
-    assertThat(runtimeService.createProcessInstanceQuery().processDefinitionKey("oneTaskProcess").count()).isEqualTo(1);
+    assertThat(runtimeService.createProcessInstanceQuery().processDefinitionKey("oneTaskProcess").count()).isOne();
 
     // Deleting without a reason should be possible
     runtimeService.deleteProcessInstance(processInstance.getId(), null);
@@ -491,7 +482,8 @@ public class RuntimeServiceTest {
 
   @Test
   void testDeleteProcessInstanceIfExistsWithFake() {
-    assertDoesNotThrow(() -> runtimeService.deleteProcessInstanceIfExists("aFake", null, false, false, false, false));
+    assertThatCode(() -> runtimeService.deleteProcessInstanceIfExists("aFake", null, false, false, false, false))
+      .doesNotThrowAnyException();
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
@@ -504,7 +496,7 @@ public class RuntimeServiceTest {
       .isInstanceOf(NotFoundException.class)
       .hasMessageContaining("No process instance found for id");
 
-    assertThat(runtimeService.createProcessInstanceQuery().processDefinitionKey("oneTaskProcess").count()).isEqualTo(1);
+    assertThat(runtimeService.createProcessInstanceQuery().processDefinitionKey("oneTaskProcess").count()).isOne();
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
@@ -543,8 +535,8 @@ public class RuntimeServiceTest {
 
     // when
     // there are two compensation tasks
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("outerAfterBoundaryTask").count()).isEqualTo(1);
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("innerAfterBoundaryTask").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("outerAfterBoundaryTask").count()).isOne();
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("innerAfterBoundaryTask").count()).isOne();
 
     // when the process instance is deleted
     runtimeService.deleteProcessInstance(instance.getId(), "");
@@ -995,23 +987,19 @@ public class RuntimeServiceTest {
   @SuppressWarnings("unchecked")
   @Test
   void testSetVariablesUnexistingExecutionId() {
-    try {
-      runtimeService.setVariables("unexistingexecution", Collections.EMPTY_MAP);
-      fail("ProcessEngineException expected");
-    } catch (ProcessEngineException ae) {
-      testRule.assertTextPresent("execution unexistingexecution doesn't exist", ae.getMessage());
-    }
+    Map<String, Object> variables = Collections.emptyMap();
+    assertThatThrownBy(() -> runtimeService.setVariables("unexistingexecution", variables))
+      .isInstanceOf(ProcessEngineException.class)
+      .hasMessageContaining("execution unexistingexecution doesn't exist");
   }
 
   @SuppressWarnings("unchecked")
   @Test
   void testSetVariablesNullExecutionId() {
-    try {
-      runtimeService.setVariables(null, Collections.EMPTY_MAP);
-      fail("ProcessEngineException expected");
-    } catch (ProcessEngineException ae) {
-      testRule.assertTextPresent("executionId is null", ae.getMessage());
-    }
+    Map<String, Object> variables = Collections.emptyMap();
+    assertThatThrownBy(() -> runtimeService.setVariables(null, variables))
+      .isInstanceOf(ProcessEngineException.class)
+      .hasMessageContaining("executionId is null");
   }
 
 
@@ -1219,12 +1207,10 @@ public class RuntimeServiceTest {
   @SuppressWarnings("unchecked")
   @Test
   void testRemoveVariablesNullExecutionId() {
-    try {
-      runtimeService.removeVariables(null, Collections.EMPTY_LIST);
-      fail("ProcessEngineException expected");
-    } catch (ProcessEngineException ae) {
-      testRule.assertTextPresent("executionId is null", ae.getMessage());
-    }
+    List<String> variableNames = Collections.emptyList();
+    assertThatThrownBy(() -> runtimeService.removeVariables(null, variableNames))
+      .isInstanceOf(ProcessEngineException.class)
+      .hasMessageContaining("executionId is null");
   }
 
   @Deployment(resources = {
@@ -1277,12 +1263,10 @@ public class RuntimeServiceTest {
   @SuppressWarnings("unchecked")
   @Test
   void testRemoveVariablesLocalNullExecutionId() {
-    try {
-      runtimeService.removeVariablesLocal(null, Collections.EMPTY_LIST);
-      fail("ProcessEngineException expected");
-    } catch (ProcessEngineException ae) {
-      testRule.assertTextPresent("executionId is null", ae.getMessage());
-    }
+    List<String> variableNames = Collections.emptyList();
+    assertThatThrownBy(() -> runtimeService.removeVariablesLocal(null, variableNames))
+      .isInstanceOf(ProcessEngineException.class)
+      .hasMessageContaining("executionId is null");
   }
 
   @Deployment(resources = {
@@ -1344,7 +1328,7 @@ public class RuntimeServiceTest {
   @Test
   void testSignalEventReceived() {
 
-    //////  test  signalEventReceived(String)
+    // ////  test  signalEventReceived(String)
 
     startSignalCatchProcesses();
     // 12, because the signal catch is a scope
@@ -1354,7 +1338,7 @@ public class RuntimeServiceTest {
     runtimeService.signalEventReceived("panic");
     assertThat(runtimeService.createExecutionQuery().count()).isZero();
 
-    //////  test  signalEventReceived(String, String)
+    // ////  test  signalEventReceived(String, String)
     startSignalCatchProcesses();
 
     // signal the executions one at a time:
@@ -1742,12 +1726,7 @@ public class RuntimeServiceTest {
 
     ActivityInstance tree = runtimeService.getActivityInstance(instance.getId());
 
-    try {
-      tree.getActivityInstances(null);
-      fail("exception expected");
-    } catch (NullValueException e) {
-      // happy path
-    }
+    assertThatThrownBy(() -> tree.getActivityInstances(null)).isInstanceOf(NullValueException.class);
   }
 
   @Deployment(resources = "org/operaton/bpm/engine/test/api/runtime/RuntimeServiceTest.testGetActivityInstancesForActivity.bpmn20.xml")
@@ -1797,12 +1776,7 @@ public class RuntimeServiceTest {
 
     ActivityInstance tree = runtimeService.getActivityInstance(instance.getId());
 
-    try {
-      tree.getTransitionInstances(null);
-      fail("exception expected");
-    } catch (NullValueException e) {
-      // happy path
-    }
+    assertThatThrownBy(() -> tree.getTransitionInstances(null)).isInstanceOf(NullValueException.class);
   }
 
   @Deployment(resources = "org/operaton/bpm/engine/test/api/runtime/RuntimeServiceTest.testGetTransitionInstancesForActivity.bpmn20.xml")
@@ -3029,10 +3003,10 @@ public class RuntimeServiceTest {
       .putValue("anObjectValue", objectValue(new SimpleSerializableBean(10)).serializationDataFormat(Variables.SerializationDataFormats.JAVA))
       .putValue("anUntypedObjectValue", new SimpleSerializableBean(30));
 
-    runtimeService.startProcessInstanceByKey("testProcess", variables);
-
     // assertions are part of the java delegate AssertVariableInstancesDelegate
     // only there we can access the VariableScope methods
+    assertThatCode(() -> runtimeService.startProcessInstanceByKey("testProcess", variables))
+      .doesNotThrowAnyException();
   }
 
   @Deployment(resources = "org/operaton/bpm/engine/test/api/runtime/RuntimeServiceTest.testSetVariableInScope.bpmn20.xml")

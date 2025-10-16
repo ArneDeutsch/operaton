@@ -18,14 +18,13 @@ package org.operaton.bpm.webapp.impl.util;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
-
 import jakarta.ws.rs.core.Response.Status;
 
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.rest.exception.RestException;
 import org.operaton.bpm.engine.rest.spi.ProcessEngineProvider;
 
-public class ProcessEngineUtil {
+public final class ProcessEngineUtil {
 
   private ProcessEngineUtil() {
   }

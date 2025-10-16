@@ -23,13 +23,14 @@ import org.operaton.bpm.engine.impl.pvm.PvmActivity;
 import org.operaton.bpm.engine.impl.pvm.PvmException;
 import org.operaton.bpm.engine.impl.pvm.delegate.ActivityBehavior;
 import org.operaton.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
+
 import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 /**
  * @author Roman Smirnov
  *
  */
-public class ActivityBehaviorUtil {
+public final class ActivityBehaviorUtil {
 
   private ActivityBehaviorUtil() {
   }

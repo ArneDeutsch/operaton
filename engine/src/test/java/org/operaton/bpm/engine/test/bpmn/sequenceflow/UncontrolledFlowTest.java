@@ -16,11 +16,9 @@
  */
 package org.operaton.bpm.engine.test.bpmn.sequenceflow;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.RuntimeService;
 import org.operaton.bpm.engine.TaskService;
@@ -29,6 +27,9 @@ import org.operaton.bpm.engine.task.Task;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 /**
  * Tests things that BPMN describes as 'uncontrolled flow':
@@ -59,8 +60,8 @@ class UncontrolledFlowTest {
 
     // then there are two tasks after the sub process
     assertThat(taskService.createTaskQuery().count()).isEqualTo(2);
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("outerTask1").count()).isEqualTo(1);
-    assertThat(taskService.createTaskQuery().taskDefinitionKey("outerTask2").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("outerTask1").count()).isOne();
+    assertThat(taskService.createTaskQuery().taskDefinitionKey("outerTask2").count()).isOne();
 
     // and then the message for the event subprocess cannot be delivered
     try {

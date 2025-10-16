@@ -16,12 +16,6 @@
  */
 package org.operaton.bpm.engine.test.api.runtime;
 
-import static java.util.stream.Collectors.toSet;
-import static java.util.stream.Stream.of;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.tuple;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -31,6 +25,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.BadUserRequestException;
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ManagementService;
@@ -56,6 +51,12 @@ import org.operaton.bpm.engine.test.junit5.batch.BatchExtension;
 import org.operaton.bpm.engine.variable.Variables;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Stream.of;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.tuple;
 
 class CorrelateAllMessageBatchTest {
 
@@ -135,7 +136,7 @@ class CorrelateAllMessageBatchTest {
     rule.syncExec(batch);
 
     // then
-    assertThat(taskExecutionQueryInstanceOne.count()).isEqualTo(1L);
+    assertThat(taskExecutionQueryInstanceOne.count()).isOne();
     assertThat(taskExecutionQueryInstanceTwo.count()).isZero();
     assertThat(taskExecutionQueryInstanceThree.count()).isZero();
   }
@@ -174,7 +175,7 @@ class CorrelateAllMessageBatchTest {
     rule.syncExec(batch);
 
     // then
-    assertThat(taskExecutionQueryInstanceOne.count()).isEqualTo(1L);
+    assertThat(taskExecutionQueryInstanceOne.count()).isOne();
     assertThat(taskExecutionQueryInstanceTwo.count()).isZero();
     assertThat(taskExecutionQueryInstanceThree.count()).isZero();
   }
@@ -213,7 +214,7 @@ class CorrelateAllMessageBatchTest {
     rule.syncExec(batch);
 
     // then
-    assertThat(taskExecutionQueryInstanceOne.count()).isEqualTo(1L);
+    assertThat(taskExecutionQueryInstanceOne.count()).isOne();
     assertThat(taskExecutionQueryInstanceTwo.count()).isZero();
     assertThat(taskExecutionQueryInstanceThree.count()).isZero();
   }
@@ -251,9 +252,9 @@ class CorrelateAllMessageBatchTest {
     rule.syncExec(batch);
 
     // then
-    assertThat(taskExecutionQueryInstanceOne.count()).isEqualTo(1L);
+    assertThat(taskExecutionQueryInstanceOne.count()).isOne();
     assertThat(taskExecutionQueryInstanceTwo.count()).isZero();
-    assertThat(taskExecutionQueryInstanceThree.count()).isEqualTo(1L);
+    assertThat(taskExecutionQueryInstanceThree.count()).isOne();
   }
 
   @Test
@@ -283,7 +284,7 @@ class CorrelateAllMessageBatchTest {
     rule.syncExec(batch);
 
     // then
-    assertThat(taskExecutionQueryInstanceOne.count()).isEqualTo(1L);
+    assertThat(taskExecutionQueryInstanceOne.count()).isOne();
     assertThat(taskExecutionQueryInstanceThree.count()).isZero();
   }
 

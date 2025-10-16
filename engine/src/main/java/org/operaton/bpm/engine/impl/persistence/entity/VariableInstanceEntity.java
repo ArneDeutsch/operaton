@@ -114,12 +114,12 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
    *   stay in the scope execution
    * </p>
    */
-  protected boolean isConcurrentLocal = false;
+  protected boolean isConcurrentLocal;
 
   /**
    * Determines whether this variable is stored in the data base.
    */
-  protected boolean isTransient = false;
+  protected boolean isTransient;
 
   // transient properties
   protected ExecutionEntity execution;
@@ -693,24 +693,28 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
-    return result;
+    return prime * result + (id == null ? 0 : id.hashCode());
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     VariableInstanceEntity other = (VariableInstanceEntity) obj;
     if (id == null) {
-      if (other.id != null)
+      if (other.id != null) {
         return false;
-    } else if (!id.equals(other.id))
+      }
+    } else if (!id.equals(other.id)) {
       return false;
+    }
     return true;
   }
 

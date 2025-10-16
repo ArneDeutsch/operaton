@@ -16,9 +16,6 @@
  */
 package org.operaton.bpm.engine.impl.cmmn.cmd;
 
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureAtLeastOneNotNull;
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Map;
@@ -33,6 +30,9 @@ import org.operaton.bpm.engine.impl.interceptor.CommandContext;
 import org.operaton.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
 import org.operaton.bpm.engine.runtime.CaseInstance;
 
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureAtLeastOneNotNull;
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+
 /**
  * @author Roman Smirnov
  *
@@ -46,7 +46,7 @@ public class CreateCaseInstanceCmd implements Command<CaseInstance>, Serializabl
   protected String businessKey;
 
   protected String caseDefinitionTenantId;
-  protected boolean isTenantIdSet = false;
+  protected boolean isTenantIdSet;
 
   public CreateCaseInstanceCmd(CaseInstanceBuilderImpl builder) {
     this.caseDefinitionKey = builder.getCaseDefinitionKey();

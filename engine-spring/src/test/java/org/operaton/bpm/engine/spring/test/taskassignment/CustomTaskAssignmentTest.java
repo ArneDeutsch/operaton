@@ -16,12 +16,12 @@
  */
 package org.operaton.bpm.engine.spring.test.taskassignment;
 
-import org.operaton.commons.utils.CollectionUtil;
-import org.operaton.bpm.engine.spring.test.SpringProcessEngineTestCase;
-import org.operaton.bpm.engine.test.Deployment;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
+
+import org.operaton.bpm.engine.spring.test.SpringProcessEngineTestCase;
+import org.operaton.bpm.engine.test.Deployment;
+import org.operaton.commons.utils.CollectionUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,16 +36,16 @@ class CustomTaskAssignmentTest extends SpringProcessEngineTestCase {
   @Test
   void setAssigneeThroughSpringService() {
     runtimeService.startProcessInstanceByKey("assigneeThroughSpringService", CollectionUtil.singletonMap("emp", "fozzie"));
-    assertThat(taskService.createTaskQuery().taskAssignee("Kermit The Frog").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskAssignee("Kermit The Frog").count()).isOne();
   }
 
   @Deployment
   @Test
   void setCandidateUsersThroughSpringService() {
     runtimeService.startProcessInstanceByKey("candidateUsersThroughSpringService", CollectionUtil.singletonMap("emp", "fozzie"));
-    assertThat(taskService.createTaskQuery().taskCandidateUser("kermit").count()).isEqualTo(1);
-    assertThat(taskService.createTaskQuery().taskCandidateUser("fozzie").count()).isEqualTo(1);
-    assertThat(taskService.createTaskQuery().taskCandidateUser("gonzo").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskCandidateUser("kermit").count()).isOne();
+    assertThat(taskService.createTaskQuery().taskCandidateUser("fozzie").count()).isOne();
+    assertThat(taskService.createTaskQuery().taskCandidateUser("gonzo").count()).isOne();
     assertThat(taskService.createTaskQuery().taskCandidateUser("misspiggy").count()).isZero();
   }
 
@@ -54,9 +54,9 @@ class CustomTaskAssignmentTest extends SpringProcessEngineTestCase {
   @Test
   void setCandidateGroupsThroughSpringService() {
     runtimeService.startProcessInstanceByKey("candidateGroupsThroughSpringService", CollectionUtil.singletonMap("emp", "fozzie"));
-    assertThat(taskService.createTaskQuery().taskCandidateGroup("management").count()).isEqualTo(1);
-    assertThat(taskService.createTaskQuery().taskCandidateGroup("directors").count()).isEqualTo(1);
-    assertThat(taskService.createTaskQuery().taskCandidateGroup("accountancy").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskCandidateGroup("management").count()).isOne();
+    assertThat(taskService.createTaskQuery().taskCandidateGroup("directors").count()).isOne();
+    assertThat(taskService.createTaskQuery().taskCandidateGroup("accountancy").count()).isOne();
     assertThat(taskService.createTaskQuery().taskCandidateGroup("sales").count()).isZero();
   }
 

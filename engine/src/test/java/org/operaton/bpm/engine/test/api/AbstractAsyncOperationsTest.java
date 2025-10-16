@@ -16,12 +16,11 @@
  */
 package org.operaton.bpm.engine.test.api;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
+
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.RuntimeService;
@@ -32,6 +31,8 @@ import org.operaton.bpm.engine.runtime.Job;
 import org.operaton.bpm.engine.test.api.runtime.BatchHelper;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Askar Akhmerov
@@ -153,7 +154,7 @@ public abstract class AbstractAsyncOperationsTest {
 
   protected void assertHistoricBatchExists(ProcessEngineTestExtension testRule) {
     if (testRule.isHistoryLevelFull()) {
-      assertThat(historyService.createHistoricBatchQuery().count()).isEqualTo(1L);
+      assertThat(historyService.createHistoricBatchQuery().count()).isOne();
     }
   }
 

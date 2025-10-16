@@ -19,6 +19,7 @@ package org.operaton.bpm.engine.rest.exception;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 import org.operaton.bpm.engine.AuthorizationException;
 import org.operaton.bpm.engine.BadUserRequestException;
 import org.operaton.bpm.engine.ParseException;
@@ -34,7 +35,7 @@ import org.operaton.bpm.engine.rest.dto.migration.MigrationPlanValidationExcepti
 /**
  * @author Svetlana Dorokhova.
  */
-public class ExceptionHandlerHelper {
+public final class ExceptionHandlerHelper {
 
   protected static final ExceptionLogger LOGGER = ExceptionLogger.REST_LOGGER;
   protected static final ExceptionHandlerHelper INSTANCE = new ExceptionHandlerHelper();

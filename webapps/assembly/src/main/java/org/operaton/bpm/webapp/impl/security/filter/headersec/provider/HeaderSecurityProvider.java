@@ -16,17 +16,17 @@
  */
 package org.operaton.bpm.webapp.impl.security.filter.headersec.provider;
 
-import jakarta.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.Map;
+import jakarta.servlet.ServletContext;
 
 /**
  * @author Tassilo Weidner
  */
 public abstract class HeaderSecurityProvider {
 
-  protected boolean disabled = false;
-  protected String value = null;
+  protected boolean disabled;
+  protected String value;
   protected Map<String, String> initParams = new HashMap<>();
 
   public abstract Map<String, String> initParams();

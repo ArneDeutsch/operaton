@@ -16,14 +16,13 @@
  */
 package org.operaton.bpm.engine.test.bpmn.usertask;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.IdentityService;
 import org.operaton.bpm.engine.RuntimeService;
 import org.operaton.bpm.engine.TaskService;
@@ -34,6 +33,8 @@ import org.operaton.bpm.engine.task.Task;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Joram Barrez
@@ -157,8 +158,8 @@ class TaskCandidateTest {
     // and anyone in the management/accountancy group
     assertThat(taskService.createTaskQuery().taskCandidateUser(KERMIT).list()).hasSize(1);
     assertThat(taskService.createTaskQuery().taskCandidateUser(GONZO).list()).hasSize(1);
-    assertThat(taskService.createTaskQuery().taskCandidateGroup(MANAGEMENT).count()).isEqualTo(1);
-    assertThat(taskService.createTaskQuery().taskCandidateGroup("accountancy").count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().taskCandidateGroup(MANAGEMENT).count()).isOne();
+    assertThat(taskService.createTaskQuery().taskCandidateGroup("accountancy").count()).isOne();
     assertThat(taskService.createTaskQuery().taskCandidateGroup("sales").count()).isZero();
 
     // Gonzo claims the task
@@ -174,9 +175,9 @@ class TaskCandidateTest {
 
     // The task will be visible on the personal task list of Gonzo
     assertThat(taskService
-        .createTaskQuery()
-        .taskAssignee(GONZO)
-        .count()).isEqualTo(1);
+      .createTaskQuery()
+      .taskAssignee(GONZO)
+      .count()).isOne();
 
     // But not on the personal task list of (for example) Kermit
     assertThat(taskService.createTaskQuery().taskAssignee(KERMIT).count()).isZero();

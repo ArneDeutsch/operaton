@@ -27,7 +27,7 @@ import org.operaton.bpm.qa.upgrade.Times;
  * @author Thorben Lindhauer
  *
  */
-public class SubprocessParallelCreateCompensationScenario {
+public final class SubprocessParallelCreateCompensationScenario {
 
   private SubprocessParallelCreateCompensationScenario() {
   }
@@ -40,18 +40,16 @@ public class SubprocessParallelCreateCompensationScenario {
   @DescribesScenario("init")
   @Times(2)
   public static ScenarioSetup instantiate() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        engine
-          .getRuntimeService()
-          .startProcessInstanceByKey("SubprocessParallelCreateCompensationScenario", scenarioName);
+    return (engine, scenarioName) -> {
+      engine
+        .getRuntimeService()
+        .startProcessInstanceByKey("SubprocessParallelCreateCompensationScenario", scenarioName);
 
-        // create the compensation event subscription for the first user task
-        // execution continues from userTask1 to afterUserTask1
-        Task userTask = engine.getTaskService().createTaskQuery()
-            .processInstanceBusinessKey(scenarioName).taskDefinitionKey("userTask1").singleResult();
-        engine.getTaskService().complete(userTask.getId());
-      }
+      // create the compensation event subscription for the first user task
+      // execution continues from userTask1 to afterUserTask1
+      Task userTask = engine.getTaskService().createTaskQuery()
+        .processInstanceBusinessKey(scenarioName).taskDefinitionKey("userTask1").singleResult();
+      engine.getTaskService().complete(userTask.getId());
     };
   }
 }

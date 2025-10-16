@@ -16,9 +16,6 @@
  */
 package org.operaton.bpm.engine.impl;
 
-import static org.operaton.bpm.engine.ProcessEngineConfiguration.HISTORY_CLEANUP_STRATEGY_REMOVAL_TIME_BASED;
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-
 import java.io.Serial;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +26,9 @@ import org.operaton.bpm.engine.history.CleanableHistoricProcessInstanceReportRes
 import org.operaton.bpm.engine.impl.interceptor.CommandContext;
 import org.operaton.bpm.engine.impl.interceptor.CommandExecutor;
 
+import static org.operaton.bpm.engine.ProcessEngineConfiguration.HISTORY_CLEANUP_STRATEGY_REMOVAL_TIME_BASED;
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+
 public class CleanableHistoricProcessInstanceReportImpl extends AbstractQuery<CleanableHistoricProcessInstanceReport, CleanableHistoricProcessInstanceReportResult> implements CleanableHistoricProcessInstanceReport {
 
   @Serial private static final long serialVersionUID = 1L;
@@ -36,8 +36,8 @@ public class CleanableHistoricProcessInstanceReportImpl extends AbstractQuery<Cl
   protected String[] processDefinitionIdIn;
   protected String[] processDefinitionKeyIn;
   protected String[] tenantIdIn;
-  protected boolean isTenantIdSet = false;
-  protected boolean isCompact = false;
+  protected boolean isTenantIdSet;
+  protected boolean isCompact;
 
   protected Date currentTimestamp;
 

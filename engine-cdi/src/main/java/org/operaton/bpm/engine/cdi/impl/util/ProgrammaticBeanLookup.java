@@ -18,7 +18,6 @@ package org.operaton.bpm.engine.cdi.impl.util;
 
 import java.util.Set;
 import java.util.logging.Logger;
-
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.spi.CreationalContext;
 import jakarta.enterprise.inject.spi.Bean;
@@ -33,7 +32,7 @@ import org.operaton.bpm.engine.impl.interceptor.CommandContext;
  * @author Daniel Meyer
  * @author Mark Struberg
  */
-public class ProgrammaticBeanLookup {
+public final class ProgrammaticBeanLookup {
 
   public static final Logger LOG = Logger.getLogger(ProgrammaticBeanLookup.class.getName());
 

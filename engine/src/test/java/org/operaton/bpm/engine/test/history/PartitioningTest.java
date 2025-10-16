@@ -16,14 +16,13 @@
  */
 package org.operaton.bpm.engine.test.history;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.ProcessEngineConfiguration;
@@ -46,6 +45,8 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Tassilo Weidner
@@ -159,7 +160,7 @@ class PartitioningTest {
     taskService.complete(taskId);
 
     // then
-    assertThat(historyService.createHistoricActivityInstanceQuery().count()).isEqualTo(1L);
+    assertThat(historyService.createHistoricActivityInstanceQuery().count()).isOne();
   }
 
   @Test
@@ -182,7 +183,7 @@ class PartitioningTest {
 
     // assume
     assertThat(historyService.createHistoricIncidentQuery().count()).isZero();
-    assertThat(runtimeService.createIncidentQuery().count()).isEqualTo(1L);
+    assertThat(runtimeService.createIncidentQuery().count()).isOne();
 
     // when
     runtimeService.resolveIncident(incidentId);
@@ -200,7 +201,7 @@ class PartitioningTest {
     final Batch batch = runtimeService.deleteProcessInstancesAsync(Collections.singletonList(processInstanceId), "aDeleteReason");
 
     // assume
-    assertThat(historyService.createHistoricBatchQuery().count()).isEqualTo(1L);
+    assertThat(historyService.createHistoricBatchQuery().count()).isOne();
 
     commandExecutor.execute(commandContext -> {
 

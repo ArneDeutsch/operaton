@@ -16,16 +16,17 @@
  */
 package org.operaton.bpm.engine.spring.test.components.scope;
 
-import org.operaton.bpm.engine.runtime.ProcessInstance;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.logging.Logger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
+
+import org.operaton.bpm.engine.runtime.ProcessInstance;
 
 /**
  * dumb object to demonstrate holding scoped state for the duration of a business process
@@ -34,13 +35,13 @@ import org.springframework.util.Assert;
  */
 public class StatefulObject implements Serializable, InitializingBean {
 
-    private final transient Logger logger = Logger.getLogger(getClass().getName());
+    private final transient Logger logger = LoggerFactory.getLogger(getClass());
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     private String name;
-    private int visitedCount = 0;
+    private int visitedCount;
 
     private long customerId;
 
@@ -60,27 +61,32 @@ public class StatefulObject implements Serializable, InitializingBean {
 
         this.customerId = customerId;
 
-        logger.info("setting this " + StatefulObject.class.getName() + " instances 'customerId' to "
-                + this.customerId + ". The current executionId is " + this.executionId);
+        logger.info("setting this {} instances 'customerId' to {}. The current executionId is {}", 
+                StatefulObject.class.getName(), this.customerId, this.executionId);
 
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
 
         StatefulObject that = (StatefulObject) o;
 
-        if (visitedCount != that.visitedCount) return false;
+      if (visitedCount != that.visitedCount) {
+        return false;
+      }
         return Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + visitedCount;
-        return result;
+        return 31 * result + visitedCount;
     }
 
     @Override
@@ -110,6 +116,6 @@ public class StatefulObject implements Serializable, InitializingBean {
   @Override
   public void afterPropertiesSet() {
         Assert.notNull(this.processInstance, "the processInstance should be equal to the currently active processInstance!");
-        logger.info("the 'processInstance' property is non-null: PI ID# " + this.processInstance.getId());
+        logger.info("the 'processInstance' property is non-null: PI ID# {}", this.processInstance.getId());
     }
 }

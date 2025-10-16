@@ -16,6 +16,14 @@
  */
 package org.operaton.bpm.qa.performance.engine.junit;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+import org.apache.tomcat.jdbc.pool.DataSource;
+import org.apache.tomcat.jdbc.pool.PoolProperties;
+
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.ProcessEngineConfiguration;
 import org.operaton.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
@@ -25,19 +33,11 @@ import org.operaton.bpm.engine.impl.util.IoUtil;
 import org.operaton.bpm.engine.impl.util.ReflectUtil;
 import org.operaton.bpm.qa.performance.engine.framework.PerfTestException;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import org.apache.tomcat.jdbc.pool.DataSource;
-import org.apache.tomcat.jdbc.pool.PoolProperties;
-
 /**
  * @author Daniel Meyer
  *
  */
-public class PerfTestProcessEngine {
+public final class PerfTestProcessEngine {
 
   public static final String PROPERTIES_FILE_NAME = "perf-test-config.properties";
 
@@ -67,6 +67,10 @@ public class PerfTestProcessEngine {
     processEngineConfiguration.setHistory(properties.getProperty("historyLevel"));
 
     processEngineConfiguration.setJdbcBatchProcessing(Boolean.parseBoolean(properties.getProperty("jdbcBatchProcessing")));
+    
+    // Disable History Time To Live enforcement for performance tests
+    // Performance tests don't need strict history cleanup policies
+    processEngineConfiguration.setEnforceHistoryTimeToLive(false);
 
     // load plugins
     String processEnginePlugins = properties.getProperty("processEnginePlugins", "");

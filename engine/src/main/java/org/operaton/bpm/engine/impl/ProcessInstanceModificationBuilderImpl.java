@@ -16,8 +16,6 @@
  */
 package org.operaton.bpm.engine.impl;
 
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +40,8 @@ import org.operaton.bpm.engine.runtime.ProcessInstanceModificationInstantiationB
 import org.operaton.bpm.engine.variable.VariableMap;
 import org.operaton.bpm.engine.variable.impl.VariableMapImpl;
 
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+
 /**
  * @author Thorben Lindhauer
  *
@@ -54,9 +54,9 @@ public class ProcessInstanceModificationBuilderImpl implements ProcessInstanceMo
   protected String processInstanceId;
   protected String modificationReason;
 
-  protected boolean skipCustomListeners = false;
-  protected boolean skipIoMappings = false;
-  protected boolean externallyTerminated = false;
+  protected boolean skipCustomListeners;
+  protected boolean skipIoMappings;
+  protected boolean externallyTerminated;
   protected String annotation;
 
   protected List<AbstractProcessInstanceModificationCommand> operations = new ArrayList<>();

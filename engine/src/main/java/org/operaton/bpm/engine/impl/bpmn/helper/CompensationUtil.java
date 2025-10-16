@@ -16,6 +16,9 @@
  */
 package org.operaton.bpm.engine.impl.bpmn.helper;
 
+import java.util.*;
+import java.util.Map.Entry;
+
 import org.operaton.bpm.engine.impl.bpmn.parser.BpmnParse;
 import org.operaton.bpm.engine.impl.context.Context;
 import org.operaton.bpm.engine.impl.event.EventType;
@@ -28,13 +31,10 @@ import org.operaton.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 import org.operaton.bpm.engine.impl.tree.FlowScopeWalker;
 import org.operaton.bpm.engine.impl.tree.TreeVisitor;
 
-import java.util.*;
-import java.util.Map.Entry;
-
 /**
  * @author Daniel Meyer
  */
-public class CompensationUtil {
+public final class CompensationUtil {
 
   private CompensationUtil() {
   }

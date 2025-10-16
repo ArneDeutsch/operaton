@@ -16,8 +16,6 @@
  */
 package org.operaton.bpm.engine.impl;
 
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +26,13 @@ import org.operaton.bpm.engine.impl.interceptor.CommandExecutor;
 import org.operaton.bpm.engine.management.ActivityStatistics;
 import org.operaton.bpm.engine.management.ActivityStatisticsQuery;
 
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+
 public class ActivityStatisticsQueryImpl extends
-    AbstractQuery<ActivityStatisticsQuery, ActivityStatistics> implements ActivityStatisticsQuery{
+    AbstractQuery<ActivityStatisticsQuery, ActivityStatistics> implements ActivityStatisticsQuery {
 
   protected static final long serialVersionUID = 1L;
-  protected boolean includeFailedJobs = false;
+  protected boolean includeFailedJobs;
   protected String processDefinitionId;
   protected boolean includeIncidents;
   protected String includeIncidentsForType;

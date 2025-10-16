@@ -16,12 +16,11 @@
  */
 package org.operaton.bpm.application.impl.el;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.operaton.bpm.container.RuntimeContainerDelegate;
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.RuntimeService;
@@ -30,6 +29,8 @@ import org.operaton.bpm.engine.runtime.ProcessInstance;
 import org.operaton.bpm.engine.task.Task;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author Thorben Lindhauer
  *
@@ -37,7 +38,7 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 @ExtendWith(ProcessEngineExtension.class)
 class ProcessApplicationElResolverTest {
 
-  RuntimeContainerDelegate runtimeContainerDelegate = null;
+  RuntimeContainerDelegate runtimeContainerDelegate;
 
   ProcessEngine processEngine;
   RuntimeService runtimeService;

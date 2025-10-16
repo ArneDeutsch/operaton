@@ -29,7 +29,7 @@ import org.operaton.bpm.qa.upgrade.Times;
  *
  * @author Christopher Zell <christopher.zell@camunda.com>
  */
-public class ProcessWithParallelGatewayAndServiceTaskScenario {
+public final class ProcessWithParallelGatewayAndServiceTaskScenario {
 
   public static final String PROCESS_DEF_KEY = "processWithParallelGatewayAndServiceTask";
 
@@ -51,35 +51,24 @@ public class ProcessWithParallelGatewayAndServiceTaskScenario {
   @DescribesScenario("init.none")
   @Times(1)
   public static ScenarioSetup startProcess() {
-    return new ScenarioSetup() {
-      @Override
-      public void execute(ProcessEngine engine, String scenarioName) {
-        engine.getRuntimeService().startProcessInstanceByKey(PROCESS_DEF_KEY, scenarioName);
-      }
-    };
+    return (engine, scenarioName) ->
+      engine.getRuntimeService().startProcessInstanceByKey(PROCESS_DEF_KEY, scenarioName);
   }
 
   @DescribesScenario("init.async")
   @Times(1)
   public static ScenarioSetup startProcessAsyncServiceTask() {
-    return new ScenarioSetup() {
-      @Override
-      public void execute(ProcessEngine engine, String scenarioName) {
-        engine.getRuntimeService().startProcessInstanceByKey(PROCESS_DEF_KEY_2, scenarioName);
-      }
-    };
+    return (engine, scenarioName) ->
+      engine.getRuntimeService().startProcessInstanceByKey(PROCESS_DEF_KEY_2, scenarioName);
   }
 
   @DescribesScenario("init.async.complete")
   @Times(1)
   public static ScenarioSetup startProcessAsyncServiceTaskCompleteUserTask() {
-    return new ScenarioSetup() {
-      @Override
-      public void execute(ProcessEngine engine, String scenarioName) {
-        ProcessInstance procInst = engine.getRuntimeService().startProcessInstanceByKey(PROCESS_DEF_KEY_2, scenarioName);
-        Task task = engine.getTaskService().createTaskQuery().processInstanceId(procInst.getId()).singleResult();
-        engine.getTaskService().complete(task.getId());
-      }
+    return (engine, scenarioName) -> {
+      ProcessInstance procInst = engine.getRuntimeService().startProcessInstanceByKey(PROCESS_DEF_KEY_2, scenarioName);
+      Task task = engine.getTaskService().createTaskQuery().processInstanceId(procInst.getId()).singleResult();
+      engine.getTaskService().complete(task.getId());
     };
   }
 }

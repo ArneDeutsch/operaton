@@ -18,14 +18,15 @@ package org.operaton.bpm.container.impl.jboss.deployment.marker;
 
 import java.util.List;
 
-import org.operaton.bpm.application.AbstractProcessApplication;
-import org.operaton.bpm.application.impl.metadata.spi.ProcessesXml;
-import org.operaton.bpm.container.impl.jboss.util.ProcessesXmlWrapper;
 import org.jboss.as.ee.component.ComponentDescription;
 import org.jboss.as.server.deployment.AttachmentKey;
 import org.jboss.as.server.deployment.AttachmentList;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.jandex.AnnotationInstance;
+
+import org.operaton.bpm.application.AbstractProcessApplication;
+import org.operaton.bpm.application.impl.metadata.spi.ProcessesXml;
+import org.operaton.bpm.container.impl.jboss.util.ProcessesXmlWrapper;
 
 
 /**
@@ -33,7 +34,7 @@ import org.jboss.jandex.AnnotationInstance;
  * @author Daniel Meyer
  *
  */
-public class ProcessApplicationAttachments {
+public final class ProcessApplicationAttachments {
 
   private static final AttachmentKey<Boolean> MARKER = AttachmentKey.create(Boolean.class);
   private static final AttachmentKey<Boolean> PART_OF_MARKER = AttachmentKey.create(Boolean.class);
@@ -41,6 +42,9 @@ public class ProcessApplicationAttachments {
   private static final AttachmentKey<ComponentDescription> PA_COMPONENT = AttachmentKey.create(ComponentDescription.class);
   private static final AttachmentKey<AnnotationInstance> POST_DEPLOY_METHOD = AttachmentKey.create(AnnotationInstance.class);
   private static final AttachmentKey<AnnotationInstance> PRE_UNDEPLOY_METHOD = AttachmentKey.create(AnnotationInstance.class);
+
+  private ProcessApplicationAttachments() {
+  }
 
   /**
    * Attach the parsed ProcessesXml file to a deployment unit.
@@ -138,7 +142,4 @@ public class ProcessApplicationAttachments {
     return deploymentUnit.getAttachment(PRE_UNDEPLOY_METHOD);
   }
 
-  private ProcessApplicationAttachments() {
-
-  }
 }

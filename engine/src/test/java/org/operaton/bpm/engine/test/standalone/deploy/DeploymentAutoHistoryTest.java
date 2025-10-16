@@ -16,15 +16,16 @@
  */
 package org.operaton.bpm.engine.test.standalone.deploy;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ProcessEngineConfiguration;
 import org.operaton.bpm.engine.repository.DeploymentWithDefinitions;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class DeploymentAutoHistoryTest {
 
@@ -49,7 +50,7 @@ class DeploymentAutoHistoryTest {
          .deployWithResult();
 
      long count = engineRule.getRepositoryService().createDeploymentQuery().count();
-    assertThat(count).isEqualTo(1);
+    assertThat(count).isOne();
      engineRule.getRepositoryService().deleteDeployment(deployment.getId(), true);
   }
 

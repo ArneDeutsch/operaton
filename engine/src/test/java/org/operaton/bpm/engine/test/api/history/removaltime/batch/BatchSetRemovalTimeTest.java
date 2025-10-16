@@ -16,14 +16,6 @@
  */
 package org.operaton.bpm.engine.test.api.history.removaltime.batch;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.operaton.bpm.engine.ProcessEngineConfiguration.HISTORY_FULL;
-import static org.operaton.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_END;
-import static org.operaton.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_NONE;
-import static org.operaton.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_START;
-import static org.operaton.bpm.engine.test.api.history.removaltime.batch.helper.BatchSetRemovalTimeRule.addDays;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -33,6 +25,7 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.BadUserRequestException;
 import org.operaton.bpm.engine.DecisionService;
 import org.operaton.bpm.engine.HistoryService;
@@ -64,6 +57,14 @@ import org.operaton.bpm.engine.test.api.runtime.BatchHelper;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.engine.variable.Variables;
+
+import static org.operaton.bpm.engine.ProcessEngineConfiguration.HISTORY_FULL;
+import static org.operaton.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_END;
+import static org.operaton.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_NONE;
+import static org.operaton.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_START;
+import static org.operaton.bpm.engine.test.api.history.removaltime.batch.helper.BatchSetRemovalTimeRule.addDays;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author Tassilo Weidner
@@ -2613,7 +2614,7 @@ class BatchSetRemovalTimeTest {
 
     // then
     assertThat(report.getFinishedProcessInstanceCount()).isZero();
-    assertThat(report.getCleanableProcessInstanceCount()).isEqualTo(1);
+    assertThat(report.getCleanableProcessInstanceCount()).isOne();
     assertThat(report.getHistoryTimeToLive()).isNull();
   }
 
@@ -2633,8 +2634,8 @@ class BatchSetRemovalTimeTest {
     CleanableHistoricProcessInstanceReportResult report = historyService.createCleanableHistoricProcessInstanceReport().singleResult();
 
     // then
-    assertThat(report.getFinishedProcessInstanceCount()).isEqualTo(1);
-    assertThat(report.getCleanableProcessInstanceCount()).isEqualTo(1);
+    assertThat(report.getFinishedProcessInstanceCount()).isOne();
+    assertThat(report.getCleanableProcessInstanceCount()).isOne();
     assertThat(report.getHistoryTimeToLive()).isNull();
   }
 
@@ -2667,8 +2668,8 @@ class BatchSetRemovalTimeTest {
       .singleResult();
 
     // then
-    assertThat(report.getFinishedDecisionInstanceCount()).isEqualTo(1);
-    assertThat(report.getCleanableDecisionInstanceCount()).isEqualTo(1);
+    assertThat(report.getFinishedDecisionInstanceCount()).isOne();
+    assertThat(report.getCleanableDecisionInstanceCount()).isOne();
     assertThat(report.getHistoryTimeToLive()).isNull();
   }
 
@@ -2692,7 +2693,7 @@ class BatchSetRemovalTimeTest {
 
     // then
     assertThat(report.getFinishedBatchesCount()).isZero();
-    assertThat(report.getCleanableBatchesCount()).isEqualTo(1);
+    assertThat(report.getCleanableBatchesCount()).isOne();
     assertThat(report.getHistoryTimeToLive()).isNull();
   }
 
@@ -2717,8 +2718,8 @@ class BatchSetRemovalTimeTest {
     CleanableHistoricBatchReportResult report = historyService.createCleanableHistoricBatchReport().singleResult();
 
     // then
-    assertThat(report.getFinishedBatchesCount()).isEqualTo(1);
-    assertThat(report.getCleanableBatchesCount()).isEqualTo(1);
+    assertThat(report.getFinishedBatchesCount()).isOne();
+    assertThat(report.getCleanableBatchesCount()).isOne();
     assertThat(report.getHistoryTimeToLive()).isNull();
   }
 

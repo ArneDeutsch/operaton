@@ -16,6 +16,10 @@
  */
 package org.operaton.bpm.engine.impl.cmd;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.delegate.DelegateExecution;
 import org.operaton.bpm.engine.history.HistoricProcessInstance;
@@ -33,10 +37,6 @@ import org.operaton.bpm.engine.impl.persistence.entity.*;
 import org.operaton.bpm.engine.impl.runtime.UpdateProcessInstanceSuspensionStateBuilderImpl;
 import org.operaton.bpm.engine.runtime.ProcessInstance;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * @author Daniel Meyer
  * @author Joram Barrez
@@ -49,7 +49,7 @@ public abstract class AbstractSetProcessInstanceStateCmd extends AbstractSetStat
   protected String processDefinitionKey;
 
   protected String processDefinitionTenantId;
-  protected boolean isProcessDefinitionTenantIdSet = false;
+  protected boolean isProcessDefinitionTenantIdSet;
 
   protected AbstractSetProcessInstanceStateCmd(UpdateProcessInstanceSuspensionStateBuilderImpl builder) {
     super(true, null);

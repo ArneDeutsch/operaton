@@ -16,15 +16,15 @@
  */
 package org.operaton.bpm.engine.test;
 
-import org.operaton.bpm.engine.*;
-import org.operaton.bpm.engine.impl.test.ProcessEngineAssert;
-import org.operaton.bpm.engine.impl.test.TestHelper;
-import org.operaton.bpm.engine.impl.util.ClockUtil;
-
 import java.io.FileNotFoundException;
 import java.util.Date;
 
 import junit.framework.TestCase;
+
+import org.operaton.bpm.engine.*;
+import org.operaton.bpm.engine.impl.test.ProcessEngineAssert;
+import org.operaton.bpm.engine.impl.test.TestHelper;
+import org.operaton.bpm.engine.impl.util.ClockUtil;
 
 
 /** Convenience for ProcessEngine and services initialization in the form of a JUnit base class.
@@ -59,7 +59,7 @@ public class ProcessEngineTestCase extends TestCase {
 
   protected String configurationResource = "operaton.cfg.xml";
   protected String configurationResourceCompat = "activiti.cfg.xml";
-  protected String deploymentId = null;
+  protected String deploymentId;
 
   protected ProcessEngine processEngine;
   protected RepositoryService repositoryService;
@@ -75,7 +75,7 @@ public class ProcessEngineTestCase extends TestCase {
   protected AuthorizationService authorizationService;
   protected CaseService caseService;
 
-  protected boolean skipTest = false;
+  protected boolean skipTest;
 
   /** uses 'operaton.cfg.xml' as it's configuration resource */
   public ProcessEngineTestCase() {

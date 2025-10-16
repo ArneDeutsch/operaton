@@ -23,7 +23,7 @@ import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.qa.upgrade.DescribesScenario;
 import org.operaton.bpm.qa.upgrade.ScenarioSetup;
 
-public class CreateProcessInstanceWithVariableScenario {
+public final class CreateProcessInstanceWithVariableScenario {
 
   private CreateProcessInstanceWithVariableScenario() {
   }
@@ -35,14 +35,12 @@ public class CreateProcessInstanceWithVariableScenario {
 
   @DescribesScenario("initProcessInstance")
   public static ScenarioSetup initProcessInstance() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        // given
-        ProcessInstance processInstance = engine.getRuntimeService().startProcessInstanceByKey("Process", "process");
-        // when
-        Execution execution = engine.getRuntimeService().createExecutionQuery().processInstanceId(processInstance.getId()).singleResult();
-        engine.getRuntimeService().setVariable(execution.getId(), "foo", "bar");
-      }
+    return (engine, scenarioName) -> {
+      // given
+      ProcessInstance processInstance = engine.getRuntimeService().startProcessInstanceByKey("Process", "process");
+      // when
+      Execution execution = engine.getRuntimeService().createExecutionQuery().processInstanceId(processInstance.getId()).singleResult();
+      engine.getRuntimeService().setVariable(execution.getId(), "foo", "bar");
     };
   }
 }

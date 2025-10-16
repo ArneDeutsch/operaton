@@ -16,12 +16,12 @@
  */
 package org.operaton.bpm.integrationtest.functional.ejb.request.beans;
 
-import org.operaton.bpm.engine.delegate.DelegateExecution;
-import org.operaton.bpm.engine.delegate.JavaDelegate;
-
 import jakarta.ejb.Stateful;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
+
+import org.operaton.bpm.engine.delegate.DelegateExecution;
+import org.operaton.bpm.engine.delegate.JavaDelegate;
 
 /**
  * A request scoped Stateful Session Bean acting as as a JavaDelegate
@@ -34,7 +34,7 @@ import jakarta.inject.Named;
 @RequestScoped
 public class RequestScopedSFSBDelegate implements JavaDelegate {
 
-  private int invocationCounter = 0;
+  private int invocationCounter;
 
   @Override
   public void execute(DelegateExecution execution) throws Exception {

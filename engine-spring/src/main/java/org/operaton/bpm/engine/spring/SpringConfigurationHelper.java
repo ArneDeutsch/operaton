@@ -16,9 +16,6 @@
  */
 package org.operaton.bpm.engine.spring;
 
-import org.operaton.bpm.engine.ProcessEngine;
-import org.operaton.bpm.engine.ProcessEngineException;
-
 import java.net.URL;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -27,11 +24,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.io.UrlResource;
 
+import org.operaton.bpm.engine.ProcessEngine;
+import org.operaton.bpm.engine.ProcessEngineException;
+
 
 /**
  * @author Tom Baeyens
  */
-public class SpringConfigurationHelper {
+public final class SpringConfigurationHelper {
 
   private static final Logger log = Logger.getLogger(SpringConfigurationHelper.class.getName());
 

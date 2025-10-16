@@ -16,14 +16,6 @@
  */
 package org.operaton.bpm.run.test.config.identity;
 
-import org.operaton.bpm.engine.IdentityService;
-import org.operaton.bpm.engine.ProcessEngine;
-import org.operaton.bpm.engine.identity.User;
-import org.operaton.bpm.engine.identity.UserQuery;
-import org.operaton.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin;
-import org.operaton.bpm.run.OperatonApp;
-import org.operaton.bpm.run.property.OperatonBpmRunLdapProperties;
-
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +24,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+
+import org.operaton.bpm.engine.IdentityService;
+import org.operaton.bpm.engine.ProcessEngine;
+import org.operaton.bpm.engine.identity.User;
+import org.operaton.bpm.engine.identity.UserQuery;
+import org.operaton.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin;
+import org.operaton.bpm.run.OperatonApp;
+import org.operaton.bpm.run.property.OperatonBpmRunLdapProperties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -65,7 +65,7 @@ class DemoUserConfigurationTest {
     List<User> userList = userQuery.list();
 
     // then
-    assertThat(userCount).isEqualTo(1);
+    assertThat(userCount).isOne();
     String userId = userList.get(0).getId();
     assertThat(userId).isEqualTo("demo");
     assertThat(identityService.checkPassword(userId, "demo")).isTrue();

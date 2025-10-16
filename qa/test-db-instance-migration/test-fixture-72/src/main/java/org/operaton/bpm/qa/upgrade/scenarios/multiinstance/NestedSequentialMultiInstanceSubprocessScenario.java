@@ -26,7 +26,7 @@ import org.operaton.bpm.qa.upgrade.Times;
  * @author Thorben Lindhauer
  *
  */
-public class NestedSequentialMultiInstanceSubprocessScenario {
+public final class NestedSequentialMultiInstanceSubprocessScenario {
 
   private NestedSequentialMultiInstanceSubprocessScenario() {
   }
@@ -39,12 +39,9 @@ public class NestedSequentialMultiInstanceSubprocessScenario {
   @DescribesScenario("init")
   @Times(5)
   public static ScenarioSetup instantiate() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        engine
-          .getRuntimeService()
-          .startProcessInstanceByKey("NestedSequentialMultiInstanceSubprocess", scenarioName);
-      }
-    };
+    return (engine, scenarioName) ->
+      engine
+        .getRuntimeService()
+        .startProcessInstanceByKey("NestedSequentialMultiInstanceSubprocess", scenarioName);
   }
 }

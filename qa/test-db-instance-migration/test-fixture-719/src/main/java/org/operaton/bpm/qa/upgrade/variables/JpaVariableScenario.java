@@ -18,7 +18,6 @@ package org.operaton.bpm.qa.upgrade.variables;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -29,7 +28,7 @@ import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.qa.upgrade.DescribesScenario;
 import org.operaton.bpm.qa.upgrade.ScenarioSetup;
 
-public class JpaVariableScenario {
+public final class JpaVariableScenario {
 
   protected static FieldAccessJPAEntity simpleEntityFieldAccess;
   protected static EntityManagerFactory entityManagerFactory;

@@ -16,13 +16,6 @@
  */
 package org.operaton.bpm.engine.test.api.mgmt;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.batchStatisticsById;
-import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.batchStatisticsByStartTime;
-import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
-import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +24,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.batch.Batch;
 import org.operaton.bpm.engine.batch.BatchStatistics;
@@ -43,6 +37,13 @@ import org.operaton.bpm.engine.runtime.Job;
 import org.operaton.bpm.engine.test.api.runtime.migration.batch.BatchMigrationHelper;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.migration.MigrationTestExtension;
+
+import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.batchStatisticsById;
+import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.batchStatisticsByStartTime;
+import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
+import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class BatchStatisticsQueryTest {
 
@@ -113,7 +114,7 @@ class BatchStatisticsQueryTest {
     Batch batch1 = helper.createMigrationBatchWithSize(1);
 
     count = managementService.createBatchStatisticsQuery().count();
-    assertThat(count).isEqualTo(1);
+    assertThat(count).isOne();
 
     Batch batch2 = helper.createMigrationBatchWithSize(1);
     Batch batch3 = helper.createMigrationBatchWithSize(1);
@@ -125,7 +126,7 @@ class BatchStatisticsQueryTest {
     helper.completeBatch(batch3);
 
     count = managementService.createBatchStatisticsQuery().count();
-    assertThat(count).isEqualTo(1);
+    assertThat(count).isOne();
 
     helper.completeBatch(batch2);
 
@@ -585,7 +586,7 @@ class BatchStatisticsQueryTest {
 
     // then
     BatchStatisticsQuery query = managementService.createBatchStatisticsQuery().suspended();
-    assertThat(query.count()).isEqualTo(1);
+    assertThat(query.count()).isOne();
     assertThat(query.list()).hasSize(1);
     assertThat(query.singleResult().getId()).isEqualTo(batch2.getId());
   }
@@ -636,7 +637,7 @@ class BatchStatisticsQueryTest {
 
     final List<BatchStatistics> batchWithFailures = queryWithFailures.list();
     assertThat(batchWithFailures).hasSize(1);
-    assertThat(queryWithFailures.count()).isEqualTo(1);
+    assertThat(queryWithFailures.count()).isOne();
     final BatchStatistics batch1Statistics = batchWithFailures.get(0);
     assertThat(batch1Statistics.getId()).isEqualTo(batch1.getId());
     assertThat(batch1Statistics.getFailedJobs()).isEqualTo(1);
@@ -644,7 +645,7 @@ class BatchStatisticsQueryTest {
 
     final List<BatchStatistics> batchWithoutFailures = queryWithoutFailures.list();
     assertThat(batchWithoutFailures).hasSize(1);
-    assertThat(queryWithoutFailures.count()).isEqualTo(1);
+    assertThat(queryWithoutFailures.count()).isOne();
     final BatchStatistics batch2Statistics = batchWithoutFailures.get(0);
     assertThat(batch2Statistics.getId()).isEqualTo(batch2.getId());
     assertThat(batch2Statistics.getFailedJobs()).isZero();
@@ -669,7 +670,7 @@ class BatchStatisticsQueryTest {
     assertThat(batchStatistics.get(0).getId()).isEqualTo(batch.getId());
     assertThat(batchStatistics.get(0).getStartTime()).isCloseTo(ClockUtil.getCurrentTime(), 1000);
     assertThat(batchStatistics).hasSize(1);
-    assertThat(query1.count()).isEqualTo(1);
+    assertThat(query1.count()).isOne();
 
     assertThat(query2.count()).isZero();
     assertThat(query2.list()).isEmpty();
@@ -696,7 +697,7 @@ class BatchStatisticsQueryTest {
     assertThat(batchStatistics.get(0).getId()).isEqualTo(batch.getId());
     assertThat(batchStatistics.get(0).getStartTime()).isCloseTo(ClockUtil.getCurrentTime(), 1000);
     assertThat(batchStatistics).hasSize(1);
-    assertThat(query2.count()).isEqualTo(1);
+    assertThat(query2.count()).isOne();
   }
 
   @Test
@@ -717,13 +718,13 @@ class BatchStatisticsQueryTest {
     assertThat(user1Batch.getId()).isEqualTo(batch1.getId());
     assertThat(user1Batch.getCreateUserId()).isEqualTo(batch1.getCreateUserId());
     assertThat(query1.list()).hasSize(1);
-    assertThat(query1.count()).isEqualTo(1);
+    assertThat(query1.count()).isOne();
 
     final BatchStatistics user2Batch = query2.list().get(0);
     assertThat(user2Batch.getId()).isEqualTo(batch2.getId());
     assertThat(user2Batch.getCreateUserId()).isEqualTo(batch2.getCreateUserId());
     assertThat(query2.list()).hasSize(1);
-    assertThat(query2.count()).isEqualTo(1);
+    assertThat(query2.count()).isOne();
 
     assertThat(query3.list()).isEmpty();
     assertThat(query3.count()).isZero();

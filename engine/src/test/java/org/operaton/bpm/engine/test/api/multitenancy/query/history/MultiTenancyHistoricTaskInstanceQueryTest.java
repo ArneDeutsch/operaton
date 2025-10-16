@@ -16,18 +16,13 @@
  */
 package org.operaton.bpm.engine.test.api.multitenancy.query.history;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.historicTaskInstanceByTenantId;
-import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
-import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
-
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.IdentityService;
 import org.operaton.bpm.engine.ProcessEngineConfiguration;
@@ -43,6 +38,12 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.historicTaskInstanceByTenantId;
+import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
+import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_ACTIVITY)
 class MultiTenancyHistoricTaskInstanceQueryTest {
@@ -105,8 +106,8 @@ class MultiTenancyHistoricTaskInstanceQueryTest {
         .tenantIdIn(TENANT_TWO);
 
     // then
-    assertThat(queryTenantOne.count()).isEqualTo(1L);
-    assertThat(queryTenantTwo.count()).isEqualTo(1L);
+    assertThat(queryTenantOne.count()).isOne();
+    assertThat(queryTenantTwo.count()).isOne();
   }
 
   @Test
@@ -117,7 +118,7 @@ class MultiTenancyHistoricTaskInstanceQueryTest {
         .withoutTenantId();
 
     // then
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -186,7 +187,7 @@ class MultiTenancyHistoricTaskInstanceQueryTest {
     HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
 
     // then
-    assertThat(query.count()).isEqualTo(1L); // null-tenant instances are included
+    assertThat(query.count()).isOne(); // null-tenant instances are included
   }
 
   @Test
@@ -199,10 +200,10 @@ class MultiTenancyHistoricTaskInstanceQueryTest {
 
     // then
     assertThat(query.count()).isEqualTo(2L); // null-tenant instances are included
-    assertThat(query.tenantIdIn(TENANT_ONE).count()).isEqualTo(1L);
-    assertThat(query.withoutTenantId().count()).isEqualTo(1L);
+    assertThat(query.tenantIdIn(TENANT_ONE).count()).isOne();
+    assertThat(query.withoutTenantId().count()).isOne();
     assertThat(query.tenantIdIn(TENANT_TWO).count()).isZero();
-    assertThat(query.tenantIdIn(TENANT_ONE, TENANT_TWO).count()).isEqualTo(1L);
+    assertThat(query.tenantIdIn(TENANT_ONE, TENANT_TWO).count()).isOne();
   }
 
   @Test
@@ -215,8 +216,8 @@ class MultiTenancyHistoricTaskInstanceQueryTest {
 
     // then
     assertThat(query.count()).isEqualTo(3L); // null-tenant instances are included
-    assertThat(query.tenantIdIn(TENANT_ONE).count()).isEqualTo(1L);
-    assertThat(query.tenantIdIn(TENANT_TWO).count()).isEqualTo(1L);
+    assertThat(query.tenantIdIn(TENANT_ONE).count()).isOne();
+    assertThat(query.tenantIdIn(TENANT_TWO).count()).isOne();
   }
 
   @Test

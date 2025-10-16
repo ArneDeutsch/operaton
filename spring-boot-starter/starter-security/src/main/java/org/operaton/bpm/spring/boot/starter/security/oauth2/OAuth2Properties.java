@@ -16,10 +16,11 @@
  */
 package org.operaton.bpm.spring.boot.starter.security.oauth2;
 
-import org.operaton.bpm.spring.boot.starter.property.OperatonBpmProperties;
-import org.operaton.bpm.spring.boot.starter.security.oauth2.impl.OAuth2IdentityProvider;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
+
+import org.operaton.bpm.spring.boot.starter.property.OperatonBpmProperties;
+import org.operaton.bpm.spring.boot.starter.security.oauth2.impl.OAuth2IdentityProvider;
 
 @ConfigurationProperties(OAuth2Properties.PREFIX)
 public class OAuth2Properties {
@@ -42,7 +43,7 @@ public class OAuth2Properties {
     /**
      * Enable SSO Logout. Default {@code false}.
      */
-    private boolean enabled = false;
+    private boolean enabled;
 
     /**
      * URI the user is redirected after SSO logout from the provider. Default {@code {baseUrl}}.

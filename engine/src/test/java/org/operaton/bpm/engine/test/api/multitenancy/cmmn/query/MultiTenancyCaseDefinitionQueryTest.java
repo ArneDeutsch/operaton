@@ -16,9 +16,6 @@
  */
 package org.operaton.bpm.engine.test.api.multitenancy.cmmn.query;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +24,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.IdentityService;
 import org.operaton.bpm.engine.RepositoryService;
 import org.operaton.bpm.engine.exception.NullValueException;
@@ -35,6 +33,9 @@ import org.operaton.bpm.engine.repository.CaseDefinition;
 import org.operaton.bpm.engine.repository.CaseDefinitionQuery;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MultiTenancyCaseDefinitionQueryTest {
 
@@ -74,13 +75,13 @@ class MultiTenancyCaseDefinitionQueryTest {
         .createCaseDefinitionQuery()
         .tenantIdIn(TENANT_ONE);
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     query = repositoryService.
         createCaseDefinitionQuery()
         .tenantIdIn(TENANT_TWO);
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -97,7 +98,7 @@ class MultiTenancyCaseDefinitionQueryTest {
     CaseDefinitionQuery query = repositoryService
         .createCaseDefinitionQuery()
         .withoutTenantId();
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -137,14 +138,14 @@ class MultiTenancyCaseDefinitionQueryTest {
         .caseDefinitionKey(CASE_DEFINITION_KEY)
         .withoutTenantId();
     // one definition without tenant id
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     query = repositoryService
         .createCaseDefinitionQuery()
         .caseDefinitionKey(CASE_DEFINITION_KEY)
         .tenantIdIn(TENANT_ONE);
     // one definition for tenant one
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -176,7 +177,7 @@ class MultiTenancyCaseDefinitionQueryTest {
         .latestVersion()
         .tenantIdIn(TENANT_ONE);
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     CaseDefinition caseDefinition = query.singleResult();
     assertThat(caseDefinition.getTenantId()).isEqualTo(TENANT_ONE);
@@ -188,7 +189,7 @@ class MultiTenancyCaseDefinitionQueryTest {
         .latestVersion()
         .tenantIdIn(TENANT_TWO);
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     caseDefinition = query.singleResult();
     assertThat(caseDefinition.getTenantId()).isEqualTo(TENANT_TWO);
@@ -224,7 +225,7 @@ class MultiTenancyCaseDefinitionQueryTest {
         .latestVersion()
         .withoutTenantId();
 
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     CaseDefinition cDefinition = query.singleResult();
     assertThat(cDefinition.getTenantId()).isNull();
@@ -306,7 +307,7 @@ class MultiTenancyCaseDefinitionQueryTest {
     identityService.setAuthentication("user", null, null);
 
     CaseDefinitionQuery query = repositoryService.createCaseDefinitionQuery();
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -316,7 +317,7 @@ class MultiTenancyCaseDefinitionQueryTest {
     CaseDefinitionQuery query = repositoryService.createCaseDefinitionQuery();
 
     assertThat(query.count()).isEqualTo(2L);
-    assertThat(query.tenantIdIn(TENANT_ONE).count()).isEqualTo(1L);
+    assertThat(query.tenantIdIn(TENANT_ONE).count()).isOne();
     assertThat(query.tenantIdIn(TENANT_TWO).count()).isZero();
     assertThat(query.tenantIdIn(TENANT_ONE, TENANT_TWO).includeCaseDefinitionsWithoutTenantId().count()).isEqualTo(2L);
   }
@@ -328,9 +329,9 @@ class MultiTenancyCaseDefinitionQueryTest {
     CaseDefinitionQuery query = repositoryService.createCaseDefinitionQuery();
 
     assertThat(query.count()).isEqualTo(3L);
-    assertThat(query.tenantIdIn(TENANT_ONE).count()).isEqualTo(1L);
-    assertThat(query.tenantIdIn(TENANT_TWO).count()).isEqualTo(1L);
-    assertThat(query.withoutTenantId().count()).isEqualTo(1L);
+    assertThat(query.tenantIdIn(TENANT_ONE).count()).isOne();
+    assertThat(query.tenantIdIn(TENANT_TWO).count()).isOne();
+    assertThat(query.withoutTenantId().count()).isOne();
   }
 
   @Test

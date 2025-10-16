@@ -16,14 +16,14 @@
  */
 package org.operaton.bpm.spring.boot.starter;
 
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
+
 import org.operaton.bpm.engine.impl.cfg.AbstractProcessEnginePlugin;
 import org.operaton.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.operaton.bpm.engine.impl.cfg.ProcessEnginePlugin;
 import org.operaton.bpm.spring.boot.starter.configuration.Ordering;
-
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.annotation.Order;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,7 +44,7 @@ public class AdditionalOperatonBpmConfigurations {
   @Order(Ordering.DEFAULT_ORDER - 1)
   public static class BeforeStandardConfiguration extends AbstractProcessEnginePlugin {
 
-    static boolean processed = false;
+    static boolean processed;
 
     @Override
     public void preInit(ProcessEngineConfigurationImpl configuration) {
@@ -56,7 +56,7 @@ public class AdditionalOperatonBpmConfigurations {
   @Order(Ordering.DEFAULT_ORDER + 1)
   public static class AfterStandardConfiguration extends  AbstractProcessEnginePlugin {
 
-    static boolean processed = false;
+    static boolean processed;
 
     @Override
     public void preInit(ProcessEngineConfigurationImpl configuration) {

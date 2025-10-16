@@ -16,14 +16,14 @@
  */
 package org.operaton.bpm.engine.spring.test.application;
 
+import java.util.concurrent.Callable;
+
 import org.operaton.bpm.application.PostDeploy;
 import org.operaton.bpm.application.PreUndeploy;
 import org.operaton.bpm.application.ProcessApplicationExecutionException;
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.repository.ProcessDefinition;
 import org.operaton.bpm.engine.spring.application.SpringProcessApplication;
-
-import java.util.concurrent.Callable;
 
 /**
  * @author Daniel Meyer
@@ -32,8 +32,8 @@ import java.util.concurrent.Callable;
 @SuppressWarnings("unused")
 public class PostDeployRegistrationPa extends SpringProcessApplication {
 
-  protected boolean isPostDeployInvoked = false;
-  protected boolean isPreUndeployInvoked = false;
+  protected boolean isPostDeployInvoked;
+  protected boolean isPreUndeployInvoked;
   protected String deploymentId;
 
   @PostDeploy
@@ -70,7 +70,7 @@ public class PostDeployRegistrationPa extends SpringProcessApplication {
 
   // customization of Process Application for unit test ////////////////////////////
 
-  protected boolean isInvoked = false;
+  protected boolean isInvoked;
 
   @Override
   public void start() {

@@ -16,15 +16,15 @@
  */
 package org.operaton.bpm.engine.test.util;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.Date;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Thorben Lindhauer
  *
  */
-public class AssertUtil {
+public final class AssertUtil {
 
   private AssertUtil() {
   }

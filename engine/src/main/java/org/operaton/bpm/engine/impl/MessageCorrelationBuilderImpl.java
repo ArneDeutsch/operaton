@@ -16,9 +16,6 @@
  */
 package org.operaton.bpm.engine.impl;
 
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureFalse;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +33,9 @@ import org.operaton.bpm.engine.runtime.ProcessInstance;
 import org.operaton.bpm.engine.variable.VariableMap;
 import org.operaton.bpm.engine.variable.impl.VariableMapImpl;
 
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureFalse;
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+
 /**
  * @author Daniel Meyer
  * @author Christopher Zell
@@ -48,7 +48,7 @@ public class MessageCorrelationBuilderImpl implements MessageCorrelationBuilder 
   protected CommandExecutor commandExecutor;
   protected CommandContext commandContext;
 
-  protected boolean isExclusiveCorrelation = false;
+  protected boolean isExclusiveCorrelation;
 
   protected String messageName;
   protected String businessKey;
@@ -61,11 +61,11 @@ public class MessageCorrelationBuilderImpl implements MessageCorrelationBuilder 
   protected VariableMap payloadProcessInstanceVariablesLocal;
   protected VariableMap payloadProcessInstanceVariablesToTriggeredScope;
 
-  protected String tenantId = null;
-  protected boolean isTenantIdSet = false;
+  protected String tenantId;
+  protected boolean isTenantIdSet;
 
-  protected boolean startMessagesOnly = false;
-  protected boolean executionsOnly = false;
+  protected boolean startMessagesOnly;
+  protected boolean executionsOnly;
 
   public MessageCorrelationBuilderImpl(CommandExecutor commandExecutor, String messageName) {
     this(messageName);

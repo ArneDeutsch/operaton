@@ -16,14 +16,9 @@
  */
 package org.operaton.bpm.engine.test.bpmn.event.message;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.assertThat;
-import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
-import static org.operaton.bpm.engine.test.util.ExecutionAssert.assertThat;
-import static org.operaton.bpm.engine.test.util.ExecutionAssert.describeExecutionTree;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.RuntimeService;
 import org.operaton.bpm.engine.TaskService;
@@ -36,6 +31,12 @@ import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.engine.test.util.ExecutionTree;
+
+import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.assertThat;
+import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
+import static org.operaton.bpm.engine.test.util.ExecutionAssert.assertThat;
+import static org.operaton.bpm.engine.test.util.ExecutionAssert.describeExecutionTree;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  *
@@ -82,7 +83,7 @@ class MessageNonInterruptingBoundaryEventTest {
     assertThat(userTask).isNotNull();
     assertThat(userTask.getTaskDefinitionKey()).isEqualTo("taskAfterMessage");
     taskService.complete(userTask.getId());
-    assertThat(runtimeService.createProcessInstanceQuery().count()).isEqualTo(1);
+    assertThat(runtimeService.createProcessInstanceQuery().count()).isOne();
 
     // send a message a second time
     runtimeService.messageEventReceived("messageName", execution.getId());
@@ -98,7 +99,7 @@ class MessageNonInterruptingBoundaryEventTest {
     assertThat(userTask).isNotNull();
     assertThat(userTask.getTaskDefinitionKey()).isEqualTo("taskAfterMessage");
     taskService.complete(userTask.getId());
-    assertThat(runtimeService.createProcessInstanceQuery().count()).isEqualTo(1);
+    assertThat(runtimeService.createProcessInstanceQuery().count()).isOne();
 
     // now complete the user task with the message boundary event
     userTask = taskService.createTaskQuery().taskDefinitionKey("task").singleResult();
@@ -149,7 +150,7 @@ class MessageNonInterruptingBoundaryEventTest {
     runtimeService.correlateMessage("firstMessage");
 
     // then (1)
-    assertThat(taskService.createTaskQuery().count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().count()).isOne();
 
     Task task1 = taskService.createTaskQuery()
         .taskDefinitionKey("task1")
@@ -278,7 +279,7 @@ class MessageNonInterruptingBoundaryEventTest {
             .activity("receiveTask")
         .done());
 
-    assertThat(taskService.createTaskQuery().count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().count()).isOne();
 
     Task task1 = taskService.createTaskQuery()
         .taskDefinitionKey("task1")
@@ -546,7 +547,7 @@ class MessageNonInterruptingBoundaryEventTest {
     runtimeService.correlateMessage("firstMessage");
 
     // then (1)
-    assertThat(taskService.createTaskQuery().count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().count()).isOne();
 
     Task innerTask = taskService.createTaskQuery()
         .taskDefinitionKey("innerTask")
@@ -641,7 +642,7 @@ class MessageNonInterruptingBoundaryEventTest {
     runtimeService.correlateMessage("secondMessage");
 
     // then (1)
-    assertThat(taskService.createTaskQuery().count()).isEqualTo(1);
+    assertThat(taskService.createTaskQuery().count()).isOne();
 
     Task task1 = taskService.createTaskQuery()
         .taskDefinitionKey("task1")

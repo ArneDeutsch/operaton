@@ -26,7 +26,7 @@ import org.operaton.bpm.qa.upgrade.Times;
  * @author Thorben Lindhauer
  *
  */
-public class AsyncParallelMultiInstanceScenario {
+public final class AsyncParallelMultiInstanceScenario {
   private AsyncParallelMultiInstanceScenario() {
   }
 
@@ -43,24 +43,18 @@ public class AsyncParallelMultiInstanceScenario {
   @DescribesScenario("initAsyncBeforeSubprocess")
   @Times(4)
   public static ScenarioSetup initializeAsyncBeforeSubprocess() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        engine
-          .getRuntimeService()
-          .startProcessInstanceByKey("AsyncBeforeParallelMultiInstanceSubprocess", scenarioName);
-      }
-    };
+    return (engine, scenarioName) ->
+      engine
+        .getRuntimeService()
+        .startProcessInstanceByKey("AsyncBeforeParallelMultiInstanceSubprocess", scenarioName);
   }
 
   @DescribesScenario("initAsyncBeforeTask")
   @Times(4)
   public static ScenarioSetup initializeAsyncBeforeTask() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        engine
-          .getRuntimeService()
-          .startProcessInstanceByKey("AsyncBeforeParallelMultiInstanceTask", scenarioName);
-      }
-    };
+    return (engine, scenarioName) ->
+      engine
+        .getRuntimeService()
+        .startProcessInstanceByKey("AsyncBeforeParallelMultiInstanceTask", scenarioName);
   }
 }

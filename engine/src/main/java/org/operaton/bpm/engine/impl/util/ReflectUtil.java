@@ -41,7 +41,7 @@ import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 /**
  * @author Tom Baeyens
  */
-public class ReflectUtil {
+public final class ReflectUtil {
 
   private static final EngineUtilLogger LOG = ProcessEngineLogger.UTIL_LOGGER;
 
@@ -117,7 +117,7 @@ public class ReflectUtil {
    return clazz;
   }
 
-  public static <T> Class<? extends T> loadClass(String className, ClassLoader customClassloader, Class<T> clazz) throws ClassNotFoundException, ClassCastException {
+  public static <T> Class<? extends T> loadClass(String className, ClassLoader customClassloader) throws ClassNotFoundException, ClassCastException {
     if(customClassloader != null) {
       return (Class<? extends T>) customClassloader.loadClass(className);
     } else {

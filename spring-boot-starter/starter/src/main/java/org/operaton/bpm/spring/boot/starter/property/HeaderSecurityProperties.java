@@ -16,24 +16,24 @@
  */
 package org.operaton.bpm.spring.boot.starter.property;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+
+import org.apache.commons.lang3.StringUtils;
 
 import static org.operaton.bpm.spring.boot.starter.property.OperatonBpmProperties.joinOn;
 
 public class HeaderSecurityProperties {
 
-  protected boolean xssProtectionDisabled = false;
+  protected boolean xssProtectionDisabled;
   protected String xssProtectionOption;
   protected String xssProtectionValue;
 
-  protected boolean contentSecurityPolicyDisabled = false;
+  protected boolean contentSecurityPolicyDisabled;
   protected String contentSecurityPolicyValue;
 
-  protected boolean contentTypeOptionsDisabled = false;
+  protected boolean contentTypeOptionsDisabled;
   protected String contentTypeOptionsValue;
 
   protected boolean hstsDisabled = true;

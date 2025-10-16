@@ -16,14 +16,12 @@
  */
 package org.operaton.bpm.engine.test.api.mgmt;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.RepositoryService;
@@ -36,6 +34,9 @@ import org.operaton.bpm.engine.runtime.ProcessInstance;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.variable.Variables;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * @author roman.smirnov
@@ -76,7 +77,7 @@ class SuspendJobTest {
     // then
     // the job should be suspended
     assertThat(jobQuery.active().count()).isZero();
-    assertThat(jobQuery.suspended().count()).isEqualTo(1);
+    assertThat(jobQuery.suspended().count()).isOne();
 
     Job suspendedJob = jobQuery.suspended().singleResult();
 
@@ -109,7 +110,7 @@ class SuspendJobTest {
     // then
     // the job should be suspended
     assertThat(jobQuery.active().count()).isZero();
-    assertThat(jobQuery.suspended().count()).isEqualTo(1);
+    assertThat(jobQuery.suspended().count()).isOne();
 
     Job suspendedJob = jobQuery.suspended().singleResult();
 
@@ -143,7 +144,7 @@ class SuspendJobTest {
     // then
     // the job should be suspended
     assertThat(jobQuery.active().count()).isZero();
-    assertThat(jobQuery.suspended().count()).isEqualTo(1);
+    assertThat(jobQuery.suspended().count()).isOne();
 
     Job suspendedJob = jobQuery.suspended().singleResult();
 
@@ -176,7 +177,7 @@ class SuspendJobTest {
     // then
     // the job should be suspended
     assertThat(jobQuery.active().count()).isZero();
-    assertThat(jobQuery.suspended().count()).isEqualTo(1);
+    assertThat(jobQuery.suspended().count()).isOne();
 
     Job suspendedJob = jobQuery.suspended().singleResult();
 
@@ -208,7 +209,7 @@ class SuspendJobTest {
     // then
     // the job should be suspended
     assertThat(jobQuery.active().count()).isZero();
-    assertThat(jobQuery.suspended().count()).isEqualTo(1);
+    assertThat(jobQuery.suspended().count()).isOne();
 
     Job suspendedJob = jobQuery.suspended().singleResult();
 
@@ -273,7 +274,7 @@ class SuspendJobTest {
     // then
     // the job should be suspended
     assertThat(jobQuery.active().count()).isZero();
-    assertThat(jobQuery.suspended().count()).isEqualTo(1);
+    assertThat(jobQuery.suspended().count()).isOne();
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
@@ -287,7 +288,7 @@ class SuspendJobTest {
 
     // the failed job
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.active().count()).isEqualTo(1);
+    assertThat(jobQuery.active().count()).isOne();
 
     JobDefinition jobDefinition = managementService.createJobDefinitionQuery().singleResult();
 
@@ -301,7 +302,7 @@ class SuspendJobTest {
     // then
     // the job should be suspended
     assertThat(jobQuery.active().count()).isZero();
-    assertThat(jobQuery.suspended().count()).isEqualTo(1);
+    assertThat(jobQuery.suspended().count()).isOne();
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
@@ -315,7 +316,7 @@ class SuspendJobTest {
 
     // the failed job
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.active().count()).isEqualTo(1);
+    assertThat(jobQuery.active().count()).isOne();
 
     // when
     // the job will be suspended
@@ -327,7 +328,7 @@ class SuspendJobTest {
     // then
     // the job should be suspended
     assertThat(jobQuery.active().count()).isZero();
-    assertThat(jobQuery.suspended().count()).isEqualTo(1);
+    assertThat(jobQuery.suspended().count()).isOne();
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
@@ -341,7 +342,7 @@ class SuspendJobTest {
 
     // the failed job
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.active().count()).isEqualTo(1);
+    assertThat(jobQuery.active().count()).isOne();
 
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
 
@@ -355,7 +356,7 @@ class SuspendJobTest {
     // then
     // the job should be suspended
     assertThat(jobQuery.active().count()).isZero();
-    assertThat(jobQuery.suspended().count()).isEqualTo(1);
+    assertThat(jobQuery.suspended().count()).isOne();
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
@@ -369,7 +370,7 @@ class SuspendJobTest {
 
     // the failed job
     JobQuery jobQuery = managementService.createJobQuery();
-    assertThat(jobQuery.active().count()).isEqualTo(1);
+    assertThat(jobQuery.active().count()).isOne();
 
     // when
     // the job will be suspended
@@ -381,7 +382,7 @@ class SuspendJobTest {
     // then
     // the job should be suspended
     assertThat(jobQuery.active().count()).isZero();
-    assertThat(jobQuery.suspended().count()).isEqualTo(1);
+    assertThat(jobQuery.suspended().count()).isOne();
   }
 
 }

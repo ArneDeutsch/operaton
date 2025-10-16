@@ -17,7 +17,6 @@
 package org.operaton.bpm.integrationtest.functional.event.beans;
 
 import org.operaton.bpm.application.ProcessApplication;
-import org.operaton.bpm.engine.delegate.DelegateTask;
 import org.operaton.bpm.engine.delegate.TaskListener;
 
 /**
@@ -32,12 +31,8 @@ public class TaskListenerProcessApplication extends org.operaton.bpm.application
 
   @Override
   public TaskListener getTaskListener() {
-    return new TaskListener() {
-      @Override
-      public void notify(DelegateTask delegateTask) {
-        delegateTask.setVariable(delegateTask.getEventName(), true);
-      }
-    };
+    return delegateTask ->
+      delegateTask.setVariable(delegateTask.getEventName(), true);
   }
 
 }

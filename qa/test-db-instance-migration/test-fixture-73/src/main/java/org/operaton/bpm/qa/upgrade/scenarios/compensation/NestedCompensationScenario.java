@@ -27,7 +27,7 @@ import org.operaton.bpm.qa.upgrade.Times;
  * @author Thorben Lindhauer
  *
  */
-public class NestedCompensationScenario {
+public final class NestedCompensationScenario {
 
   private NestedCompensationScenario() {
   }
@@ -40,17 +40,15 @@ public class NestedCompensationScenario {
   @DescribesScenario("init.throwCompensate")
   @Times(1)
   public static ScenarioSetup instantiate() {
-    return new ScenarioSetup() {
-      public void execute(ProcessEngine engine, String scenarioName) {
-        engine
-          .getRuntimeService()
-          .startProcessInstanceByKey("NestedCompensationScenario", scenarioName);
+    return (engine, scenarioName) -> {
+      engine
+        .getRuntimeService()
+        .startProcessInstanceByKey("NestedCompensationScenario", scenarioName);
 
-        // create the compensation event subscription and wait before throwing compensation
-        Task userTask = engine.getTaskService().createTaskQuery()
-            .processInstanceBusinessKey(scenarioName).singleResult();
-        engine.getTaskService().complete(userTask.getId());
-      }
+      // create the compensation event subscription and wait before throwing compensation
+      Task userTask = engine.getTaskService().createTaskQuery()
+        .processInstanceBusinessKey(scenarioName).singleResult();
+      engine.getTaskService().complete(userTask.getId());
     };
   }
 }

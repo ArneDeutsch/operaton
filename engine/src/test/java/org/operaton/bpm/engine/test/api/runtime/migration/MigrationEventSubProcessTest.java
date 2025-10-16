@@ -16,21 +16,13 @@
  */
 package org.operaton.bpm.engine.test.api.runtime.migration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
-import static org.operaton.bpm.engine.impl.migration.validation.instruction.ConditionalEventUpdateEventTriggerValidator.MIGRATION_CONDITIONAL_VALIDATION_ERROR_MSG;
-import static org.operaton.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
-import static org.operaton.bpm.engine.test.api.runtime.migration.models.EventSubProcessModels.CONDITIONAL_EVENT_SUBPROCESS_PROCESS;
-import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
-import static org.operaton.bpm.engine.test.util.ExecutionAssert.describeExecutionTree;
-
 import java.util.Date;
 import java.util.HashMap;
 
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.impl.jobexecutor.TimerStartEventSubprocessJobHandler;
 import org.operaton.bpm.engine.impl.util.ClockUtil;
 import org.operaton.bpm.engine.management.ActivityStatistics;
@@ -47,6 +39,15 @@ import org.operaton.bpm.engine.test.junit5.migration.MigrationTestExtension;
 import org.operaton.bpm.engine.test.util.ClockTestUtil;
 import org.operaton.bpm.engine.test.util.MigrationPlanValidationReportAssert;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.operaton.bpm.engine.impl.migration.validation.instruction.ConditionalEventUpdateEventTriggerValidator.MIGRATION_CONDITIONAL_VALIDATION_ERROR_MSG;
+import static org.operaton.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
+import static org.operaton.bpm.engine.test.api.runtime.migration.models.EventSubProcessModels.CONDITIONAL_EVENT_SUBPROCESS_PROCESS;
+import static org.operaton.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
+import static org.operaton.bpm.engine.test.util.ExecutionAssert.describeExecutionTree;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.fail;
 
 public class MigrationEventSubProcessTest {
 
@@ -314,7 +315,7 @@ public class MigrationEventSubProcessTest {
 
     // and it is possible to trigger the event subprocess
     rule.getRuntimeService().correlateMessage(EventSubProcessModels.MESSAGE_NAME);
-    assertThat(rule.getTaskService().createTaskQuery().count()).isEqualTo(1);
+    assertThat(rule.getTaskService().createTaskQuery().count()).isOne();
 
     // and complete the process instance
     testHelper.completeTask(EVENT_SUB_PROCESS_TASK_ID);
@@ -343,7 +344,7 @@ public class MigrationEventSubProcessTest {
     // and it is possible to trigger the event subprocess
     Job timerJob = testHelper.snapshotAfterMigration.getJobs().get(0);
     rule.getManagementService().executeJob(timerJob.getId());
-    assertThat(rule.getTaskService().createTaskQuery().count()).isEqualTo(1);
+    assertThat(rule.getTaskService().createTaskQuery().count()).isOne();
 
     // and complete the process instance
     testHelper.completeTask(EVENT_SUB_PROCESS_TASK_ID);
@@ -371,7 +372,7 @@ public class MigrationEventSubProcessTest {
 
     // and it is possible to trigger the event subprocess
     rule.getRuntimeService().signalEventReceived(EventSubProcessModels.SIGNAL_NAME);
-    assertThat(rule.getTaskService().createTaskQuery().count()).isEqualTo(1);
+    assertThat(rule.getTaskService().createTaskQuery().count()).isOne();
 
     // and complete the process instance
     testHelper.completeTask(EVENT_SUB_PROCESS_TASK_ID);

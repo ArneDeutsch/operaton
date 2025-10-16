@@ -18,6 +18,7 @@ package org.operaton.bpm.container.impl.jboss.util;
 
 import java.lang.reflect.Field;
 import java.util.List;
+
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import org.jboss.as.controller.AttributeDefinition;
@@ -28,7 +29,7 @@ import org.jboss.as.controller.ObjectTypeAttributeDefinition;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.Property;
 
-public class CustomMarshaller {
+public final class CustomMarshaller {
   private CustomMarshaller() {
   }
 
@@ -149,7 +150,7 @@ public class CustomMarshaller {
   /**
    * Marshall a list of objects.
    */
-  private static class ObjectListMarshaller extends AttributeMarshaller {
+  private static final class ObjectListMarshaller extends AttributeMarshaller {
     private ObjectListMarshaller() {}
 
     @Override
@@ -160,7 +161,7 @@ public class CustomMarshaller {
     @Override
     public void marshallAsElement(AttributeDefinition attribute, ModelNode resourceModel, boolean marshallDefault, XMLStreamWriter writer) throws XMLStreamException {
       assert attribute instanceof ObjectListAttributeDefinition;
-      ObjectListAttributeDefinition list = ((ObjectListAttributeDefinition) attribute);
+      ObjectListAttributeDefinition list = (ObjectListAttributeDefinition) attribute;
 
       ObjectTypeAttributeDefinition objectType = (ObjectTypeAttributeDefinition) CustomMarshaller.getValueType(list, ObjectListAttributeDefinition.class);
       AttributeDefinition[] valueTypes = CustomMarshaller.getValueTypes(list, ObjectTypeAttributeDefinition.class);

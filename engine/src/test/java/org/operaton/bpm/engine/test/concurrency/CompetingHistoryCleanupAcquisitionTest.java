@@ -16,11 +16,6 @@
  */
 package org.operaton.bpm.engine.test.concurrency;
 
-import static org.apache.commons.lang3.time.DateUtils.addDays;
-import static org.apache.commons.lang3.time.DateUtils.addSeconds;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.operaton.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupJobHandlerConfiguration.START_DELAY;
-
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -29,6 +24,7 @@ import java.util.GregorianCalendar;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
@@ -42,6 +38,11 @@ import org.operaton.bpm.engine.test.jobexecutor.ControllableJobExecutor;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 
+import static org.operaton.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupJobHandlerConfiguration.START_DELAY;
+import static org.apache.commons.lang3.time.DateUtils.addDays;
+import static org.apache.commons.lang3.time.DateUtils.addSeconds;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 /**
  * @author Tassilo Weidner
@@ -54,7 +55,7 @@ public class CompetingHistoryCleanupAcquisitionTest extends ConcurrencyTestHelpe
 
   private static final Date CURRENT_DATE = new GregorianCalendar(2023, Calendar.MARCH, 18, 12, 0, 0).getTime();
 
-  protected static ThreadControl cleanupThread = null;
+  protected static ThreadControl cleanupThread;
 
   protected static ThreadLocal<Boolean> syncBeforeFlush = new ThreadLocal<>();
 
@@ -66,7 +67,7 @@ public class CompetingHistoryCleanupAcquisitionTest extends ConcurrencyTestHelpe
   ManagementService managementService;
 
   @BeforeEach
-  void setUp() throws Exception {
+  void setUp() {
     engineRule = ProcessEngineExtension.builder()
         .configurator(CompetingHistoryCleanupAcquisitionTest::configureEngine)
         .randomEngineName()

@@ -16,16 +16,16 @@
  */
 package org.operaton.bpm.model.xml.impl.type.attribute;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import org.operaton.bpm.model.xml.impl.type.reference.ReferenceImpl;
 import org.operaton.bpm.model.xml.instance.ModelElementInstance;
 import org.operaton.bpm.model.xml.type.ModelElementType;
 import org.operaton.bpm.model.xml.type.attribute.Attribute;
 import org.operaton.bpm.model.xml.type.reference.Reference;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 /**
  * <p>Base class for implementing primitive value attributes</p>
@@ -47,9 +47,9 @@ public abstract class AttributeImpl<T> implements Attribute<T> {
    */
   private T defaultValue;
 
-  private boolean isRequired = false;
+  private boolean isRequired;
 
-  private boolean isIdAttribute = false;
+  private boolean isIdAttribute;
 
   private final List<Reference<?>> outgoingReferences = new ArrayList<>();
 

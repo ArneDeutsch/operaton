@@ -16,16 +16,16 @@
  */
 package org.operaton.bpm.engine.test.bpmn.shell;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotSame;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.operaton.bpm.engine.RuntimeService;
 import org.operaton.bpm.engine.runtime.ProcessInstance;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(ProcessEngineExtension.class)
 class ShellTaskTest {
@@ -40,16 +40,17 @@ class ShellTaskTest {
 
   OsType getSystemOsType() {
     String osName = System.getProperty("os.name").toLowerCase();
-    if (osName.contains("win"))
+    if (osName.contains("win")) {
       return OsType.WINDOWS;
-    else if (osName.contains("mac"))
+    } else if (osName.contains("mac")) {
       return OsType.MAC;
-    else if ((osName.contains("nix")) || (osName.contains("nux")))
+    } else if ((osName.contains("nix")) || (osName.contains("nux"))) {
       return OsType.LINUX;
-    else if (osName.contains("sunos"))
+    } else if (osName.contains("sunos")) {
       return OsType.SOLARIS;
-    else
+    } else {
       return OsType.UNKNOWN;
+    }
   }
 
   @BeforeEach
@@ -59,7 +60,7 @@ class ShellTaskTest {
 
   @Test
   void testOsDetection() {
-    assertNotSame(OsType.UNKNOWN, osType);
+    assertThat(osType).isNotSameAs(OsType.UNKNOWN);
   }
 
   @Deployment
@@ -70,7 +71,6 @@ class ShellTaskTest {
       ProcessInstance pi = runtimeService.startProcessInstanceByKey("echoShellWindows");
 
       String st = (String) runtimeService.getVariable(pi.getId(), "resultVar");
-      assertThat(st).isNotNull();
       assertThat(st).startsWith("EchoTest");
     }
   }
@@ -83,7 +83,6 @@ class ShellTaskTest {
       ProcessInstance pi = runtimeService.startProcessInstanceByKey("echoShellLinux");
 
       String st = (String) runtimeService.getVariable(pi.getId(), "resultVar");
-      assertThat(st).isNotNull();
       assertThat(st).startsWith("EchoTest");
     }
   }
@@ -96,7 +95,6 @@ class ShellTaskTest {
       ProcessInstance pi = runtimeService.startProcessInstanceByKey("echoShellMac");
 
       String st = (String) runtimeService.getVariable(pi.getId(), "resultVar");
-      assertThat(st).isNotNull();
       assertThat(st).startsWith("EchoTest");
     }
   }

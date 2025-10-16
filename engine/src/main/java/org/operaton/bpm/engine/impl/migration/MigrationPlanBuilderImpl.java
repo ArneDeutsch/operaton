@@ -21,12 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.operaton.bpm.engine.migration.MigrationPlanBuilder;
 import org.operaton.bpm.engine.impl.cmd.CreateMigrationPlanCmd;
 import org.operaton.bpm.engine.impl.interceptor.CommandExecutor;
 import org.operaton.bpm.engine.migration.MigrationInstructionBuilder;
 import org.operaton.bpm.engine.migration.MigrationInstructionsBuilder;
 import org.operaton.bpm.engine.migration.MigrationPlan;
+import org.operaton.bpm.engine.migration.MigrationPlanBuilder;
 import org.operaton.bpm.engine.variable.VariableMap;
 import org.operaton.bpm.engine.variable.impl.VariableMapImpl;
 
@@ -42,8 +42,8 @@ public class MigrationPlanBuilderImpl implements MigrationInstructionBuilder, Mi
   protected String targetProcessDefinitionId;
   protected List<MigrationInstructionImpl> explicitMigrationInstructions;
 
-  protected boolean mapEqualActivities = false;
-  protected boolean updateEventTriggersForGeneratedInstructions = false;
+  protected boolean mapEqualActivities;
+  protected boolean updateEventTriggersForGeneratedInstructions;
   protected VariableMap variables;
 
   public MigrationPlanBuilderImpl(CommandExecutor commandExecutor, String sourceProcessDefinitionId,

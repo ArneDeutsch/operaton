@@ -16,15 +16,13 @@
  */
 package org.operaton.bpm.engine.test.api.multitenancy;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.util.Arrays;
 import java.util.Collections;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.AuthorizationService;
 import org.operaton.bpm.engine.BadUserRequestException;
 import org.operaton.bpm.engine.HistoryService;
@@ -46,6 +44,9 @@ import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.model.bpmn.Bpmn;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 
 class MultiTenancyProcessInstantiationTest {
@@ -88,7 +89,7 @@ class MultiTenancyProcessInstantiationTest {
       .processDefinitionTenantId(TENANT_ONE)
       .execute();
 
-    assertThat(runtimeService.createProcessInstanceQuery().tenantIdIn(TENANT_ONE).count()).isEqualTo(1L);
+    assertThat(runtimeService.createProcessInstanceQuery().tenantIdIn(TENANT_ONE).count()).isOne();
   }
 
   @Test
@@ -98,7 +99,7 @@ class MultiTenancyProcessInstantiationTest {
     runtimeService.createProcessInstanceByKey("testProcess")
       .execute();
 
-    assertThat(runtimeService.createProcessInstanceQuery().tenantIdIn(TENANT_ONE).count()).isEqualTo(1L);
+    assertThat(runtimeService.createProcessInstanceQuery().tenantIdIn(TENANT_ONE).count()).isOne();
   }
 
   @Test
@@ -111,7 +112,7 @@ class MultiTenancyProcessInstantiationTest {
       .execute();
 
     ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery();
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getTenantId()).isNull();
   }
 
@@ -189,7 +190,7 @@ class MultiTenancyProcessInstantiationTest {
       .startBeforeActivity("userTask")
       .execute();
 
-    assertThat(runtimeService.createProcessInstanceQuery().tenantIdIn(TENANT_ONE).count()).isEqualTo(1L);
+    assertThat(runtimeService.createProcessInstanceQuery().tenantIdIn(TENANT_ONE).count()).isOne();
   }
 
   @Test
@@ -200,7 +201,7 @@ class MultiTenancyProcessInstantiationTest {
       .startBeforeActivity("userTask")
       .execute();
 
-    assertThat(runtimeService.createProcessInstanceQuery().tenantIdIn(TENANT_ONE).count()).isEqualTo(1L);
+    assertThat(runtimeService.createProcessInstanceQuery().tenantIdIn(TENANT_ONE).count()).isOne();
   }
 
   @Test
@@ -214,7 +215,7 @@ class MultiTenancyProcessInstantiationTest {
       .execute();
 
     ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery();
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
     assertThat(query.singleResult().getTenantId()).isNull();
   }
 
@@ -297,7 +298,7 @@ class MultiTenancyProcessInstantiationTest {
       .execute();
 
     ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery();
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
   }
 
   @Test
@@ -365,8 +366,8 @@ class MultiTenancyProcessInstantiationTest {
       .execute();
 
     ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery();
-    assertThat(query.count()).isEqualTo(1L);
-    assertThat(query.tenantIdIn(TENANT_ONE).count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
+    assertThat(query.tenantIdIn(TENANT_ONE).count()).isOne();
   }
 
   @Test
@@ -383,8 +384,8 @@ class MultiTenancyProcessInstantiationTest {
       .execute();
 
     ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery();
-    assertThat(query.count()).isEqualTo(1L);
-    assertThat(query.tenantIdIn(TENANT_ONE).count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
+    assertThat(query.tenantIdIn(TENANT_ONE).count()).isOne();
   }
 
   @Test
@@ -397,8 +398,8 @@ class MultiTenancyProcessInstantiationTest {
     runtimeService.createProcessInstanceByKey("testProcess").execute();
 
     ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery();
-    assertThat(query.count()).isEqualTo(1L);
-    assertThat(query.tenantIdIn(TENANT_ONE).count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
+    assertThat(query.tenantIdIn(TENANT_ONE).count()).isOne();
   }
 
   @Test
@@ -413,15 +414,15 @@ class MultiTenancyProcessInstantiationTest {
       .execute();
 
     ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery();
-    assertThat(query.count()).isEqualTo(1L);
-    assertThat(query.tenantIdIn(TENANT_ONE).count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
+    assertThat(query.tenantIdIn(TENANT_ONE).count()).isOne();
   }
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Test
   void testRestartProcessInstanceSyncWithTenantId() {
     // given
-    ProcessInstance processInstance = startAndDeleteProcessInstance(TENANT_ONE, PROCESS);
+    ProcessInstance processInstance = startAndDeleteProcessInstance();
 
     identityService.setAuthentication("user", null, Collections.singletonList(TENANT_ONE));
 
@@ -443,7 +444,7 @@ class MultiTenancyProcessInstantiationTest {
   @Test
   void testRestartProcessInstanceAsyncWithTenantId() {
     // given
-    ProcessInstance processInstance = startAndDeleteProcessInstance(TENANT_ONE, PROCESS);
+    ProcessInstance processInstance = startAndDeleteProcessInstance();
 
     identityService.setAuthentication("user", null, Collections.singletonList(TENANT_ONE));
 
@@ -467,7 +468,7 @@ class MultiTenancyProcessInstantiationTest {
   @Test
   void testFailToRestartProcessInstanceSyncWithOtherTenantId() {
     // given
-    ProcessInstance processInstance = startAndDeleteProcessInstance(TENANT_ONE, PROCESS);
+    ProcessInstance processInstance = startAndDeleteProcessInstance();
 
     identityService.setAuthentication("user", null, Collections.singletonList(TENANT_TWO));
     var restartProcessInstanceBuilder = runtimeService.restartProcessInstances(processInstance.getProcessDefinitionId())
@@ -489,7 +490,7 @@ class MultiTenancyProcessInstantiationTest {
   @Test
   void testFailToRestartProcessInstanceAsyncWithOtherTenantId() {
     // given
-    ProcessInstance processInstance = startAndDeleteProcessInstance(TENANT_ONE, PROCESS);
+    ProcessInstance processInstance = startAndDeleteProcessInstance();
 
     identityService.setAuthentication("user", null, Collections.singletonList(TENANT_TWO));
 
@@ -510,7 +511,7 @@ class MultiTenancyProcessInstantiationTest {
   @Test
   void testRestartProcessInstanceSyncWithTenantIdByHistoricProcessInstanceQuery() {
     // given
-    ProcessInstance processInstance = startAndDeleteProcessInstance(TENANT_ONE, PROCESS);
+    ProcessInstance processInstance = startAndDeleteProcessInstance();
     HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery().processDefinitionId(processInstance.getProcessDefinitionId());
 
     identityService.setAuthentication("user", null, Collections.singletonList(TENANT_ONE));
@@ -533,7 +534,7 @@ class MultiTenancyProcessInstantiationTest {
   @Test
   void testRestartProcessInstanceAsyncWithTenantIdByHistoricProcessInstanceQuery() {
     // given
-    ProcessInstance processInstance = startAndDeleteProcessInstance(TENANT_ONE, PROCESS);
+    ProcessInstance processInstance = startAndDeleteProcessInstance();
     HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery().processDefinitionId(processInstance.getProcessDefinitionId());
 
     identityService.setAuthentication("user", null, Collections.singletonList(TENANT_ONE));
@@ -558,7 +559,7 @@ class MultiTenancyProcessInstantiationTest {
   @Test
   void testFailToRestartProcessInstanceSyncWithOtherTenantIdByHistoricProcessInstanceQuery() {
     // given
-    ProcessInstance processInstance = startAndDeleteProcessInstance(TENANT_ONE, PROCESS);
+    ProcessInstance processInstance = startAndDeleteProcessInstance();
     HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery().processDefinitionId(processInstance.getProcessDefinitionId());
 
     identityService.setAuthentication("user", null, Collections.singletonList(TENANT_TWO));
@@ -581,7 +582,7 @@ class MultiTenancyProcessInstantiationTest {
   @Test
   void testFailToRestartProcessInstanceAsyncWithOtherTenantIdByHistoricProcessInstanceQuery() {
     // given
-    ProcessInstance processInstance = startAndDeleteProcessInstance(TENANT_ONE, PROCESS);
+    ProcessInstance processInstance = startAndDeleteProcessInstance();
     HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery().processDefinitionId(processInstance.getProcessDefinitionId());
 
     identityService.setAuthentication("user", null, Collections.singletonList(TENANT_TWO));
@@ -600,7 +601,7 @@ class MultiTenancyProcessInstantiationTest {
   }
 
 
-  public ProcessInstance startAndDeleteProcessInstance(String tenantId, BpmnModelInstance modelInstance) {
+  public ProcessInstance startAndDeleteProcessInstance() {
     Deployment deployment = testRule.deployForTenant(TENANT_ONE, PROCESS);
     ProcessDefinition processDefinition = repositoryService
         .createProcessDefinitionQuery()

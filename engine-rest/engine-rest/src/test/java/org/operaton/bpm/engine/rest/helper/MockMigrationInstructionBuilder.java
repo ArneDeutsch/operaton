@@ -16,19 +16,19 @@
  */
 package org.operaton.bpm.engine.rest.helper;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.Collections;
 import java.util.List;
 
 import org.operaton.bpm.engine.migration.MigrationInstruction;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class MockMigrationInstructionBuilder {
 
   protected List<String> sourceActivityIds;
   protected List<String> targetActivityIds;
-  protected boolean updateEventTrigger = false;
+  protected boolean updateEventTrigger;
 
   public MockMigrationInstructionBuilder sourceActivityIds(List<String> sourceActivityIds) {
     this.sourceActivityIds = sourceActivityIds;

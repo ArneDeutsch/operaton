@@ -16,6 +16,13 @@
  */
 package org.operaton.bpm.engine.impl.test;
 
+import java.util.*;
+import java.util.concurrent.Callable;
+
+import junit.framework.AssertionFailedError;
+import org.apache.ibatis.logging.LogFactory;
+import org.slf4j.Logger;
+
 import org.operaton.bpm.engine.*;
 import org.operaton.bpm.engine.impl.ProcessEngineImpl;
 import org.operaton.bpm.engine.impl.ProcessEngineLogger;
@@ -29,13 +36,6 @@ import org.operaton.bpm.engine.runtime.Job;
 import org.operaton.bpm.engine.runtime.ProcessInstance;
 import org.operaton.bpm.engine.test.util.JobExecutorWaitUtils;
 import org.operaton.bpm.model.bpmn.BpmnModelInstance;
-
-import java.util.*;
-import java.util.concurrent.Callable;
-
-import junit.framework.AssertionFailedError;
-import org.apache.ibatis.logging.LogFactory;
-import org.slf4j.Logger;
 
 
 /**
@@ -108,13 +108,13 @@ public abstract class AbstractProcessEngineTestCase extends PvmTestCase {
 
     }
     catch (AssertionFailedError e) {
-      LOG.error("ASSERTION FAILED: " + e, e);
+      LOG.error("ASSERTION FAILED: {}", e.getMessage(), e);
       exception = e;
       throw e;
 
     }
     catch (Throwable e) {
-      LOG.error("EXCEPTION: " + e, e);
+      LOG.error("EXCEPTION: {}", e.getMessage(), e);
       exception = e;
       throw e;
 

@@ -16,6 +16,7 @@
  */
 package org.operaton.bpm.application.impl;
 
+import java.lang.ref.WeakReference;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
@@ -23,8 +24,6 @@ import jakarta.servlet.ServletContextListener;
 import org.operaton.bpm.application.AbstractProcessApplication;
 import org.operaton.bpm.engine.delegate.JavaDelegate;
 import org.operaton.bpm.engine.impl.util.ClassLoaderUtil;
-
-import java.lang.ref.WeakReference;
 
 /**
  * <p>
@@ -41,12 +40,10 @@ import java.lang.ref.WeakReference;
  * <p>
  * It is sufficient adding a custom
  * subclass of {@link ServletProcessApplication} annotated with
- * <code>{@literal @}ProcessApplication</code> and <code>{@literal @}WebListener</code>
- * to your application:
+ * <code>{@literal @}ProcessApplication</code> to your application:
  *
  * <pre>
  * {@literal @}ProcessApplication("Loan Approval App")
- * {@literal @}WebListener
  * public class LoanApprovalApplication extends ServletProcessApplication {
  * // empty implementation
  * }

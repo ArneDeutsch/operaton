@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.ProcessEngineException;
 import org.operaton.bpm.engine.ProcessEngineServices;
@@ -132,7 +133,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
    */
   protected String taskState;
 
-  protected boolean isIdentityLinksInitialized = false;
+  protected boolean isIdentityLinksInitialized;
   protected transient List<IdentityLinkEntity> taskIdentityLinkEntities = new ArrayList<>();
 
   // execution
@@ -159,7 +160,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   protected String deleteReason;
 
   protected String eventName;
-  protected boolean isFormKeyInitialized = false;
+  protected boolean isFormKeyInitialized;
   protected String formKey;
   protected transient OperatonFormRef operatonFormRef;
   protected boolean attachmentExists;
@@ -170,7 +171,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   = new VariableStore<>(this, new TaskEntityReferencer(this));
 
 
-  protected transient boolean skipCustomListeners = false;
+  protected transient boolean skipCustomListeners;
 
   /**
    * contains all changed properties of this entity
@@ -1711,8 +1712,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + (id == null ? 0 : id.hashCode());
-    return result;
+    return prime * result + (id == null ? 0 : id.hashCode());
   }
 
   @Override

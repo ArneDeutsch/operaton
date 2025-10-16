@@ -16,10 +16,6 @@
  */
 package org.operaton.bpm.engine.test.jobexecutor;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.operaton.bpm.engine.test.util.JobExecutorWaitUtils.waitForJobExecutionRunnablesToFinish;
-import static org.operaton.bpm.engine.test.util.JobExecutorWaitUtils.waitForJobExecutorToProcessAllJobs;
-
 import java.text.DateFormat.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,6 +25,7 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.ProcessEngines;
 import org.operaton.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
@@ -36,6 +33,10 @@ import org.operaton.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.operaton.bpm.engine.impl.jobexecutor.DefaultJobExecutor;
 import org.operaton.bpm.engine.impl.jobexecutor.JobExecutor;
 import org.operaton.bpm.engine.impl.util.ClockUtil;
+
+import static org.operaton.bpm.engine.test.util.JobExecutorWaitUtils.waitForJobExecutionRunnablesToFinish;
+import static org.operaton.bpm.engine.test.util.JobExecutorWaitUtils.waitForJobExecutorToProcessAllJobs;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Daniel Meyer
@@ -98,7 +99,7 @@ class SequentialJobAcquisitionTest {
 
     engine.getRuntimeService().startProcessInstanceByKey("intermediateTimerEventExample");
 
-    assertThat(engine.getManagementService().createJobQuery().count()).isEqualTo(1);
+    assertThat(engine.getManagementService().createJobQuery().count()).isOne();
 
     Calendar calendar = Calendar.getInstance();
     calendar.add(Field.DAY_OF_YEAR.getCalendarField(), 6);
@@ -149,8 +150,8 @@ class SequentialJobAcquisitionTest {
     engine1.getRuntimeService().startProcessInstanceByKey("intermediateTimerEventExample");
     engine2.getRuntimeService().startProcessInstanceByKey("intermediateTimerEventExample");
 
-    assertThat(engine1.getManagementService().createJobQuery().count()).isEqualTo(1);
-    assertThat(engine2.getManagementService().createJobQuery().count()).isEqualTo(1);
+    assertThat(engine1.getManagementService().createJobQuery().count()).isOne();
+    assertThat(engine2.getManagementService().createJobQuery().count()).isOne();
 
     Calendar calendar = Calendar.getInstance();
     calendar.add(Field.DAY_OF_YEAR.getCalendarField(), 6);
@@ -169,7 +170,7 @@ class SequentialJobAcquisitionTest {
   }
 
   @Test
-  void testJobAddedGuardForTwoEnginesSameAcquisition() throws InterruptedException {
+  void testJobAddedGuardForTwoEnginesSameAcquisition() throws Exception {
     // configure and build a process engine
     StandaloneProcessEngineConfiguration engineConfiguration1 = new StandaloneInMemProcessEngineConfiguration();
     engineConfiguration1.setProcessEngineName(getClass().getName() + "-engine1");
@@ -210,8 +211,8 @@ class SequentialJobAcquisitionTest {
     calendar.add(Field.DAY_OF_YEAR.getCalendarField(), 6);
     ClockUtil.setCurrentTime(calendar.getTime());
 
-    assertThat(engine1.getManagementService().createJobQuery().count()).isEqualTo(1);
-    assertThat(engine2.getManagementService().createJobQuery().count()).isEqualTo(1);
+    assertThat(engine1.getManagementService().createJobQuery().count()).isOne();
+    assertThat(engine2.getManagementService().createJobQuery().count()).isOne();
 
     // assert task completed for the first engine
     jobExecutor.start();

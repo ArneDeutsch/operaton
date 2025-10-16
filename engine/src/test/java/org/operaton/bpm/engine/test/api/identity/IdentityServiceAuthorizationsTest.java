@@ -16,25 +16,6 @@
  */
 package org.operaton.bpm.engine.test.api.identity;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.assertj.core.api.Assertions.tuple;
-import static org.operaton.bpm.engine.authorization.Authorization.ANY;
-import static org.operaton.bpm.engine.authorization.Authorization.AUTH_TYPE_GLOBAL;
-import static org.operaton.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
-import static org.operaton.bpm.engine.authorization.Authorization.AUTH_TYPE_REVOKE;
-import static org.operaton.bpm.engine.authorization.Permissions.ALL;
-import static org.operaton.bpm.engine.authorization.Permissions.CREATE;
-import static org.operaton.bpm.engine.authorization.Permissions.DELETE;
-import static org.operaton.bpm.engine.authorization.Permissions.READ;
-import static org.operaton.bpm.engine.authorization.Permissions.UPDATE;
-import static org.operaton.bpm.engine.authorization.Resources.GROUP;
-import static org.operaton.bpm.engine.authorization.Resources.GROUP_MEMBERSHIP;
-import static org.operaton.bpm.engine.authorization.Resources.TENANT;
-import static org.operaton.bpm.engine.authorization.Resources.TENANT_MEMBERSHIP;
-import static org.operaton.bpm.engine.authorization.Resources.USER;
-import static org.operaton.bpm.engine.test.api.authorization.util.AuthorizationTestUtil.assertExceptionInfo;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -44,6 +25,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.operaton.bpm.engine.AuthorizationException;
 import org.operaton.bpm.engine.AuthorizationService;
 import org.operaton.bpm.engine.IdentityService;
@@ -62,6 +44,25 @@ import org.operaton.bpm.engine.impl.persistence.entity.TenantEntity;
 import org.operaton.bpm.engine.impl.persistence.entity.UserEntity;
 import org.operaton.bpm.engine.impl.util.ClockUtil;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
+
+import static org.operaton.bpm.engine.authorization.Authorization.ANY;
+import static org.operaton.bpm.engine.authorization.Authorization.AUTH_TYPE_GLOBAL;
+import static org.operaton.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
+import static org.operaton.bpm.engine.authorization.Authorization.AUTH_TYPE_REVOKE;
+import static org.operaton.bpm.engine.authorization.Permissions.ALL;
+import static org.operaton.bpm.engine.authorization.Permissions.CREATE;
+import static org.operaton.bpm.engine.authorization.Permissions.DELETE;
+import static org.operaton.bpm.engine.authorization.Permissions.READ;
+import static org.operaton.bpm.engine.authorization.Permissions.UPDATE;
+import static org.operaton.bpm.engine.authorization.Resources.GROUP;
+import static org.operaton.bpm.engine.authorization.Resources.GROUP_MEMBERSHIP;
+import static org.operaton.bpm.engine.authorization.Resources.TENANT;
+import static org.operaton.bpm.engine.authorization.Resources.TENANT_MEMBERSHIP;
+import static org.operaton.bpm.engine.authorization.Resources.USER;
+import static org.operaton.bpm.engine.test.api.authorization.util.AuthorizationTestUtil.assertExceptionInfo;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.tuple;
 
 /**
  * @author Daniel Meyer
@@ -189,7 +190,7 @@ class IdentityServiceAuthorizationsTest {
 
     // assume
     TenantQuery query = identityService.createTenantQuery().userMember(jonny1Id);
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     // when
     identityService.deleteUser(jonny1Id);
@@ -425,7 +426,7 @@ class IdentityServiceAuthorizationsTest {
 
     // assume
     TenantQuery query = identityService.createTenantQuery().groupMember("group1");
-    assertThat(query.count()).isEqualTo(1L);
+    assertThat(query.count()).isOne();
 
     // when
     identityService.deleteGroup("group1");
@@ -892,7 +893,7 @@ class IdentityServiceAuthorizationsTest {
 
     // now we can fetch the user
     assertThat(identityService.createUserQuery().singleResult()).isNotNull();
-    assertThat(identityService.createUserQuery().count()).isEqualTo(1);
+    assertThat(identityService.createUserQuery().count()).isOne();
 
     // change the base permission:
     processEngineConfiguration.setAuthorizationEnabled(false);
@@ -903,7 +904,7 @@ class IdentityServiceAuthorizationsTest {
 
     // we can still fetch the user
     assertThat(identityService.createUserQuery().singleResult()).isNotNull();
-    assertThat(identityService.createUserQuery().count()).isEqualTo(1);
+    assertThat(identityService.createUserQuery().count()).isOne();
 
 
     // revoke permission for jonny2:
@@ -933,7 +934,7 @@ class IdentityServiceAuthorizationsTest {
 
     // now the base permission applies and grants us read access
     assertThat(identityService.createUserQuery().singleResult()).isNotNull();
-    assertThat(identityService.createUserQuery().count()).isEqualTo(1);
+    assertThat(identityService.createUserQuery().count()).isOne();
 
   }
 
@@ -1140,7 +1141,7 @@ class IdentityServiceAuthorizationsTest {
 
     // now we can fetch the group
     assertThat(identityService.createGroupQuery().singleResult()).isNotNull();
-    assertThat(identityService.createGroupQuery().count()).isEqualTo(1);
+    assertThat(identityService.createGroupQuery().count()).isOne();
 
     // change the base permission:
     processEngineConfiguration.setAuthorizationEnabled(false);
@@ -1151,7 +1152,7 @@ class IdentityServiceAuthorizationsTest {
 
     // we can still fetch the group
     assertThat(identityService.createGroupQuery().singleResult()).isNotNull();
-    assertThat(identityService.createGroupQuery().count()).isEqualTo(1);
+    assertThat(identityService.createGroupQuery().count()).isOne();
 
     // revoke permission for jonny2:
     processEngineConfiguration.setAuthorizationEnabled(false);
@@ -1179,7 +1180,7 @@ class IdentityServiceAuthorizationsTest {
 
     // now the base permission applies and grants us read access
     assertThat(identityService.createGroupQuery().singleResult()).isNotNull();
-    assertThat(identityService.createGroupQuery().count()).isEqualTo(1);
+    assertThat(identityService.createGroupQuery().count()).isOne();
 
   }
 
@@ -1219,7 +1220,7 @@ class IdentityServiceAuthorizationsTest {
     processEngineConfiguration.setAuthorizationEnabled(true);
 
     // now we can fetch the tenants
-    assertThat(identityService.createTenantQuery().count()).isEqualTo(1);
+    assertThat(identityService.createTenantQuery().count()).isOne();
 
     // change the base permission:
     processEngineConfiguration.setAuthorizationEnabled(false);
@@ -1229,7 +1230,7 @@ class IdentityServiceAuthorizationsTest {
     processEngineConfiguration.setAuthorizationEnabled(true);
 
     // we can still fetch the tenants
-    assertThat(identityService.createTenantQuery().count()).isEqualTo(1);
+    assertThat(identityService.createTenantQuery().count()).isOne();
 
     // revoke permission for jonny2:
     processEngineConfiguration.setAuthorizationEnabled(false);
@@ -1255,7 +1256,7 @@ class IdentityServiceAuthorizationsTest {
     processEngineConfiguration.setAuthorizationEnabled(true);
 
     // now the base permission applies and grants us read access
-    assertThat(identityService.createTenantQuery().count()).isEqualTo(1);
+    assertThat(identityService.createTenantQuery().count()).isOne();
   }
 
   @Test

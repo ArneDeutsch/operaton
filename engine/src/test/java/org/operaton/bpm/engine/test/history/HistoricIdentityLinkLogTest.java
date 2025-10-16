@@ -16,12 +16,11 @@
  */
 package org.operaton.bpm.engine.test.history;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.operaton.bpm.engine.HistoryService;
 import org.operaton.bpm.engine.IdentityService;
 import org.operaton.bpm.engine.ProcessEngineConfiguration;
@@ -38,6 +37,8 @@ import org.operaton.bpm.engine.task.Task;
 import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.RequiredHistoryLevel;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  *
@@ -122,7 +123,7 @@ class HistoricIdentityLinkLogTest {
 
     query = historyService.createHistoricIdentityLinkLogQuery();
     assertThat(query.type(IdentityLinkType.ASSIGNEE).count()).isEqualTo(4);
-    assertThat(query.type(IdentityLinkType.OWNER).count()).isEqualTo(1);
+    assertThat(query.type(IdentityLinkType.OWNER).count()).isOne();
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
@@ -144,16 +145,16 @@ class HistoricIdentityLinkLogTest {
 
     //Query test
     HistoricIdentityLinkLogQuery query = historyService.createHistoricIdentityLinkLogQuery();
-    assertThat(query.userId(A_USER_ID).count()).isEqualTo(1);
+    assertThat(query.userId(A_USER_ID).count()).isOne();
 
     query = historyService.createHistoricIdentityLinkLogQuery();
-    assertThat(query.operationType(IDENTITY_LINK_ADD).count()).isEqualTo(1);
+    assertThat(query.operationType(IDENTITY_LINK_ADD).count()).isOne();
 
     query = historyService.createHistoricIdentityLinkLogQuery();
     assertThat(query.operationType(IDENTITY_LINK_DELETE).count()).isZero();
 
     query = historyService.createHistoricIdentityLinkLogQuery();
-    assertThat(query.type(IdentityLinkType.ASSIGNEE).count()).isEqualTo(1);
+    assertThat(query.type(IdentityLinkType.ASSIGNEE).count()).isOne();
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
@@ -199,7 +200,7 @@ class HistoricIdentityLinkLogTest {
     assertThat(query.type(IdentityLinkType.ASSIGNEE).count()).isEqualTo(6);
 
     query = historyService.createHistoricIdentityLinkLogQuery();
-    assertThat(query.type(IdentityLinkType.OWNER).count()).isEqualTo(1);
+    assertThat(query.type(IdentityLinkType.OWNER).count()).isOne();
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
@@ -379,12 +380,12 @@ class HistoricIdentityLinkLogTest {
 
     // Basic Query test
     HistoricIdentityLinkLogQuery query = historyService.createHistoricIdentityLinkLogQuery();
-    assertThat(query.type(IdentityLinkType.ASSIGNEE).count()).isEqualTo(1);
-    assertThat(query.userId(USER_1).count()).isEqualTo(1);
+    assertThat(query.type(IdentityLinkType.ASSIGNEE).count()).isOne();
+    assertThat(query.userId(USER_1).count()).isOne();
 
     query = historyService.createHistoricIdentityLinkLogQuery();
-    assertThat(query.type(IdentityLinkType.OWNER).count()).isEqualTo(1);
-    assertThat(query.userId(OWNER_1).count()).isEqualTo(1);
+    assertThat(query.type(IdentityLinkType.OWNER).count()).isOne();
+    assertThat(query.userId(OWNER_1).count()).isOne();
 
     taskService.deleteTask(taskAssigneeId,true);
     taskService.deleteTask(taskOwnerId,true);
@@ -454,13 +455,15 @@ class HistoricIdentityLinkLogTest {
   }
 
   public void addUserIdentityLinks(String taskId) {
-    for (int userIndex = 1; userIndex <= NUMBER_OF_USERS; userIndex++)
+    for (int userIndex = 1;userIndex <= NUMBER_OF_USERS;userIndex++) {
       taskService.addUserIdentityLink(taskId, A_USER_ID + userIndex, IdentityLinkType.OWNER);
+    }
   }
 
   public void deleteUserIdentityLinks(String taskId) {
-    for (int userIndex = 1; userIndex <= NUMBER_OF_USERS; userIndex++)
+    for (int userIndex = 1;userIndex <= NUMBER_OF_USERS;userIndex++) {
       taskService.deleteUserIdentityLink(taskId, A_USER_ID + userIndex, IdentityLinkType.OWNER);
+    }
   }
 
   protected ProcessInstance startProcessInstance(String key) {

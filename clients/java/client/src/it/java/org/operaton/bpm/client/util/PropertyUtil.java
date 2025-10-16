@@ -22,11 +22,11 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PropertyUtil {
+public final class PropertyUtil {
 
   public static final String DEFAULT_PROPERTIES_PATH = "integration-rules.properties";
-  public static final String CAMUNDA_ENGINE_REST = "operaton.engine.rest";
-  public static final String CAMUNDA_ENGINE_NAME = "operaton.engine.name";
+  public static final String OPERATON_ENGINE_REST = "operaton.engine.rest";
+  public static final String OPERATON_ENGINE_NAME = "operaton.engine.name";
 
   private static final Logger logger = LoggerFactory.getLogger(PropertyUtil.class);
 
@@ -46,6 +46,9 @@ public class PropertyUtil {
 
   public static Properties loadProperties() {
     return PropertyUtil.loadProperties("service.properties");
+  }
+
+  private PropertyUtil() {
   }
 
 }

@@ -16,10 +16,10 @@
  */
 package org.operaton.bpm.engine.test.assertions.bpmn;
 
+import java.util.Map;
+
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.ProcessEngines;
-
-import java.util.Map;
 
 public abstract class AbstractAssertions {
 
@@ -41,8 +41,9 @@ public abstract class AbstractAssertions {
    */
   public static ProcessEngine processEngine() {
     ProcessEngine processEngine = AbstractAssertions.processEngine.get();
-    if (processEngine != null)
+    if (processEngine != null) {
       return processEngine;
+    }
     Map<String, ProcessEngine> processEngines = ProcessEngines.getProcessEngines();
     if (processEngines.size() == 1) {
       processEngine = processEngines.values().iterator().next();

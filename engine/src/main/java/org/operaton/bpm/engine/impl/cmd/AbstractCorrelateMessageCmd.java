@@ -44,9 +44,9 @@ public abstract class AbstractCorrelateMessageCmd {
   protected final MessageCorrelationBuilderImpl builder;
 
   protected ExecutionVariableSnapshotObserver variablesListener;
-  protected boolean variablesInResultEnabled = false;
-  protected long variablesCount = 0;
-  protected boolean deserializeVariableValues = false;
+  protected boolean variablesInResultEnabled;
+  protected long variablesCount;
+  protected boolean deserializeVariableValues;
 
   /**
    * Initialize the command with a builder
@@ -120,7 +120,7 @@ public abstract class AbstractCorrelateMessageCmd {
       ProcessInstance processInstance = execution.getProcessInstance();
       resultWithVariables.setProcessInstance(processInstance);
 
-      if (variablesInResultEnabled && execution != null) {
+      if (variablesInResultEnabled) {
         variablesListener = new ExecutionVariableSnapshotObserver(execution, false, deserializeVariableValues);
       }
       triggerExecution(commandContext, handlerResult);

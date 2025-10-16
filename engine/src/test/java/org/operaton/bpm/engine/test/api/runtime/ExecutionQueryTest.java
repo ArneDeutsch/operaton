@@ -16,16 +16,6 @@
  */
 package org.operaton.bpm.engine.test.api.runtime;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.junit.Assert.assertNotSame;
-import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.executionByProcessDefinitionId;
-import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.executionByProcessDefinitionKey;
-import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.executionByProcessInstanceId;
-import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.hierarchical;
-import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
-import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,6 +30,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
 import org.operaton.bpm.engine.ManagementService;
 import org.operaton.bpm.engine.ProcessEngine;
 import org.operaton.bpm.engine.ProcessEngineException;
@@ -57,6 +48,14 @@ import org.operaton.bpm.engine.test.Deployment;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.operaton.bpm.engine.test.junit5.ProcessEngineTestExtension;
 import org.operaton.bpm.engine.variable.Variables;
+
+import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.executionByProcessDefinitionId;
+import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.executionByProcessDefinitionKey;
+import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.executionByProcessInstanceId;
+import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.hierarchical;
+import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
+import static org.operaton.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
+import static org.assertj.core.api.Assertions.*;
 
 
 /**
@@ -161,12 +160,7 @@ class ExecutionQueryTest {
     assertThat(query.list()).hasSize(4);
     assertThat(query.count()).isEqualTo(4);
 
-    try {
-      query.singleResult();
-      fail("Exception expected");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    assertThatThrownBy(query::singleResult).isInstanceOf(ProcessEngineException.class);
   }
 
   @Test
@@ -232,12 +226,7 @@ class ExecutionQueryTest {
   @Test
   void testQueryInvalidSorting() {
     var executionQuery = runtimeService.createExecutionQuery().orderByProcessDefinitionKey();
-    try {
-      executionQuery.list();
-      fail("Exception expected");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    assertThatThrownBy(executionQuery::list).isInstanceOf(ProcessEngineException.class);
   }
 
   @Test
@@ -919,11 +908,11 @@ class ExecutionQueryTest {
     assertThat(executions.get(0).getId()).isEqualTo(processInstance1.getId());
 
     // Test NOT_EQUALS null
-    assertThat(runtimeService.createExecutionQuery().variableValueNotEquals("nullVar", null).count()).isEqualTo(1);
-    assertThat(runtimeService.createExecutionQuery().variableValueNotEquals("nullVarLong", null).count()).isEqualTo(1);
-    assertThat(runtimeService.createExecutionQuery().variableValueNotEquals("nullVarDouble", null).count()).isEqualTo(1);
+    assertThat(runtimeService.createExecutionQuery().variableValueNotEquals("nullVar", null).count()).isOne();
+    assertThat(runtimeService.createExecutionQuery().variableValueNotEquals("nullVarLong", null).count()).isOne();
+    assertThat(runtimeService.createExecutionQuery().variableValueNotEquals("nullVarDouble", null).count()).isOne();
     // When a byte-array reference is present, the variable is not considered null
-    assertThat(runtimeService.createExecutionQuery().variableValueNotEquals("nullVarByte", null).count()).isEqualTo(1);
+    assertThat(runtimeService.createExecutionQuery().variableValueNotEquals("nullVarByte", null).count()).isOne();
     var executionQuery = runtimeService.createExecutionQuery();
 
     // All other variable queries with null should throw exception
@@ -1187,7 +1176,7 @@ class ExecutionQueryTest {
     }
 
     assertThat(runtimeService.createExecutionQuery().processInstanceId(pi.getId()).variableValueEquals("x", "child").count()).isEqualTo(2);
-    assertThat(runtimeService.createExecutionQuery().processInstanceId(pi.getId()).variableValueEquals("x", "parent").count()).isEqualTo(1);
+    assertThat(runtimeService.createExecutionQuery().processInstanceId(pi.getId()).variableValueEquals("x", "parent").count()).isOne();
 
     assertThat(runtimeService.createExecutionQuery().processInstanceId(pi.getId()).processVariableValueEquals("x", "parent").count()).isEqualTo(3);
     assertThat(runtimeService.createExecutionQuery().processInstanceId(pi.getId()).processVariableValueNotEquals("x", "xxx").count()).isEqualTo(3);
@@ -1239,12 +1228,7 @@ class ExecutionQueryTest {
 
     assertThat(query.incidentId("invalid").count()).isZero();
 
-    try {
-      query.incidentId(null);
-      fail("Exception expected");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    assertThatThrownBy(() -> query.incidentId(null)).isInstanceOf(ProcessEngineException.class);
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
@@ -1272,12 +1256,7 @@ class ExecutionQueryTest {
 
     assertThat(query.incidentType("invalid").count()).isZero();
 
-    try {
-      query.incidentType(null);
-      fail("Exception expected");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    assertThatThrownBy(() -> query.incidentType(null)).isInstanceOf(ProcessEngineException.class);
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
@@ -1305,12 +1284,7 @@ class ExecutionQueryTest {
 
     assertThat(query.incidentMessage("invalid").count()).isZero();
 
-    try {
-      query.incidentMessage(null);
-      fail("Exception expected");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    assertThatThrownBy(() -> query.incidentMessage(null)).isInstanceOf(ProcessEngineException.class);
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
@@ -1336,12 +1310,7 @@ class ExecutionQueryTest {
 
     assertThat(query.incidentMessageLike("invalid").count()).isZero();
 
-    try {
-      query.incidentMessageLike(null);
-      fail("Exception expected");
-    } catch (ProcessEngineException e) {
-      // expected
-    }
+    assertThatThrownBy(() -> query.incidentMessageLike(null)).isInstanceOf(ProcessEngineException.class);
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
@@ -1362,7 +1331,7 @@ class ExecutionQueryTest {
 
     assertThat(executionList).hasSize(1);
     // execution id of subprocess != process instance id
-    assertNotSame(processInstance.getId(), executionList.get(0).getId());
+    assertThat(executionList.get(0).getId()).isNotSameAs(processInstance.getId());
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
@@ -1383,7 +1352,7 @@ class ExecutionQueryTest {
 
     assertThat(executionList).hasSize(1);
     // execution id of subprocess != process instance id
-    assertNotSame(processInstance.getId(), executionList.get(0).getId());
+    assertThat(executionList.get(0).getId()).isNotSameAs(processInstance.getId());
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
@@ -1404,7 +1373,7 @@ class ExecutionQueryTest {
 
     assertThat(executionList).hasSize(1);
     // execution id of subprocess != process instance id
-    assertNotSame(processInstance.getId(), executionList.get(0).getId());
+    assertThat(executionList.get(0).getId()).isNotSameAs(processInstance.getId());
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
@@ -1425,7 +1394,7 @@ class ExecutionQueryTest {
 
     assertThat(executionList).hasSize(1);
     // execution id of subprocess != process instance id
-    assertNotSame(processInstance.getId(), executionList.get(0).getId());
+    assertThat(executionList.get(0).getId()).isNotSameAs(processInstance.getId());
   }
 
   @Deployment(resources = {"org/operaton/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml",
@@ -1574,14 +1543,14 @@ class ExecutionQueryTest {
     assertThat(runtimeService.createExecutionQuery().processVariableValueEquals("var", Variables.numberValue(123.0d)).count()).isEqualTo(4);
     assertThat(runtimeService.createExecutionQuery().processVariableValueEquals("var", Variables.numberValue((short) 123)).count()).isEqualTo(4);
 
-    assertThat(runtimeService.createExecutionQuery().processVariableValueEquals("var", Variables.numberValue(null)).count()).isEqualTo(1);
+    assertThat(runtimeService.createExecutionQuery().processVariableValueEquals("var", Variables.numberValue(null)).count()).isOne();
 
     assertThat(runtimeService.createExecutionQuery().variableValueEquals("var", Variables.numberValue(123)).count()).isEqualTo(4);
     assertThat(runtimeService.createExecutionQuery().variableValueEquals("var", Variables.numberValue(123L)).count()).isEqualTo(4);
     assertThat(runtimeService.createExecutionQuery().variableValueEquals("var", Variables.numberValue(123.0d)).count()).isEqualTo(4);
     assertThat(runtimeService.createExecutionQuery().variableValueEquals("var", Variables.numberValue((short) 123)).count()).isEqualTo(4);
 
-    assertThat(runtimeService.createExecutionQuery().variableValueEquals("var", Variables.numberValue(null)).count()).isEqualTo(1);
+    assertThat(runtimeService.createExecutionQuery().variableValueEquals("var", Variables.numberValue(null)).count()).isOne();
   }
 
   @Deployment(resources = "org/operaton/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")

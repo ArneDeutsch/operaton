@@ -16,13 +16,13 @@
  */
 package org.operaton.bpm.engine.impl;
 
-import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import java.io.Serial;
 
 import org.operaton.bpm.engine.identity.Tenant;
-
-import java.io.Serial;
 import org.operaton.bpm.engine.identity.TenantQuery;
 import org.operaton.bpm.engine.impl.interceptor.CommandExecutor;
+
+import static org.operaton.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 public abstract class TenantQueryImpl extends AbstractQuery<TenantQuery, Tenant> implements TenantQuery {
 
@@ -33,7 +33,7 @@ public abstract class TenantQueryImpl extends AbstractQuery<TenantQuery, Tenant>
   protected String nameLike;
   protected String userId;
   protected String groupId;
-  protected boolean includingGroups = false;
+  protected boolean includingGroups;
 
   protected TenantQueryImpl() {
   }
@@ -94,7 +94,7 @@ public abstract class TenantQueryImpl extends AbstractQuery<TenantQuery, Tenant>
 
   @Override
   public TenantQuery orderByTenantId() {
-    return orderBy(TenantQueryProperty.GROUP_ID);
+    return orderBy(TenantQueryProperty.TENANT_ID);
   }
 
   @Override
